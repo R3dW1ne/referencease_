@@ -5,5 +5,13 @@
   version="3.0">
   <persistence-unit name="default">
 
+    <jta-data-source>jdbc/myPostgresDS</jta-data-source>
+    <class>entities.Employee</class>
+    <class>entities.UserAccount</class>
+    <class>entities.ReferenceLetter</class>
+    <class>entities.PerformanceRating</class>
+    <class>entities.RatingTemplate</class>
+    <class>entities.AuditLog</class>
+
   </persistence-unit>
 </persistence>
