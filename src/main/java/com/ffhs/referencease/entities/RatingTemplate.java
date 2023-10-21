@@ -1,10 +1,6 @@
-package entities;
+package com.ffhs.referencease.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
@@ -19,6 +15,8 @@ public class RatingTemplate {
   private String category;
   private int score;
   private String language;
+
+  @Lob
   private String text;
 
   // Getter, Setter, hashCode, equals und toString Methoden

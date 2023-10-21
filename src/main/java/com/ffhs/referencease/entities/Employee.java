@@ -1,13 +1,9 @@
-package entities;
+package com.ffhs.referencease.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import java.time.LocalDate;
+import jakarta.persistence.*;
+import java.util.UUID;
 import lombok.Data;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -16,7 +12,7 @@ public class Employee {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int employeeId;
+  private Long employeeId;
 
   @Column(unique = true)
   private String employeeNumber;
@@ -24,8 +20,11 @@ public class Employee {
   private String firstName;
   private String lastName;
   private LocalDate dateOfBirth;
-  private String position;
-  private String department;
+
+  @ManyToOne
+  @JoinColumn(name = "positionId")
+  private Position position;
+
   private String email;
   private String phone;
   private LocalDate startDate;

@@ -1,12 +1,6 @@
-package entities;
+package com.ffhs.referencease.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import lombok.Data;
 
@@ -22,11 +16,12 @@ public class AuditLog {
   private String action;
   private LocalDateTime timestamp;
 
+  @Lob
+  private String description;
+
   @ManyToOne
   @JoinColumn(name = "userId")
   private UserAccount userAccount;
-
-  private String description;
 
   // Getter, Setter, hashCode, equals und toString Methoden
 }

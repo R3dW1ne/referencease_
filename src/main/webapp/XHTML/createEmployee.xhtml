@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+  <title>Employee erstellen</title>
+</h:head>
+
+<h:body>
+
+  <h:form>
+    <p:panel header="Employee erstellen">
+
+      <p:outputLabel for="name" value="Name:" />
+      <p:inputText id="name" value="#{employeeBean.employee.name}" required="true" />
+      <p:message for="name" />
+
+      <!-- Du kannst entsprechende Felder für alle anderen Attribute des Employee-Objekts hinzufügen -->
+      <!-- Beispiel:
+      <p:outputLabel for="attribute2" value="Attribute 2:" />
+      <p:inputText id="attribute2" value="#{employeeBean.employee.attribute2}" />
+      <p:message for="attribute2" />
+      -->
+
+      <p:commandButton value="Speichern" action="#{employeeBean.saveEmployee}" />
+
+    </p:panel>
+  </h:form>
+
+</h:body>
+</html>

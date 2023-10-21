@@ -6,12 +6,18 @@
   <persistence-unit name="default">
 
     <jta-data-source>jdbc/myPostgresDS</jta-data-source>
-    <class>entities.Employee</class>
-    <class>entities.UserAccount</class>
-    <class>entities.ReferenceLetter</class>
-    <class>entities.PerformanceRating</class>
-    <class>entities.RatingTemplate</class>
-    <class>entities.AuditLog</class>
+    <class>com.ffhs.referencease.entities.Employee</class>
+    <class>com.ffhs.referencease.entities.UserAccount</class>
+    <class>com.ffhs.referencease.entities.ReferenceLetter</class>
+    <class>com.ffhs.referencease.entities.PerformanceRating</class>
+    <class>com.ffhs.referencease.entities.RatingTemplate</class>
+    <class>com.ffhs.referencease.entities.AuditLog</class>
+
+    <properties>
+<!--      <property name="hibernate.hbm2ddl.auto" value="update"/>-->
+      <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>
+
+    </properties>
 
   </persistence-unit>
 </persistence>
