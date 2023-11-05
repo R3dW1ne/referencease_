@@ -7,17 +7,21 @@ import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import java.io.Serializable;
+import lombok.Getter;
 
 
 @Named
 @ViewScoped
-public class EmployeeBean {
+public class EmployeeBean implements Serializable {
+  private static final long serialVersionUID = 1L;
 
   @Inject
-  private EmployeeService employeeService;
+  private transient EmployeeService employeeService;
 
-
-  private Employee employee;
+  // Getter und Setter
+  @Getter
+  private transient Employee employee;
 
   @PostConstruct
   public void init() {
@@ -28,11 +32,6 @@ public class EmployeeBean {
     employeeService.save(employee);
     // Hier könnten Sie auch eine Erfolgsmeldung anzeigen oder zu einer anderen Seite navigieren
   }
-//
-//  // Getter und Setter
-//  public Employee getEmployee() {
-//    return employee;
-//  }
 
   public void setEmployee(Employee employee) {
     this.employee = employee;

@@ -2,10 +2,12 @@ package com.ffhs.referencease.entityservices;
 
 import com.ffhs.referencease.entities.Employee;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 
+@ApplicationScoped
 public class EmployeeService {
 
   @PersistenceContext

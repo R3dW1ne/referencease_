@@ -1,0 +1,43 @@
+<!-- /WEB-INF/templates/layout.xhtml -->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+  <title>My Application</title>
+  <!-- Weitere Kopfzeilen-Inhalte wie CSS-Links -->
+</h:head>
+<h:body>
+
+  <p:layout fullPage="true">
+
+    <p:layoutUnit position="north" size="100" header="Header" resizable="false" closable="false" collapsible="false">
+      <!-- Hier können Sie Ihre Header-Inhalte hinzufügen -->
+    </p:layoutUnit>
+
+    <p:layoutUnit position="west" size="175" header="Sidebar" resizable="true" closable="true" collapsible="true">
+      <h:form>
+        <!-- Navigation mit Icons -->
+        <p:menu>
+          <p:submenu label="Navigation">
+            <p:menuitem value="Home" icon="pi pi-fw pi-home" outcome="/home"/>
+            <p:menuitem value="Employees" icon="pi pi-fw pi-users" outcome="/employees"/>
+            <!-- Weitere Menüpunkte -->
+          </p:submenu>
+        </p:menu>
+      </h:form>
+    </p:layoutUnit>
+
+    <p:layoutUnit position="center">
+      <!-- Hier wird der dynamische Inhalt eingefügt -->
+      <ui:insert name="content">
+        <!-- Standard-Inhalt, falls kein anderer Inhalt definiert ist -->
+        <h:outputText value="Wählen Sie eine Option aus der Sidebar." />
+      </ui:insert>
+    </p:layoutUnit>
+
+  </p:layout>
+
+</h:body>
+</html>
