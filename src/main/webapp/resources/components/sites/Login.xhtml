@@ -1,0 +1,39 @@
+<!-- /Login.xhtml -->
+<ui:composition template="/resources/components/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+  <ui:define name="content">
+    <!-- Inhalt der Home-Seite -->
+    <div class="flex align-items-center justify-content-center">
+      <div class="surface-card p-4 shadow-2 border-round w-full lg:w-6">
+        <div class="text-center mb-5">
+          <p:graphicImage name="images/blocks/logos/hyper.svg" library="primeblocks-app" alt="Image"
+                          height="50" styleClass="mb-3"/>
+          <div class="text-900 text-3xl font-medium mb-3">Welcome Back</div>
+          <span class="text-600 font-medium line-height-3">Don't have an account?</span>
+          <a class="font-medium no-underline ml-2 text-blue-500 cursor-pointer">Create today!</a>
+        </div>
+
+        <div>
+          <label for="email1" class="block text-900 font-medium mb-2">Email</label>
+          <p:inputText id="email1" styleClass="w-full mb-3" placeholder="Email address"/>
+          <label for="password1" class="block text-900 font-medium mb-2">Password</label>
+          <p:inputText id="password1" type="password" styleClass="w-full mb-3" placeholder="Password"/>
+
+          <div class="flex align-items-center justify-content-between mb-6">
+            <div class="flex align-items-center">
+              <p:selectBooleanCheckbox id="rememberme" styleClass="mr-2"/>
+              <label for="rememberme">Remember me</label>
+            </div>
+            <a class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">Forgot your password?</a>
+          </div>
+
+          <p:commandButton type="button" value="Sign In" icon="pi pi-user" styleClass="w-full"/>
+        </div>
+      </div>
+    </div>
+    <!-- Weitere Inhalte -->
+  </ui:define>
+</ui:composition>
