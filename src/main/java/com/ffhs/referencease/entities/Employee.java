@@ -25,7 +25,7 @@ public class Employee {
   @JoinColumn(name = "positionId")
   private Position position;
 
-  private String email;
+
   private String phone;
   private LocalDate startDate;
   private LocalDate endDate;

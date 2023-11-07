@@ -2,7 +2,6 @@ package com.ffhs.referencease.beans;
 
 import com.ffhs.referencease.entities.Employee;
 import com.ffhs.referencease.entityservices.EmployeeService;
-
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -14,6 +13,7 @@ import lombok.Getter;
 @Named
 @ViewScoped
 public class EmployeeBean implements Serializable {
+
   private static final long serialVersionUID = 1L;
 
   @Inject

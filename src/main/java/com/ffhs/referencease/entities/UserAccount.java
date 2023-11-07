@@ -10,11 +10,12 @@ public class UserAccount {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int userId;
+  private Long userId;
 
   @Column(unique = true)
-  private String username;
+  private String email;
 
+  @Column(length = 60)
   private String password;
 
   @ManyToOne
@@ -24,6 +25,4 @@ public class UserAccount {
   @OneToOne
   @JoinColumn(name = "employeeId")
   private Employee employee;
-
-  // Getter, Setter, hashCode, equals und toString Methoden
 }

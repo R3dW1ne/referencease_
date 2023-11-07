@@ -1,0 +1,53 @@
+<!-- /createEmployee.xhtml -->
+<ui:composition template="/resources/components/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+  <ui:define name="content">
+    <h:form>
+      <p:panelGrid columns="2">
+        <p:outputLabel for="employeeNumber" value="Employee Number:" />
+        <p:inputText id="employeeNumber" value="#{employeeBean.employee.employeeNumber}" required="true" />
+
+        <!-- Add similar pairs for other attributes -->
+
+        <p:outputLabel for="firstName" value="First Name:" />
+        <p:inputText id="firstName" value="#{employeeBean.employee.firstName}" required="true" />
+
+        <!-- ... -->
+
+        <p:commandButton value="Save" action="#{employeeBean.saveEmployee}" />
+      </p:panelGrid>
+    </h:form>
+  </ui:define>
+</ui:composition>
+
+<!--<!DOCTYPE html>-->
+<!--<html xmlns="http://www.w3.org/1999/xhtml"-->
+<!--      xmlns:h="http://xmlns.jcp.org/jsf/html"-->
+<!--      xmlns:f="http://xmlns.jcp.org/jsf/core"-->
+<!--      xmlns:p="http://primefaces.org/ui">-->
+
+<!--<h:head>-->
+<!--  <title>Create Employee</title>-->
+<!--</h:head>-->
+
+<!--<h:body>-->
+<!--  <h:form>-->
+<!--    <p:panelGrid columns="2">-->
+<!--      <p:outputLabel for="employeeNumber" value="Employee Number:" />-->
+<!--      <p:inputText id="employeeNumber" value="#{employeeBean.employee.employeeNumber}" required="true" />-->
+
+<!--      &lt;!&ndash; Add similar pairs for other attributes &ndash;&gt;-->
+
+<!--      <p:outputLabel for="firstName" value="First Name:" />-->
+<!--      <p:inputText id="firstName" value="#{employeeBean.employee.firstName}" required="true" />-->
+
+<!--      &lt;!&ndash; ... &ndash;&gt;-->
+
+<!--      <p:commandButton value="Save" action="#{employeeBean.saveEmployee}" />-->
+<!--    </p:panelGrid>-->
+<!--  </h:form>-->
+<!--</h:body>-->
+<!--</html>-->

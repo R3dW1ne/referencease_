@@ -1,0 +1,47 @@
+<!-- /login.xhtml -->
+<ui:composition template="/resources/components/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="content">
+        <h:form>
+            <!-- Inhalt der Login-Seite -->
+            <div class="flex align-items-center justify-content-center">
+                <div class="surface-card p-4 shadow-2 border-round w-full lg:w-6">
+
+                    <div class="text-center mb-5">
+                        <p:graphicImage name="images/blocks/logos/hyper.svg"
+                                        library="primeblocks-app"
+                                        alt="Image"
+                                        height="50" styleClass="mb-3"/>
+                        <div class="text-900 text-3xl font-medium mb-3">Registration</div>
+                        <span class="text-600 font-medium line-height-3">You have an account?</span>
+                        <a class="font-medium no-underline ml-2 text-blue-500 cursor-pointer"
+                           href="login.xhtml">Login now!</a>
+                    </div>
+
+                    <div>
+
+                        <p:outputLabel for="email"
+                                       class="block text-900 font-medium mb-2" value="Email"/>
+                        <p:inputText id="email" value="#{userBean.userAccount.email}"
+                                     required="true"
+                                     styleClass="w-full mb-3" placeholder="Email address"/>
+
+                        <p:outputLabel for="password"
+                                       class="block text-900 font-medium mb-2" value="Password"/>
+                        <p:inputText id="password" value="#{userBean.userAccount.password}"
+                                     required="true"
+                                     type="password"
+                                     styleClass="w-full mb-3" placeholder="Password"/>
+
+                        <p:commandButton value="Register" action="#{userBean.register}"
+                                         icon="pi pi-user" styleClass="w-full"/>
+                    </div>
+
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
