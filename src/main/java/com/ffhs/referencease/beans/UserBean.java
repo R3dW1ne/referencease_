@@ -1,20 +1,17 @@
 package com.ffhs.referencease.beans;
 
-import com.ffhs.referencease.entities.Employee;
 import com.ffhs.referencease.entities.UserAccount;
 import com.ffhs.referencease.entityservices.UserService;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.enterprise.context.SessionScoped;
-import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 @Named
-@ViewScoped
+@Data
+@RequestScoped
 public class UserBean implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -22,7 +19,6 @@ public class UserBean implements Serializable {
   @Inject
   private transient UserService userService; // Service-Klasse zum Interagieren mit der DB
 
-  @Getter
   private transient UserAccount userAccount; // Getter und Setter via Lombok
 
 
@@ -40,9 +36,5 @@ public class UserBean implements Serializable {
   public void saveUserAccount() {
     userService.save(userAccount);
     // Hier könnten Sie auch eine Erfolgsmeldung anzeigen oder zu einer anderen Seite navigieren
-  }
-
-  public void setNewUser(UserAccount userAccount) {
-    this.userAccount = userAccount;
   }
 }

@@ -1,6 +1,7 @@
 package com.ffhs.referencease.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.Data;
 
 @Entity
@@ -13,10 +14,14 @@ public class UserAccount {
   private Long userId;
 
   @Column(unique = true)
+  @Email(message = "Invalid email format.")
   private String email;
 
   @Column(length = 60)
   private String password;
+
+  @Transient // Diese Annotation sorgt dafür, dass das Feld nicht persistent gespeichert wird
+  private String confirmPassword;
 
   @ManyToOne
   @JoinColumn(name = "roleId")
