@@ -1,0 +1,3 @@
+<glassfish-application>
+  <realm>MyJdbcRealm</realm>
+</glassfish-application>

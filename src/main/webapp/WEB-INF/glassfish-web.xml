@@ -1,0 +1,8 @@
+<glassfish-web-app error-url="">
+  <context-root>/referencease</context-root>
+  <security-role-mapping>
+    <role-name>User</role-name>
+    <group-name>roles</group-name> <!-- Der Gruppenname, wie in der DB definiert -->
+  </security-role-mapping>
+<!--  <realm>MyJdbcRealm</realm>-->
+</glassfish-web-app>

@@ -27,7 +27,7 @@ public class UserAccount {
   @JoinColumn(name = "roleId")
   private Role role;
 
-  @OneToOne
+  @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "employeeId")
   private Employee employee;
 }

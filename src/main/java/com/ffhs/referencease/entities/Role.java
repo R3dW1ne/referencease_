@@ -2,9 +2,11 @@ package com.ffhs.referencease.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@NoArgsConstructor
 @Table(name = "Role")
 public class Role {
 
@@ -15,5 +17,7 @@ public class Role {
   @Column(unique = true)
   private String roleName;
 
-  // Getter, Setter, hashCode, equals und toString Methoden
+  public Role(String roleName) {
+    this.roleName = roleName;
+  }
 }
