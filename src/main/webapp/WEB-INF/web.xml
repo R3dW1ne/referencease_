@@ -17,4 +17,26 @@
     <url-pattern>*.xhtml</url-pattern>
   </servlet-mapping>
 
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>Secured Area</web-resource-name>
+      <url-pattern>/resources/components/sites/secured/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>User</role-name>
+    </auth-constraint>
+  </security-constraint>
+
+  <login-config>
+    <auth-method>FORM</auth-method>
+    <form-login-config>
+      <form-login-page>/resources/components/sites/login.xhtml</form-login-page>
+      <form-error-page>/resources/components/sites/login.xhtml?error=true</form-error-page>
+    </form-login-config>
+  </login-config>
+
+  <security-role>
+    <role-name>User</role-name>
+  </security-role>
+
 </web-app>
