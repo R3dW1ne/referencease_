@@ -16,7 +16,9 @@ public class AppInitSingleton {
 
   @PostConstruct
   public void init() {
-    Role user = new Role("User");
-    entityManager.persist(user);
+    if (entityManager.find(Role.class, 1) == null){
+      Role user = new Role("User");
+      entityManager.persist(user);
+    }
   }
 }
