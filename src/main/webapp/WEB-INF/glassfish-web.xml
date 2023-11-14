@@ -1,4 +1,5 @@
 <glassfish-web-app error-url="">
+  <parameter-encoding default-charset="UTF-8"/>
   <context-root>/referencease</context-root>
   <security-role-mapping>
     <role-name>User</role-name>

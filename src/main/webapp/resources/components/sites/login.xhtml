@@ -24,7 +24,7 @@
                     <a class="font-medium no-underline ml-2 text-blue-500 cursor-pointer"
                        href="register.xhtml">Create today!</a>
                 </div>
-                <h:form>
+                <form action="j_security_check" method="post">
                     <div>
                         <label for="email1" class="block text-900 font-medium mb-2">Email</label>
                         <p:inputText id="email1" name="j_username" styleClass="w-full mb-3" required="true"
@@ -42,10 +42,22 @@
                         <!--            <a class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">Forgot your password?</a>-->
                         <!--          </div>-->
 
-                        <p:commandButton type="button" value="Sign In" icon="pi pi-user"
-                                         styleClass="w-full" action="j_security_check" />
+<!--                        <h:inputText type="submit" value="Sign In" icon="pi pi-user"-->
+<!--                                         styleClass="w-full"/>-->
+
+                        <input type="submit" value="Sign In" />
                     </div>
-                </h:form>
+                </form>
+
+<!--                <form action="j_security_check" method="post">-->
+<!--                    <label>-->
+<!--                        <input type="text" name="j_username" />-->
+<!--                    </label>-->
+<!--                    <label>-->
+<!--                        <input type="password" name="j_password" />-->
+<!--                    </label>-->
+<!--                    <input type="submit" value="Sign In" />-->
+<!--                </form>-->
             </div>
         </div>
     </ui:define>

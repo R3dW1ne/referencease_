@@ -7,25 +7,25 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:define name="content">
 
-<!--        <p:tooltip />-->
-<!--        <h:form>-->
-<!--            <p:messages id="messages" showDetail="true" closable="true">-->
-<!--                <p:autoUpdate />-->
-<!--            </p:messages>-->
-<!--        </h:form>-->
+        <!--        <p:tooltip />-->
+        <!--        <h:form>-->
+        <!--            <p:messages id="messages" showDetail="true" closable="true">-->
+        <!--                <p:autoUpdate />-->
+        <!--            </p:messages>-->
+        <!--        </h:form>-->
         <h:form id="registerForm">
             <!-- Inhalt der Registrierungsseite -->
             <div class="flex align-items-center justify-content-center">
                 <div class="surface-card p-4 shadow-2 border-round w-full lg:w-6">
 
-<!--                    &lt;!&ndash; Feedback Nachrichten &ndash;&gt;-->
-<!--                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true"/>-->
+                    <!--                    &lt;!&ndash; Feedback Nachrichten &ndash;&gt;-->
+                    <!--                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true"/>-->
 
                     <div class="text-center mb-5">
-                        <p:graphicImage library="images" name="logos/Logo.jpg" />
-<!--                        <p:graphicImage srcset="resources/images/logos/Logo.jpg"-->
-<!--                                        alt="Logo"-->
-<!--                                        height="50" styleClass="mb-3"/>-->
+                        <p:graphicImage library="images" name="logos/Logo.jpg"/>
+                        <!--                        <p:graphicImage srcset="resources/images/logos/Logo.jpg"-->
+                        <!--                                        alt="Logo"-->
+                        <!--                                        height="50" styleClass="mb-3"/>-->
                         <div class="text-900 text-3xl font-medium mb-3">Registration</div>
                         <span class="text-600 font-medium line-height-3">Already have an account?</span>
                         <h:link outcome="login"
@@ -41,11 +41,11 @@
                                      validatorMessage="Invalid email format"
                                      styleClass="w-full mb-3" placeholder="Email address">
                             <f:validateRegex
-                              pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"/>
+                                    pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"/>
 
                         </p:inputText>
-<!--                        <p:watermark for="email" value="Email Address *" />-->
-                        <p:message for="email" display="text" />
+                        <!--                        <p:watermark for="email" value="Email Address *" />-->
+                        <p:message for="email" display="text"/>
 
                         <!-- Passwort Eingabefeld -->
                         <p:outputLabel for="password"
@@ -56,17 +56,20 @@
                                     feedback="true" promptLabel="Enter a password" weakLabel="Weak"
                                     goodLabel="Good" strongLabel="Strong"
                                     styleClass="w-full mb-3" placeholder="Password"/>
-                        <p:message for="password" display="text"  />
+                        <p:message for="password" display="text"/>
 
                         <!-- Passwort Bestätigung -->
-                        <p:outputLabel for="confirmPassword" class="block text-900 font-medium mb-2" value="Confirm Password"/>
-                        <p:password id="confirmPassword" value="#{userBean.userAccount.confirmPassword}"
+                        <p:outputLabel for="confirmPassword" class="block text-900 font-medium mb-2"
+                                       value="Confirm Password"/>
+                        <p:password id="confirmPassword"
+                                    value="#{userBean.userAccount.confirmPassword}"
                                     required="true" requiredMessage="Confirm password is required."
                                     styleClass="w-full mb-3" placeholder="Confirm Password"/>
-                        <p:message for="confirmPassword" display="text"  />
+                        <p:message for="confirmPassword" display="text"/>
 
                         <p:commandButton value="Register" action="#{userBean.register}"
-                                         icon="pi pi-user" styleClass="w-full" update="registerForm"/>
+                                         icon="pi pi-user" styleClass="w-full"
+                                         update="registerForm"/>
                     </div>
                 </div>
             </div>

@@ -37,7 +37,7 @@ public class UserService {
 //    userAccount.setEmployee(employee);
 
     // Passwort verschlüsseln
-    userAccount.setPassword(encryptPassword(userAccount.getPassword()));
+//    userAccount.setPassword(encryptPassword(userAccount.getPassword()));
 
     // Benutzer speichern
     entityManager.persist(userAccount);
