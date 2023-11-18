@@ -4,10 +4,15 @@ import com.ffhs.referencease.entities.Employee;
 import com.ffhs.referencease.entities.Role;
 import com.ffhs.referencease.entities.UserAccount;
 import jakarta.ejb.Stateless;
+import jakarta.faces.context.FacesContext;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+import java.util.Optional;
+import java.util.UUID;
 import org.mindrot.jbcrypt.BCrypt;
 
 @Stateless
@@ -37,7 +42,7 @@ public class UserService {
 //    userAccount.setEmployee(employee);
 
     // Passwort verschlüsseln
-//    userAccount.setPassword(encryptPassword(userAccount.getPassword()));
+    userAccount.setPassword(encryptPassword(userAccount.getPassword()));
 
     // Benutzer speichern
     entityManager.persist(userAccount);
@@ -74,6 +79,35 @@ public class UserService {
   // Überprüfen des Passworts
   public boolean checkPassword(String candidate, String encryptedPassword) {
     return BCrypt.checkpw(candidate, encryptedPassword);
+  }
+
+  public Optional<UserAccount> getUserByEmail(String email) {
+    TypedQuery<UserAccount> query = entityManager.createQuery(
+        "SELECT u FROM UserAccount u WHERE u.email = :email", UserAccount.class);
+    query.setParameter("email", email);
+    UserAccount userAccount = query.getSingleResult();
+    return Optional.of(userAccount);
+  }
+
+  public Optional<UserAccount> getUserById(Long userId) {
+    TypedQuery<UserAccount> query = entityManager.createQuery(
+        "SELECT u FROM UserAccount u WHERE u.userId = :userId", UserAccount.class);
+    query.setParameter("userId", userId);
+    UserAccount userAccount = query.getSingleResult();
+    return Optional.of(userAccount);
+  }
+
+  public Optional<UserAccount> get(Long id) {
+    return Optional.ofNullable(entityManager.find(UserAccount.class, id));
+  }
+
+  public void updateUser(UserAccount userAccount) {
+    Optional<UserAccount> userToUpdate = get(userAccount.getUserId());
+    if (userToUpdate.isPresent()) {
+      entityManager.getTransaction().begin();
+      entityManager.merge(userAccount);
+      entityManager.getTransaction().commit();
+    }
   }
 }
 

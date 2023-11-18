@@ -3,11 +3,18 @@ package com.ffhs.referencease.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @Table(name = "UserAccount")
+@NoArgsConstructor
 public class UserAccount {
+
+  public UserAccount(String email, String password) {
+    this.email = email;
+    this.password = password;
+  }
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
