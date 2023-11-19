@@ -1,8 +1,9 @@
 package com.ffhs.referencease.beans;
 
-import ch.ffhs.bude4u.utils.PBKDF2Hash;
+//import ch.ffhs.bude4u.utils.PBKDF2Hash;
 import com.ffhs.referencease.entities.UserAccount;
 import com.ffhs.referencease.entityservices.UserService;
+import com.ffhs.referencease.utils.PBKDF2Hash;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
@@ -12,7 +13,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.Optional;
-import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,11 +23,11 @@ import lombok.Setter;
 @Setter
 public class AuthenticationBean implements Serializable {
 
+    private static final long serialVersionUID = 1L;
 
-    @Inject
-    private UserService userService;
+    private final UserService userService;
 
-    private HttpSession session = null;
+    private transient HttpSession session = null;
 
     @Setter(AccessLevel.PRIVATE)
     private boolean authenticated = false;
@@ -37,30 +37,12 @@ public class AuthenticationBean implements Serializable {
     private String lastName = null;
     private String updatePassword = null;
 
-    UserAccount userAccount;
+    private transient UserAccount userAccount;
 
-//    public String register() {
-//        String firstName = getFirstName();
-//        String lastName = getLastName();
-//        String email = getEmail();
-//        String password = getPassword();
-//
-//        // Check if user with specific username is not in db.
-//        Optional<UserAccount> userAccount = userService.getUserByEmail(email);
-//        if (userAccount.isPresent()) {
-//            // This means user is already registered, navigate back to login page.
-//            return "/views/login.xhtml";
-//        }
-//        // Create new user
-//        try {
-//            UserAccount newUser = new UserAccount(email, password);
-//            userService.createUser(newUser);
-//            // New user created, navigate back to login page.
-//            return "/views/login.xhtml";
-//        } catch (Exception ex) {
-//            return "ERROR: " + ex.getMessage();
-//        }
-//    }
+    @Inject
+    public AuthenticationBean(UserService userService) {
+        this.userService = userService;
+    }
 
     public HttpSession getSession() {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -72,31 +54,31 @@ public class AuthenticationBean implements Serializable {
 
     public String login() {
         String emailInput = getEmail();
-        String passwordInput = getPassword();
+        String hashedPasswordInput = PBKDF2Hash.createHash(getPassword());
         session = getSession();
 
-        Optional<UserAccount> userAccount = userService.getUserByEmail(emailInput);
+        Optional<UserAccount> userAccountAccess = userService.getUserByEmail(emailInput);
 
-        if (userAccount.isEmpty()) return "/views/loginFailed.xhtml";
+        if (userAccountAccess.isEmpty()) return "/resources/components/sites/login.xhtml?error=true";
 
-        String hashedPw = userAccount.get().getPassword();
-        boolean pwMatch = userService.checkPassword(passwordInput, hashedPw);
-//        boolean pwMatch = PBKDF2Hash.CheckPassword(hashedPw, passwordInput);
+        String hashedSavedPw = userAccountAccess.get().getPassword();
+        boolean pwMatch = PBKDF2Hash.checkPassword(hashedPasswordInput, hashedSavedPw);
+
 
         if (pwMatch) {
             session.setAttribute("authenticated", true);
             session.setAttribute("email", emailInput);
-            session.setAttribute("userId", userAccount.get().getUserId());
+            session.setAttribute("userId", userAccountAccess.get().getUserId());
 //            session.setAttribute("selectedTheme", userAccount.get().getSelectedTheme());
             this.authenticated = true;
-            setUserAccount(userAccount.get());
+            setUserAccount(userAccountAccess.get());
             // Navigate to landing page
-            return "/index.xhtml";
+            return "/resources/components/sites/home.xhtml";
         }
         this.authenticated = false;
         setUserAccount(null);
 
-        return "/views/loginFailed.xhtml";
+        return "/resources/components/sites/login.xhtml?error=true";
     }
 
 
@@ -126,7 +108,7 @@ public class AuthenticationBean implements Serializable {
         try {
 
             Optional<UserAccount> updatedUser = userService.getUserById((Long) session.getAttribute("userId"));
-            if (updatedUser.isEmpty()) return "/views/loginFailed.xhtml";
+            if (updatedUser.isEmpty()) return "/resources/components/sites/login.xhtml?error=true";
 
             if (getUpdatePassword() != null && !getUpdatePassword().isEmpty()) {
                 updatedUser.get().setPassword(getUpdatePassword());
@@ -142,7 +124,7 @@ public class AuthenticationBean implements Serializable {
                 // Check if username has already been set.
                 Optional<UserAccount> hasUser = userService.getUserByEmail(updatedUser.get().getEmail());
                 // Update failed -> Navigate to...
-                if (hasUser.isPresent()) return "/views/loginFailed.xhtml";
+                if (hasUser.isPresent()) return "/resources/components/sites/login.xhtml?error=true";
                 userService.updateUser(updatedUser.get());
             }
 

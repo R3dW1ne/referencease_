@@ -3,6 +3,7 @@ package com.ffhs.referencease.entityservices;
 import com.ffhs.referencease.entities.Employee;
 import com.ffhs.referencease.entities.Role;
 import com.ffhs.referencease.entities.UserAccount;
+import com.ffhs.referencease.utils.PBKDF2Hash;
 import jakarta.ejb.Stateless;
 import jakarta.faces.context.FacesContext;
 import jakarta.persistence.EntityManager;
@@ -11,12 +12,13 @@ import jakarta.persistence.TypedQuery;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+import java.io.Serializable;
 import java.util.Optional;
 import java.util.UUID;
 import org.mindrot.jbcrypt.BCrypt;
 
 @Stateless
-public class UserService {
+public class UserService implements Serializable {
 
   @PersistenceContext
   private EntityManager entityManager;
@@ -42,7 +44,7 @@ public class UserService {
 //    userAccount.setEmployee(employee);
 
     // Passwort verschlüsseln
-    userAccount.setPassword(encryptPassword(userAccount.getPassword()));
+    userAccount.setPassword(PBKDF2Hash.createHash(userAccount.getPassword()));
 
     // Benutzer speichern
     entityManager.persist(userAccount);
@@ -72,7 +74,7 @@ public class UserService {
   }
 
 
-  private String encryptPassword(String password) {
+  public String encryptPassword(String password) {
     return BCrypt.hashpw(password, BCrypt.gensalt());
   }
 
