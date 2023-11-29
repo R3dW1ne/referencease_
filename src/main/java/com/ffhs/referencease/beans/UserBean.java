@@ -26,6 +26,7 @@ public class UserBean implements Serializable {
 //  private transient UserService userService; // Service-Klasse zum Interagieren mit der DB
 
   private transient UserAccount userAccount; // Getter und Setter via Lombok
+
   @Inject
   public UserBean(UserService userService) {
     this.userService = userService;
@@ -38,9 +39,15 @@ public class UserBean implements Serializable {
   }
 
   public String register() {
+    if (userService.emailExists(userAccount.getEmail())) {
+      FacesContext.getCurrentInstance().addMessage("registerForm:messages",
+          new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "User already exists."));
+      return null; // Bleibt auf der Registrierungsseite
+    }
     if (!userAccount.getPassword().equals(userAccount.getConfirmPassword())) {
-      FacesContext.getCurrentInstance().addMessage(null,
-          new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Passwords must match."));
+      FacesContext.getCurrentInstance().addMessage("registerForm:password",
+          new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+              "Password should match with Confirm Password."));
       return null; // Bleibt auf der Registrierungsseite
     }
     // Passwort-Verschlüsselung und User-Persistierung im UserService

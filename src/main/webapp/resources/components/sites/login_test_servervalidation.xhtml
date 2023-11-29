@@ -3,8 +3,7 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                xmlns:p="http://primefaces.org/ui">
     <ui:define name="content">
         <!-- Inhalt der Login-Seite -->
         <h:form id="LoginForm">
@@ -16,32 +15,20 @@
             <div class="flex align-items-center justify-content-center">
                 <div class="surface-card p-4 shadow-2 border-round w-full lg:w-6">
                     <div class="text-center mb-5">
-                        <p:graphicImage name="images/Logo.jpg"
+                        <p:graphicImage name="images/blocks/logos/hyper.svg"
+                                        library="primeblocks-app"
                                         alt="Image"
-                                        height="200" styleClass="mb-3"/>
+                                        height="50" styleClass="mb-3"/>
                         <div class="text-900 text-3xl font-medium mb-3">Welcome Back</div>
                         <span class="text-600 font-medium line-height-3">Don't have an account?</span>
                         <a class="font-medium no-underline ml-2 text-blue-500 cursor-pointer"
                            href="register.xhtml">Create today!</a>
                     </div>
-<!--                    <p:outputLabel for="email" class="block text-900 font-medium mb-2"-->
-<!--                                   value="Email"/>-->
-<!--                    <p:inputText id="email" value="#{authenticationBean.email}"-->
-<!--                                 styleClass="w-full mb-3" required="true"-->
-<!--                                 placeholder="Email address"-->
-<!--                                 />-->
-
-                    <!-- E-Mail Eingabefeld -->
-                    <p:outputLabel for="email"
-                                   class="block text-900 font-medium mb-2" value="Email"/>
-                    <p:inputText id="email" value="#{authenticationBean.email}"
-                                 required="true" requiredMessage="Email is required."
-                                 validatorMessage="Invalid email format"
-                                 styleClass="w-full mb-3" placeholder="Email address">
-                        <f:validateRegex
-                          pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"/>
-                        <p:ajax event="blur" update="messages" />
-                    </p:inputText>
+                    <p:outputLabel for="email" class="block text-900 font-medium mb-2"
+                                   value="Email"/>
+                    <p:inputText id="email" styleClass="w-full mb-3" required="true"
+                                 placeholder="Email address"
+                                 value="#{authenticationBean.email}"/>
 
 
                     <p:outputLabel for="password"
@@ -52,9 +39,6 @@
                     <p:commandButton type="submit-button" value="Login" icon="pi pi-user"
                                      styleClass="w-full" id="login"
                                      action="#{authenticationBean.login}" update="LoginForm"/>
-
-                    <!-- Feedback Nachrichten -->
-                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true"/>
 
                 </div>
             </div>

@@ -68,8 +68,6 @@ w
 Gsrc/main/webapp/resources/components/sites/secured/createEmployee.xhtml,e\8\e8f4fdf6d9b160b89f623da60e5e5b9cce3f5ceb
 Y
 )src/main/webapp/WEB-INF/glassfish-web.xml,3\5\35a9882a1b348898ce361ae7efca289be3713e66
-a
-1src/main/webapp/WEB-INF/glassfish-application.xml,8\0\801d0cfee29e06262065f48b9a3d47d5e959f764
 i
 9src/main/java/com/ffhs/referencease/AppInitSingleton.java,6\2\629b5d732ef3a7945f187a8ad48b9cff40c45281
 f
@@ -2856,3 +2854,7 @@ q
 Asrc/main/java/com/ffhs/referencease/beans/AuthenticationBean.java,6\d\6d239f03b110fa96e79e03f39a26cc40ef99ad97
 i
 9src/main/java/com/ffhs/referencease/utils/PBKDF2Hash.java,4\2\42477231d543d590a4d97178ebbc15e8998355dd
+|
+Lsrc/main/webapp/resources/components/sites/login_test_servervalidation.xhtml,9\a\9a3c117f97094689812aa82019a739495cb0c1ec
+
+Osrc/main/webapp/resources/components/sites/register_test_servervalidation.xhtml,7\3\7341cc5348861ccae182efd367da491a96fc2f70

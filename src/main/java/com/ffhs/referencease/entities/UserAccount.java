@@ -21,7 +21,7 @@ public class UserAccount {
   private Long userId;
 
   @Column(unique = true)
-  @Email(message = "Invalid email format.")
+//  @Email(message = "Invalid email format.")
   private String email;
 
   @Column(length = 60)

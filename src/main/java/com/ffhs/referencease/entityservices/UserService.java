@@ -26,11 +26,11 @@ public class UserService implements Serializable {
   @Transactional
   public boolean registerNewUser(UserAccount userAccount) {
     // Überprüfen, ob bereits ein Benutzer mit derselben E-Mail-Adresse existiert
-    if (emailExists(userAccount.getEmail())) {
-      // Logik, um zu handhaben, wenn der Benutzer bereits existiert
-      // Zum Beispiel: Rückgabe von 'false' oder Auslösen einer Exception
-      return false;
-    }
+//    if (emailExists(userAccount.getEmail())) {
+//      // Logik, um zu handhaben, wenn der Benutzer bereits existiert
+//      // Zum Beispiel: Rückgabe von 'false' oder Auslösen einer Exception
+//      return false;
+//    }
 
     // Rolle und Mitarbeiter zuweisen
     Role userRole = entityManager.find(Role.class, 1);
@@ -54,7 +54,7 @@ public class UserService implements Serializable {
   }
 
 
-  private boolean emailExists(String email) {
+  public boolean emailExists(String email) {
     TypedQuery<Long> query = entityManager.createQuery(
         "SELECT COUNT(u) FROM UserAccount u WHERE u.email = :email", Long.class);
     query.setParameter("email", email);
