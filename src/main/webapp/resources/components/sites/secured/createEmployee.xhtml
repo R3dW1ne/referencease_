@@ -3,22 +3,62 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
   <ui:define name="content">
-    <h:form>
-      <p:panelGrid columns="2">
-        <p:outputLabel for="employeeNumber" value="Employee Number:" />
-        <p:inputText id="employeeNumber" value="#{employeeBean.employee.employeeNumber}" required="true" />
+    <h:form id="employeeForm">
+      <p:panel header="Employee Details">
 
-        <!-- Add similar pairs for other attributes -->
+        <p:outputLabel for="employeeNumber" value="Employee Number:" />
+        <p:inputText id="employeeNumber" value="#{employeeBean.employee.employeeNumber}" required="true" requiredMessage="Employee number is required." />
+        <p:message for="employeeNumber" />
 
         <p:outputLabel for="firstName" value="First Name:" />
-        <p:inputText id="firstName" value="#{employeeBean.employee.firstName}" required="true" />
+        <p:inputText id="firstName" value="#{employeeBean.employee.firstName}" required="true" requiredMessage="First name is required." />
+        <p:message for="firstName" />
 
-        <!-- ... -->
+        <p:outputLabel for="lastName" value="Last Name:" />
+        <p:inputText id="lastName" value="#{employeeBean.employee.lastName}" required="true" requiredMessage="Last name is required." />
+        <p:message for="lastName" />
 
-        <p:commandButton value="Save" action="#{employeeBean.saveEmployee}" />
-      </p:panelGrid>
+        <p:outputLabel for="dateOfBirth" value="Date of Birth:" />
+        <p:calendar id="dateOfBirth" value="#{employeeBean.employee.dateOfBirth}" navigator="true" pattern="dd/MM/yyyy" required="true" requiredMessage="Date of birth is required." />
+        <p:message for="dateOfBirth" />
+
+        <p:outputLabel for="phone" value="Phone:" />
+        <p:inputMask id="phone" value="#{employeeBean.employee.phone}" mask="(999) 999-9999" />
+        <p:message for="phone" />
+
+<!--        <p:outputLabel for="position" value="Position:" />-->
+<!--        <p:inputText id="position" value="#{employeeBean.employee.position.positionName}" required="true" requiredMessage="Position is required." />-->
+<!--        <p:message for="position" />-->
+
+        <p:outputLabel for="startDate" value="Start Date:" />
+        <p:calendar id="startDate" value="#{employeeBean.employee.startDate}" navigator="true" pattern="dd/MM/yyyy" required="true" requiredMessage="Start date is required." />
+        <p:message for="startDate" />
+
+        <p:outputLabel for="endDate" value="End Date:" />
+        <p:calendar id="endDate" value="#{employeeBean.employee.endDate}" navigator="true" pattern="dd/MM/yyyy" />
+        <p:message for="endDate" />
+
+        <!-- Position Dropdown -->
+        <p:outputLabel for="position" value="Position:" />
+        <p:selectOneMenu id="position" value="#{employeeBean.employee.position}" converter="positionConverter">
+          <f:selectItem itemLabel="Select Position" itemValue="" noSelectionOption="true"/>
+          <f:selectItems value="#{employeeBean.positions}" var="position" itemLabel="#{position.positionName}" itemValue="#{position}" />
+        </p:selectOneMenu>
+        <p:message for="position" />
+
+        <!-- Department Dropdown (falls erforderlich) -->
+        <p:outputLabel for="department" value="Department:" />
+        <p:selectOneMenu id="department" value="#{employeeBean.employee.position.department}" converter="departmentConverter">
+          <f:selectItem itemLabel="Select Department" itemValue="" noSelectionOption="true"/>
+          <f:selectItems value="#{employeeBean.departments}" var="department" itemLabel="#{department.departmentName}" itemValue="#{department}" />
+        </p:selectOneMenu>
+        <p:message for="department" />
+
+        <p:commandButton value="Save" action="#{employeeBean.saveEmployee}" update="employeeForm" />
+      </p:panel>
     </h:form>
   </ui:define>
 </ui:composition>

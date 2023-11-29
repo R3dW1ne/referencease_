@@ -10,7 +10,7 @@ public class Position {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int positionId;
+  private Long positionId;
 
   @Column(unique = true)
   private String positionName;
@@ -18,6 +18,4 @@ public class Position {
   @ManyToOne
   @JoinColumn(name = "departmentId")
   private Department department;
-
-  // Getter, Setter, hashCode, equals und toString Methoden
 }

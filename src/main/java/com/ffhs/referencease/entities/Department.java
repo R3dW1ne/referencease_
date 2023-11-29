@@ -10,11 +10,9 @@ public class Department {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int departmentId;
+  private Long departmentId;
 
   @Column(unique = true)
   private String departmentName;
-
-  // Getter, Setter, hashCode, equals und toString Methoden
 }
 

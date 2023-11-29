@@ -1,30 +1,48 @@
 package com.ffhs.referencease.beans;
 
+import com.ffhs.referencease.entities.Department;
 import com.ffhs.referencease.entities.Employee;
+import com.ffhs.referencease.entities.Position;
+import com.ffhs.referencease.services.service_interfaces.IDepartmentService;
 import com.ffhs.referencease.services.service_interfaces.IEmployeeService;
+import com.ffhs.referencease.services.service_interfaces.IPositionService;
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.util.List;
 import lombok.Getter;
+import lombok.Setter;
 
 @Named
 @RequestScoped
 public class EmployeeBean {
 
-//  @Inject
-//  private IEmployeeService employeeService;
-
   private final IEmployeeService employeeService;
+  private final IPositionService positionService;
+  private final IDepartmentService departmentService;
+
+  @Getter @Setter
+  private Employee employee = new Employee();
+
+  @Getter
+  private List<Position> positions;
+
+  @Getter
+  private List<Department> departments;
 
   @Inject
-  public EmployeeBean(IEmployeeService employeeService) {
+  public EmployeeBean(IEmployeeService employeeService, IPositionService positionService, IDepartmentService departmentService) {
     this.employeeService = employeeService;
+    this.positionService = positionService;
+    this.departmentService = departmentService;
   }
 
-  // Getter und Setter
-  @Getter
-  private Employee employee = new Employee();
+  @PostConstruct
+  public void init() {
+    positions = positionService.getAllPositions();
+    departments = departmentService.getAllDepartments();
+  }
 
   public void loadEmployee(Long id) {
     employee = employeeService.getEmployee(id).orElse(new Employee());
@@ -40,10 +58,6 @@ public class EmployeeBean {
 
   public void updateEmployee() {
     employee = employeeService.updateEmployee(employee);
-  }
-
-  public void setEmployee(Employee employee) {
-    this.employee = employee;
   }
 
   public List<Employee> getEmployees() {
