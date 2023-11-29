@@ -1,15 +1,13 @@
 package com.ffhs.referencease.beans;
 
 import com.ffhs.referencease.entities.UserAccount;
-import com.ffhs.referencease.entityservices.UserService;
+import com.ffhs.referencease.services.UserService;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import java.io.Serializable;
 import lombok.Data;
 

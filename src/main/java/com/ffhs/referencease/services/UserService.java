@@ -1,20 +1,15 @@
-package com.ffhs.referencease.entityservices;
+package com.ffhs.referencease.services;
 
-import com.ffhs.referencease.entities.Employee;
 import com.ffhs.referencease.entities.Role;
 import com.ffhs.referencease.entities.UserAccount;
 import com.ffhs.referencease.utils.PBKDF2Hash;
 import jakarta.ejb.Stateless;
-import jakarta.faces.context.FacesContext;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import java.io.Serializable;
 import java.util.Optional;
-import java.util.UUID;
 import org.mindrot.jbcrypt.BCrypt;
 
 @Stateless

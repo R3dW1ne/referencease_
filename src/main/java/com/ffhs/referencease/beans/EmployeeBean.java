@@ -1,39 +1,52 @@
 package com.ffhs.referencease.beans;
 
 import com.ffhs.referencease.entities.Employee;
-import com.ffhs.referencease.entityservices.EmployeeService;
-import jakarta.annotation.PostConstruct;
-import jakarta.faces.view.ViewScoped;
+import com.ffhs.referencease.services.service_interfaces.IEmployeeService;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import java.io.Serializable;
+import java.util.List;
 import lombok.Getter;
 
-
 @Named
-@ViewScoped
-public class EmployeeBean implements Serializable {
+@RequestScoped
+public class EmployeeBean {
 
-  private static final long serialVersionUID = 1L;
+//  @Inject
+//  private IEmployeeService employeeService;
+
+  private final IEmployeeService employeeService;
 
   @Inject
-  private transient EmployeeService employeeService;
+  public EmployeeBean(IEmployeeService employeeService) {
+    this.employeeService = employeeService;
+  }
 
   // Getter und Setter
   @Getter
-  private transient Employee employee;
+  private Employee employee = new Employee();
 
-  @PostConstruct
-  public void init() {
-    employee = new Employee();
+  public void loadEmployee(Long id) {
+    employee = employeeService.getEmployee(id).orElse(new Employee());
   }
 
   public void saveEmployee() {
-    employeeService.save(employee);
-    // Hier könnten Sie auch eine Erfolgsmeldung anzeigen oder zu einer anderen Seite navigieren
+    employeeService.saveEmployee(employee);
+  }
+
+  public void deleteEmployee() {
+    employeeService.deleteEmployee(employee);
+  }
+
+  public void updateEmployee() {
+    employee = employeeService.updateEmployee(employee);
   }
 
   public void setEmployee(Employee employee) {
     this.employee = employee;
+  }
+
+  public List<Employee> getEmployees() {
+    return employeeService.getAllEmployees();
   }
 }

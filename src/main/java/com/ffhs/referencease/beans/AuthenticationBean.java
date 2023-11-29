@@ -2,7 +2,7 @@ package com.ffhs.referencease.beans;
 
 //import ch.ffhs.bude4u.utils.PBKDF2Hash;
 import com.ffhs.referencease.entities.UserAccount;
-import com.ffhs.referencease.entityservices.UserService;
+import com.ffhs.referencease.services.UserService;
 import com.ffhs.referencease.utils.PBKDF2Hash;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.context.ExternalContext;
