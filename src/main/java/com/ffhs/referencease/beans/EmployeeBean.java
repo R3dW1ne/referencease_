@@ -8,9 +8,11 @@ import com.ffhs.referencease.services.service_interfaces.IEmployeeService;
 import com.ffhs.referencease.services.service_interfaces.IPositionService;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.model.SelectItem;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.Setter;
 
