@@ -8,15 +8,12 @@ import jakarta.faces.convert.Converter;
 import jakarta.faces.convert.FacesConverter;
 import jakarta.inject.Inject;
 
-@FacesConverter(forClass = Position.class)
+//@FacesConverter(forClass = Position.class)
+@FacesConverter(value = "positionConverter", managed = true)
 public class PositionConverter implements Converter<Position> {
 
-  private final IPositionService positionService;
-
   @Inject
-  public PositionConverter(IPositionService positionService) {
-    this.positionService = positionService;
-  }
+  private IPositionService positionService;
 
   @Override
   public Position getAsObject(FacesContext context, UIComponent component, String value) {

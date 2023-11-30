@@ -8,15 +8,19 @@ import jakarta.faces.convert.Converter;
 import jakarta.faces.convert.FacesConverter;
 import jakarta.inject.Inject;
 
-@FacesConverter(forClass = Department.class)
+//@FacesConverter(forClass = Department.class)
+@FacesConverter(value = "departmentConverter", managed = true)
 public class DepartmentConverter implements Converter<Department> {
 
-  private final IDepartmentService departmentService;
-
   @Inject
-  public DepartmentConverter(IDepartmentService departmentService) {
-    this.departmentService = departmentService;
-  }
+  private IDepartmentService departmentService;
+
+//  private final IDepartmentService departmentService;
+//
+//  @Inject
+//  public DepartmentConverter(IDepartmentService departmentService) {
+//    this.departmentService = departmentService;
+//  }
 
   @Override
   public Department getAsObject(FacesContext context, UIComponent component, String value) {

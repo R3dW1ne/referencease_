@@ -41,21 +41,21 @@
         <p:calendar id="endDate" value="#{employeeBean.employee.endDate}" navigator="true" pattern="dd/MM/yyyy" />
         <p:message for="endDate" />
 
-        <!-- Position Dropdown -->
-        <p:outputLabel for="position" value="Position:" />
-        <p:selectOneMenu id="position" value="#{employeeBean.employee.position}" converter="positionConverter">
-          <f:selectItem itemLabel="Select Position" itemValue="" noSelectionOption="true"/>
-          <f:selectItems value="#{employeeBean.positions}" var="position" itemLabel="#{position.positionName}" itemValue="#{position}" />
-        </p:selectOneMenu>
-        <p:message for="position" />
+<!--        &lt;!&ndash; Position Dropdown &ndash;&gt;-->
+<!--        <p:outputLabel for="position" value="Position:" />-->
+<!--        <p:selectOneMenu id="position" value="#{employeeBean.employee.position}" converter="positionConverter">-->
+<!--          <f:selectItem itemLabel="Select Position" itemValue="" noSelectionOption="true"/>-->
+<!--          <f:selectItems value="#{employeeBean.positions}" var="position" itemLabel="#{position.positionName}" itemValue="#{position}" />-->
+<!--        </p:selectOneMenu>-->
+<!--        <p:message for="position" />-->
 
-        <!-- Department Dropdown (falls erforderlich) -->
-        <p:outputLabel for="department" value="Department:" />
-        <p:selectOneMenu id="department" value="#{employeeBean.employee.position.department}" converter="departmentConverter">
-          <f:selectItem itemLabel="Select Department" itemValue="" noSelectionOption="true"/>
-          <f:selectItems value="#{employeeBean.departments}" var="department" itemLabel="#{department.departmentName}" itemValue="#{department}" />
-        </p:selectOneMenu>
-        <p:message for="department" />
+<!--        &lt;!&ndash; Department Dropdown (falls erforderlich) &ndash;&gt;-->
+<!--        <p:outputLabel for="department" value="Department:" />-->
+<!--        <p:selectOneMenu id="department" value="#{employeeBean.employee.position.department}" converter="departmentConverter">-->
+<!--          <f:selectItem itemLabel="Select Department" itemValue="" noSelectionOption="true"/>-->
+<!--          <f:selectItems value="#{employeeBean.departments}" var="department" itemLabel="#{department.departmentName}" itemValue="#{department}" />-->
+<!--        </p:selectOneMenu>-->
+<!--        <p:message for="department" />-->
 
         <p:commandButton value="Save" action="#{employeeBean.saveEmployee}" update="employeeForm" />
       </p:panel>

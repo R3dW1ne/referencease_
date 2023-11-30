@@ -2902,3 +2902,5 @@ u
 Esrc/main/java/com/ffhs/referencease/converters/PositionConverter.java,4\8\48e1e27cd7cfb57062ed1037d6a78258e55babd6
 w
 Gsrc/main/java/com/ffhs/referencease/converters/DepartmentConverter.java,f\0\f036a93005233341de66dbac3850d193706c373e
+Q
+!src/main/webapp/WEB-INF/beans.xml,8\3\83008b1a88ba03a2548bb5b9ad0768c6c307d36c

@@ -15,7 +15,8 @@ public class Position {
   @Column(unique = true)
   private String positionName;
 
-  @ManyToOne
-  @JoinColumn(name = "departmentId")
-  private Department department;
+//  @ManyToOne
+//  @JoinColumn(name = "departmentId")
+//  private Department department;
+
 }

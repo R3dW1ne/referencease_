@@ -25,6 +25,9 @@ public class Employee {
   @JoinColumn(name = "positionId")
   private Position position;
 
+  @ManyToOne
+  @JoinColumn(name = "departmentId")
+  private Department department;
 
   private String phone;
   private LocalDate startDate;
