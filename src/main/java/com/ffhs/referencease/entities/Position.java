@@ -1,12 +1,15 @@
 package com.ffhs.referencease.entities;
 
 import jakarta.persistence.*;
+import java.io.Serializable;
 import lombok.Data;
 
 @Entity
 @Data
 @Table(name = "Position")
-public class Position {
+public class Position implements Serializable {
+
+  private static final long serialVersionUID = 1L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,4 +22,8 @@ public class Position {
 //  @JoinColumn(name = "departmentId")
 //  private Department department;
 
+  @Override
+  public String toString() {
+    return positionName;
+  }
 }

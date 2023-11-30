@@ -30,4 +30,6 @@ public class PositionService implements IPositionService {
   public List<Position> getAllPositions() {
     return positionDao.findAll();
   }
+
+
 }

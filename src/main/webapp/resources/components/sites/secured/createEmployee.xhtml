@@ -5,89 +5,94 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
-  <ui:define name="content">
-    <h:form id="employeeForm">
-      <p:panel header="Employee Details">
+    <ui:define name="content">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">Create Employee</h1>
+            </div>
+            <h:form id="employeeForm">
+                <!--            <div class="flex align-items-center justify-content-center">-->
+                <!--                <div class="surface-card p-4 shadow-2 border-round w-full lg:w-6">-->
+                <p:panelGrid columns="4" layout="flex"
+                             columnClasses="p-col-12 p-md-3 p-xl-2, p-col-12 p-md-9 p-xl-4, p-col-12 p-md-3 p-xl-2, p-col-12 p-md-9 p-xl-4"
+                             contentStyleClass="p-align-baseline ui-fluid"
+                             header="Employee Details">
+                    <!--                                                <p:panel header="Employee Details">-->
 
-        <p:outputLabel for="employeeNumber" value="Employee Number:" />
-        <p:inputText id="employeeNumber" value="#{employeeBean.employee.employeeNumber}" required="true" requiredMessage="Employee number is required." />
-        <p:message for="employeeNumber" />
+                    <p:outputLabel for="employeeNumber" value="Employee Number:"/>
+                    <p:inputText id="employeeNumber"
+                                 value="#{employeeBean.employee.employeeNumber}"
+                                 required="true"
+                                 requiredMessage="Employee number is required."/>
+                    <p:message for="employeeNumber"/>
 
-        <p:outputLabel for="firstName" value="First Name:" />
-        <p:inputText id="firstName" value="#{employeeBean.employee.firstName}" required="true" requiredMessage="First name is required." />
-        <p:message for="firstName" />
+                    <p:outputLabel for="firstName" value="First Name:"/>
+                    <p:inputText id="firstName" value="#{employeeBean.employee.firstName}"
+                                 required="true" requiredMessage="First name is required."/>
+                    <p:message for="firstName"/>
 
-        <p:outputLabel for="lastName" value="Last Name:" />
-        <p:inputText id="lastName" value="#{employeeBean.employee.lastName}" required="true" requiredMessage="Last name is required." />
-        <p:message for="lastName" />
+                    <p:outputLabel for="lastName" value="Last Name:"/>
+                    <p:inputText id="lastName" value="#{employeeBean.employee.lastName}"
+                                 required="true"
+                                 requiredMessage="Last name is required."/>
+                    <p:message for="lastName"/>
 
-        <p:outputLabel for="dateOfBirth" value="Date of Birth:" />
-        <p:calendar id="dateOfBirth" value="#{employeeBean.employee.dateOfBirth}" navigator="true" pattern="dd/MM/yyyy" required="true" requiredMessage="Date of birth is required." />
-        <p:message for="dateOfBirth" />
+                    <p:outputLabel for="dateOfBirth" value="Date of Birth:"/>
+                    <p:calendar id="dateOfBirth"
+                                value="#{employeeBean.employee.dateOfBirth}"
+                                navigator="true" pattern="dd/MM/yyyy" required="true"
+                                requiredMessage="Date of birth is required."
+                                yearRange="c-65:c-0"/>
+                    <p:message for="dateOfBirth"/>
 
-        <p:outputLabel for="phone" value="Phone:" />
-        <p:inputMask id="phone" value="#{employeeBean.employee.phone}" mask="(999) 999-9999" />
-        <p:message for="phone" />
+                    <p:outputLabel for="phone" value="Phone:"/>
+                    <p:inputMask id="phone" value="#{employeeBean.employee.phone}"
+                                 mask="999 / 999 99 99"/>
+                    <p:message for="phone"/>
 
-<!--        <p:outputLabel for="position" value="Position:" />-->
-<!--        <p:inputText id="position" value="#{employeeBean.employee.position.positionName}" required="true" requiredMessage="Position is required." />-->
-<!--        <p:message for="position" />-->
+                    <p:outputLabel for="startDate" value="Start Date:"/>
+                    <p:calendar id="startDate" value="#{employeeBean.employee.startDate}"
+                                navigator="true" pattern="dd/MM/yyyy" required="true"
+                                requiredMessage="Start date is required."
+                                yearRange="c-65:c-0"/>
+                    <p:message for="startDate"/>
 
-        <p:outputLabel for="startDate" value="Start Date:" />
-        <p:calendar id="startDate" value="#{employeeBean.employee.startDate}" navigator="true" pattern="dd/MM/yyyy" required="true" requiredMessage="Start date is required." />
-        <p:message for="startDate" />
+                    <p:outputLabel for="endDate" value="End Date:"/>
+                    <p:calendar id="endDate" value="#{employeeBean.employee.endDate}"
+                                navigator="true"
+                                pattern="dd/MM/yyyy" yearRange="c-65:c-0"/>
+                    <p:message for="endDate"/>
 
-        <p:outputLabel for="endDate" value="End Date:" />
-        <p:calendar id="endDate" value="#{employeeBean.employee.endDate}" navigator="true" pattern="dd/MM/yyyy" />
-        <p:message for="endDate" />
+                    <p:outputLabel for="position" value="Position:"/>
+                    <p:selectOneMenu id="position" value="#{employeeBean.employee.position}"
+                                     converter="entityConverter">
+                        <f:selectItem itemLabel="Select Position" itemValue=""
+                                      noSelectionOption="true"/>
+                        <f:selectItems value="#{employeeBean.positions}" var="position"
+                                       itemLabel="#{position.positionName}"
+                                       itemValue="#{position}"/>
+                    </p:selectOneMenu>
+                    <p:message for="position"/>
 
-<!--        &lt;!&ndash; Position Dropdown &ndash;&gt;-->
-<!--        <p:outputLabel for="position" value="Position:" />-->
-<!--        <p:selectOneMenu id="position" value="#{employeeBean.employee.position}" converter="positionConverter">-->
-<!--          <f:selectItem itemLabel="Select Position" itemValue="" noSelectionOption="true"/>-->
-<!--          <f:selectItems value="#{employeeBean.positions}" var="position" itemLabel="#{position.positionName}" itemValue="#{position}" />-->
-<!--        </p:selectOneMenu>-->
-<!--        <p:message for="position" />-->
+                    <p:outputLabel for="department" value="Department:"/>
+                    <p:selectOneMenu id="department"
+                                     value="#{employeeBean.employee.department}"
+                                     converter="entityConverter">
+                        <f:selectItem itemLabel="Select Department" itemValue=""
+                                      noSelectionOption="true"/>
+                        <f:selectItems value="#{employeeBean.departments}" var="department"
+                                       itemLabel="#{department.departmentName}"
+                                       itemValue="#{department}"/>
+                    </p:selectOneMenu>
+                    <p:message for="department"/>
 
-<!--        &lt;!&ndash; Department Dropdown (falls erforderlich) &ndash;&gt;-->
-<!--        <p:outputLabel for="department" value="Department:" />-->
-<!--        <p:selectOneMenu id="department" value="#{employeeBean.employee.position.department}" converter="departmentConverter">-->
-<!--          <f:selectItem itemLabel="Select Department" itemValue="" noSelectionOption="true"/>-->
-<!--          <f:selectItems value="#{employeeBean.departments}" var="department" itemLabel="#{department.departmentName}" itemValue="#{department}" />-->
-<!--        </p:selectOneMenu>-->
-<!--        <p:message for="department" />-->
-
-        <p:commandButton value="Save" action="#{employeeBean.saveEmployee}" update="employeeForm" />
-      </p:panel>
-    </h:form>
-  </ui:define>
+                    <p:commandButton value="Save" action="#{employeeBean.saveEmployee}"
+                                     update="employeeForm"/>
+                    <!--                        </p:panel>-->
+                </p:panelGrid>
+                <!--                </div>-->
+                <!--            </div>-->
+            </h:form>
+        </div>
+    </ui:define>
 </ui:composition>
-
-<!--<!DOCTYPE html>-->
-<!--<html xmlns="http://www.w3.org/1999/xhtml"-->
-<!--      xmlns:h="http://xmlns.jcp.org/jsf/html"-->
-<!--      xmlns:f="http://xmlns.jcp.org/jsf/core"-->
-<!--      xmlns:p="http://primefaces.org/ui">-->
-
-<!--<h:head>-->
-<!--  <title>Create Employee</title>-->
-<!--</h:head>-->
-
-<!--<h:body>-->
-<!--  <h:form>-->
-<!--    <p:panelGrid columns="2">-->
-<!--      <p:outputLabel for="employeeNumber" value="Employee Number:" />-->
-<!--      <p:inputText id="employeeNumber" value="#{employeeBean.employee.employeeNumber}" required="true" />-->
-
-<!--      &lt;!&ndash; Add similar pairs for other attributes &ndash;&gt;-->
-
-<!--      <p:outputLabel for="firstName" value="First Name:" />-->
-<!--      <p:inputText id="firstName" value="#{employeeBean.employee.firstName}" required="true" />-->
-
-<!--      &lt;!&ndash; ... &ndash;&gt;-->
-
-<!--      <p:commandButton value="Save" action="#{employeeBean.saveEmployee}" />-->
-<!--    </p:panelGrid>-->
-<!--  </h:form>-->
-<!--</h:body>-->
-<!--</html>-->
