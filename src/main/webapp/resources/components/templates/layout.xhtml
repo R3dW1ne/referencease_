@@ -21,16 +21,18 @@
                     <h:graphicImage style="padding: 0 !important; margin: 0 !important" name="images/Logo.jpg"
                                     width="50" height="50"/>
                 </p:menuitem>
-                <p:submenu label="Reference Letter" icon="pi pi-fw pi-file">
+                <p:submenu label="Arbeitszeugnisse" icon="pi pi-fw pi-file">
                     <!--              <p:submenu label="New" icon="pi pi-fw pi-plus">-->
                     <!--                <p:menuitem value="Bookmark" icon="pi pi-fw pi-bookmark"/>-->
                     <!--                <p:menuitem value="Video" icon="pi pi-fw pi-video"/>-->
                     <!--              </p:submenu>-->
-                    <p:menuitem value="New" icon="pi pi-fw pi-plus"/>
+                    <p:menuitem value="Neu" icon="pi pi-fw pi-plus"/>
 <!--                    <p:menuitem value="Delete" icon="pi pi-fw pi-trash"/>-->
                     <p:divider/>
-                    <p:menuitem value="Save" icon="pi pi-fw pi-save" rendered="#{session.getAttribute('authenticated')}"/>
-                    <p:menuitem value="Export" icon="pi pi-fw pi-external-link"/>
+<!--                    vorübergehend deaktiviert-->
+<!--                    <p:menuitem value="Speichern" icon="pi pi-fw pi-save" rendered="#{session.getAttribute('authenticated')}"/>-->
+                    <p:menuitem value="Speichern" icon="pi pi-fw pi-save"/>
+                    <p:menuitem value="Exportieren" icon="pi pi-fw pi-external-link"/>
                 </p:submenu>
 
                 <!--            <p:submenu label="Edit" icon="pi pi-fw pi-pencil">-->
@@ -40,10 +42,13 @@
                 <!--              <p:menuitem value="Justify" icon="pi pi-fw pi-align-justify"/>-->
                 <!--            </p:submenu>-->
 
-                <p:submenu label="Employees" icon="pi pi-fw pi-user" rendered="#{session.getAttribute('authenticated')}">
-                    <p:menuitem value="List" icon="pi pi-fw pi-bars"
-                                outcome="/resources/components/sites/secured/employees"/>
-                    <p:menuitem value="New" icon="pi pi-fw pi-user-plus"
+
+                <!--                    vorübergehend deaktiviert-->
+<!--                <p:submenu label="Mitarbeiter" icon="pi pi-fw pi-user" rendered="#{session.getAttribute('authenticated')}">-->
+                <p:submenu label="Mitarbeiter" icon="pi pi-fw pi-user">
+                    <p:menuitem value="Liste" icon="pi pi-fw pi-bars"
+                                outcome="/resources/components/sites/secured/employeeList"/>
+                    <p:menuitem value="Neuer Mitarbeiter" icon="pi pi-fw pi-user-plus"
                                 outcome="/resources/components/sites/secured/createEmployee"/>
                     <!--              <p:menuitem value="Delete" icon="pi pi-fw pi-user-minus"/>-->
                     <!--              <p:submenu label="Search" icon="pi pi-fw pi-users">-->
@@ -69,10 +74,10 @@
 <!--                <p:menuitem value="Quit" icon="pi pi-fw pi-power-off"/>-->
 
                 <f:facet name="options">
-                    <div class="ui-input-icon-left mr-2">
-                        <i class="pi pi-fw pi-search"/>
-                        <p:inputText placeholder="Search"/>
-                    </div>
+<!--                    <div class="ui-input-icon-left mr-2">-->
+<!--                        <i class="pi pi-fw pi-search"/>-->
+<!--                        <p:inputText placeholder="Search"/>-->
+<!--                    </div>-->
                     <p:button value="Login" icon="pi pi-fw pi-sign-in" styleClass="ui-button-info"
                               outcome="/resources/components/sites/login"
                               rendered="#{!session.getAttribute('authenticated')}"/>

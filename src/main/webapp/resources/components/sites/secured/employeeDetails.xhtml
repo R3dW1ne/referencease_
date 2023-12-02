@@ -1,0 +1,41 @@
+<ui:composition template="/resources/components/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="content">
+        <f:metadata>
+            <f:viewParam name="employeeId" value="#{employeeBean.selectedEmployeeId}"/>
+        </f:metadata>
+        <div class="card">
+            <h:form id="employeeDetailsForm">
+                <div class="flex align-items-center justify-content-center">
+                    <div class="surface-card p-4 shadow-2 border-round w-full lg:w-6">
+                        <div class="card-header text-center">
+                            <h1 class="card-title">Mitarbeiterdetails</h1>
+                        </div>
+                        <div class="formgrid grid">
+                            <!-- Mitarbeiterdetails -->
+                            <div class="field col-12 md:col-6">
+                                <p:outputLabel value="Vorname: "/>
+                                <h:outputText value="#{employeeBean.employees[employeeBean.selectedEmployeeId].firstName}"
+                                              styleClass="mb-3"/>
+                            </div>
+                            <!-- Weitere Felder für Nachname, Abteilung usw. -->
+                            <div class="field col-12 md:col-6">
+                                <p:outputLabel value="Nachname: "/>
+                                <h:outputText value="#{employeeBean.employees[employeeBean.selectedEmployeeId].lastName}"
+                                              styleClass="mb-3"/>
+                            </div>
+                            <p:commandButton icon="pi pi-user"
+                                             styleClass="rounded-button ui-button-info"
+                                             action="#{employeeBean.setSelectedEmployeeById(employeeBean.selectedEmployeeId)}"/>
+                            <!-- ... -->
+                        </div>
+                    </div>
+                </div>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>

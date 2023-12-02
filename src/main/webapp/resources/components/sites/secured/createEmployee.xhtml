@@ -7,91 +7,114 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:define name="content">
         <div class="card">
-            <div class="card-header">
-                <h1 class="card-title">Create Employee</h1>
-            </div>
+
             <h:form id="employeeForm">
-                <!--            <div class="flex align-items-center justify-content-center">-->
-                <!--                <div class="surface-card p-4 shadow-2 border-round w-full lg:w-6">-->
-                <p:panelGrid columns="4" layout="flex"
-                             columnClasses="p-col-12 p-md-3 p-xl-2, p-col-12 p-md-9 p-xl-4, p-col-12 p-md-3 p-xl-2, p-col-12 p-md-9 p-xl-4"
-                             contentStyleClass="p-align-baseline ui-fluid"
-                             header="Employee Details">
-                    <!--                                                <p:panel header="Employee Details">-->
+                <div class="flex align-items-center justify-content-center">
+                    <div class="surface-card p-4 shadow-2 border-round w-full lg:w-6">
+                        <div class="card-header text-center">
+                            <h1 class="card-title">Mitarbeiter erstellen</h1>
+                        </div>
+                        <div class="formgrid grid">
+                            <div class="field col-12 md:col-12">
+                                <p:outputLabel for="employeeNumber"
+                                               class="block text-900 font-medium mb-2"
+                                               value="Mitarbeiternummer:"/>
+                                <p:inputText id="employeeNumber"
+                                             value="#{employeeBean.employee.employeeNumber}"
+                                             styleClass="mb-3"/>
+                                <p:message for="employeeNumber"/>
+                            </div>
 
-                    <p:outputLabel for="employeeNumber" value="Employee Number:"/>
-                    <p:inputText id="employeeNumber"
-                                 value="#{employeeBean.employee.employeeNumber}"
-                                 required="true"
-                                 requiredMessage="Employee number is required."/>
-                    <p:message for="employeeNumber"/>
+                            <div class="field col-12 md:col-6">
+                                <p:outputLabel for="firstName"
+                                               class="block text-900 font-medium mb-2"
+                                               value="Vorname:"/>
+                                <p:inputText id="firstName"
+                                             value="#{employeeBean.employee.firstName}"
+                                             required="true"
+                                             requiredMessage="Vorname ist erforderlich." styleClass="w-full mb-3"/>
+                                <p:message for="firstName"/>
+                            </div>
 
-                    <p:outputLabel for="firstName" value="First Name:"/>
-                    <p:inputText id="firstName" value="#{employeeBean.employee.firstName}"
-                                 required="true" requiredMessage="First name is required."/>
-                    <p:message for="firstName"/>
+                            <div class="field col-12 md:col-6">
+                                <p:outputLabel for="lastName" class="block text-900 font-medium mb-2" value="Nachname:"/>
+                                <p:inputText id="lastName" value="#{employeeBean.employee.lastName}"
+                                             required="true"
+                                             requiredMessage="Nachname ist erforderlich." styleClass="w-full mb-3"/>
+                                <p:message for="lastName"/>
+                            </div>
 
-                    <p:outputLabel for="lastName" value="Last Name:"/>
-                    <p:inputText id="lastName" value="#{employeeBean.employee.lastName}"
-                                 required="true"
-                                 requiredMessage="Last name is required."/>
-                    <p:message for="lastName"/>
+                            <div class="field col-12 md:col-6">
+                                <p:outputLabel for="dateOfBirth" class="block text-900 font-medium mb-2" value="Geburtsdatum:"/>
+                                <p:calendar id="dateOfBirth"
+                                            value="#{employeeBean.employee.dateOfBirth}"
+                                            navigator="true" pattern="dd/MM/yyyy" required="true"
+                                            requiredMessage="Geburtsdatum ist erforderlich."
+                                            yearRange="c-65:c-0" styleClass="w-full mb-3"/>
+                                <p:message for="dateOfBirth"/>
+                            </div>
 
-                    <p:outputLabel for="dateOfBirth" value="Date of Birth:"/>
-                    <p:calendar id="dateOfBirth"
-                                value="#{employeeBean.employee.dateOfBirth}"
-                                navigator="true" pattern="dd/MM/yyyy" required="true"
-                                requiredMessage="Date of birth is required."
-                                yearRange="c-65:c-0"/>
-                    <p:message for="dateOfBirth"/>
+                            <div class="field col-12 md:col-6">
+                                <p:outputLabel for="phone" class="block text-900 font-medium mb-2" value="Telefon:"/>
+                                <p:inputMask id="phone" value="#{employeeBean.employee.phone}"
+                                             mask="999 / 999 99 99" styleClass="mb-3"/>
+                                <p:message for="phone"/>
+                            </div>
 
-                    <p:outputLabel for="phone" value="Phone:"/>
-                    <p:inputMask id="phone" value="#{employeeBean.employee.phone}"
-                                 mask="999 / 999 99 99"/>
-                    <p:message for="phone"/>
+                            <div class="field col-12 md:col-6">
+                                <p:outputLabel for="startDate" class="block text-900 font-medium mb-2" value="Anfangsdatum:"/>
+                                <p:calendar id="startDate"
+                                            value="#{employeeBean.employee.startDate}"
+                                            navigator="true" pattern="dd/MM/yyyy" required="true"
+                                            requiredMessage="Anfangsdatum ist erforderlich."
+                                            yearRange="c-65:c-0" styleClass="w-full mb-3"/>
+                                <p:message for="startDate"/>
+                            </div>
 
-                    <p:outputLabel for="startDate" value="Start Date:"/>
-                    <p:calendar id="startDate" value="#{employeeBean.employee.startDate}"
-                                navigator="true" pattern="dd/MM/yyyy" required="true"
-                                requiredMessage="Start date is required."
-                                yearRange="c-65:c-0"/>
-                    <p:message for="startDate"/>
+                            <div class="field col-12 md:col-6">
+                                <p:outputLabel for="endDate" class="block text-900 font-medium mb-2" value="Enddatum:"/>
+                                <p:calendar id="endDate" value="#{employeeBean.employee.endDate}"
+                                            navigator="true"
+                                            pattern="dd/MM/yyyy" yearRange="c-65:c-0" styleClass="w-full mb-3"/>
+                                <p:message for="endDate"/>
+                            </div>
 
-                    <p:outputLabel for="endDate" value="End Date:"/>
-                    <p:calendar id="endDate" value="#{employeeBean.employee.endDate}"
-                                navigator="true"
-                                pattern="dd/MM/yyyy" yearRange="c-65:c-0"/>
-                    <p:message for="endDate"/>
+                            <div class="field col-12 md:col-6">
+                                <p:outputLabel for="position" class="block text-900 font-medium mb-2" value="Position:"/>
+                                <p:selectOneMenu id="position"
+                                                 value="#{employeeBean.employee.position}"
+                                                 converter="entityConverter" required="true"
+                                                 requiredMessage="Position ist erforderlich.">
+                                    <f:selectItem itemLabel="Position auswählen" itemValue=""
+                                                  noSelectionOption="true"/>
+                                    <f:selectItems value="#{employeeBean.positions}" var="position"
+                                                   itemLabel="#{position.positionName}"
+                                                   itemValue="#{position}"/>
+                                </p:selectOneMenu>
+                                <p:message for="position"/>
+                            </div>
 
-                    <p:outputLabel for="position" value="Position:"/>
-                    <p:selectOneMenu id="position" value="#{employeeBean.employee.position}"
-                                     converter="entityConverter">
-                        <f:selectItem itemLabel="Select Position" itemValue=""
-                                      noSelectionOption="true"/>
-                        <f:selectItems value="#{employeeBean.positions}" var="position"
-                                       itemLabel="#{position.positionName}"
-                                       itemValue="#{position}"/>
-                    </p:selectOneMenu>
-                    <p:message for="position"/>
+                            <div class="field col-12 md:col-6">
+                                <p:outputLabel for="department" class="block text-900 font-medium mb-2" value="Abteilung:"/>
+                                <p:selectOneMenu id="department"
+                                                 value="#{employeeBean.employee.department}"
+                                                 converter="entityConverter" required="true"
+                                                 requiredMessage="Abteilung ist erforderlich.">
+                                    <f:selectItem itemLabel="Abteilung auswählen" itemValue=""
+                                                  noSelectionOption="true"/>
+                                    <f:selectItems value="#{employeeBean.departments}"
+                                                   var="department"
+                                                   itemLabel="#{department.departmentName}"
+                                                   itemValue="#{department}"/>
+                                </p:selectOneMenu>
+                                <p:message for="department"/>
+                            </div>
 
-                    <p:outputLabel for="department" value="Department:"/>
-                    <p:selectOneMenu id="department"
-                                     value="#{employeeBean.employee.department}"
-                                     converter="entityConverter">
-                        <f:selectItem itemLabel="Select Department" itemValue=""
-                                      noSelectionOption="true"/>
-                        <f:selectItems value="#{employeeBean.departments}" var="department"
-                                       itemLabel="#{department.departmentName}"
-                                       itemValue="#{department}"/>
-                    </p:selectOneMenu>
-                    <p:message for="department"/>
-
-                    <p:commandButton value="Save" action="#{employeeBean.saveEmployee}"
-                                     update="employeeForm"/>
-                    <!--                        </p:panel>-->
-                </p:panelGrid>
-                <!--                </div>-->
-                <!--            </div>-->
+                            <p:commandButton value="Speichern" icon="pi pi-check" styleClass="rounded-button" action="#{employeeBean.saveEmployee}"
+                                             update="employeeForm"/>
+                        </div>
+                    </div>
+                </div>
             </h:form>
         </div>
     </ui:define>

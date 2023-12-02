@@ -1,6 +1,7 @@
 package com.ffhs.referencease.entities;
 
 import jakarta.persistence.*;
+import java.io.Serializable;
 import java.util.UUID;
 import lombok.Data;
 import java.time.LocalDate;
@@ -8,7 +9,7 @@ import java.time.LocalDate;
 @Entity
 @Data
 @Table(name = "Employee")
-public class Employee {
+public class Employee implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
