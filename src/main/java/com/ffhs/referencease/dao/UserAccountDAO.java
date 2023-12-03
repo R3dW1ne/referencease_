@@ -24,7 +24,7 @@ public class UserAccountDAO implements IUserAccountDAO {
   }
 
   @Override
-  public Optional<UserAccount> getUserByEmail(String email) {
+  public Optional<UserAccount> findByEmail(String email) {
     TypedQuery<UserAccount> query = entityManager.createQuery(
         "SELECT u FROM UserAccount u WHERE u.email = :email", UserAccount.class);
     query.setParameter("email", email);

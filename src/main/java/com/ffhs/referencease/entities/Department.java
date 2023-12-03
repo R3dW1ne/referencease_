@@ -2,6 +2,7 @@ package com.ffhs.referencease.entities;
 
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.UUID;
 import lombok.Data;
 
 @Entity
@@ -12,8 +13,8 @@ public class Department implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long departmentId;
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private UUID departmentId;
 
   @Column(unique = true)
   private String departmentName;

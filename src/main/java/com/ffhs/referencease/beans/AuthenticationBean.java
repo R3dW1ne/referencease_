@@ -19,6 +19,8 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SessionScoped
 @Named
@@ -27,6 +29,9 @@ import lombok.Setter;
 public class AuthenticationBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    @Inject
+    private Logger LOGGER = LoggerFactory.getLogger(AuthenticationBean.class);
 
     private final transient IUserAccountService userAccountService;
 
@@ -80,6 +85,7 @@ public class AuthenticationBean implements Serializable {
 //            session.setAttribute("selectedTheme", userAccount.get().getSelectedTheme());
             this.authenticated = true;
             setUserAccountDTO(userAccountDTO);
+            LOGGER.info("User " + userAccountDTO.getEmail() + " logged in.");
             // Navigate to landing page
             return "/resources/components/sites/home.xhtml";
         }
