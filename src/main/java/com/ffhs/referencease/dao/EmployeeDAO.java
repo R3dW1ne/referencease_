@@ -1,6 +1,6 @@
 package com.ffhs.referencease.dao;
 
-import com.ffhs.referencease.dao.dao_interfaces.IEmployeeDAO;
+import com.ffhs.referencease.dao.interfaces.IEmployeeDAO;
 import com.ffhs.referencease.entities.Employee;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;

@@ -1,8 +1,8 @@
 package com.ffhs.referencease.services;
 
-import com.ffhs.referencease.dao.dao_interfaces.IDepartmentDAO;
+import com.ffhs.referencease.dao.interfaces.IDepartmentDAO;
 import com.ffhs.referencease.entities.Department;
-import com.ffhs.referencease.services.service_interfaces.IDepartmentService;
+import com.ffhs.referencease.services.interfaces.IDepartmentService;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import java.util.List;

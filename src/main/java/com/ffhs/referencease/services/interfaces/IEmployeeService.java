@@ -1,7 +1,6 @@
-package com.ffhs.referencease.services.service_interfaces;
+package com.ffhs.referencease.services.interfaces;
 
 import com.ffhs.referencease.entities.Employee;
-import jakarta.ejb.Stateless;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

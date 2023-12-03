@@ -1,6 +1,6 @@
 package com.ffhs.referencease.dao;
 
-import com.ffhs.referencease.dao.dao_interfaces.IPositionDAO;
+import com.ffhs.referencease.dao.interfaces.IPositionDAO;
 import com.ffhs.referencease.entities.Position;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;

@@ -1,8 +1,8 @@
 package com.ffhs.referencease.services;
 
-import com.ffhs.referencease.dao.dao_interfaces.IPositionDAO;
+import com.ffhs.referencease.dao.interfaces.IPositionDAO;
 import com.ffhs.referencease.entities.Position;
-import com.ffhs.referencease.services.service_interfaces.IPositionService;
+import com.ffhs.referencease.services.interfaces.IPositionService;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import java.util.List;

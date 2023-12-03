@@ -1,4 +1,4 @@
-package com.ffhs.referencease.services.service_interfaces;
+package com.ffhs.referencease.services.interfaces;
 
 import com.ffhs.referencease.entities.Position;
 import java.util.List;

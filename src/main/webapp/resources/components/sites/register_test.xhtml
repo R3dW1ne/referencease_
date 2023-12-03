@@ -14,7 +14,7 @@
                 <p:inputText id="email" required="true" label="email" size="40"
                              requiredMessage="Please enter your email address."
                              validatorMessage="Invalid email format"
-                             value="#{userBean.userAccount.email}">
+                             value="#{userBean.userAccountDTO.email}">
 
                     <f:validateRegex
                       pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />

@@ -36,7 +36,7 @@
                         <!-- E-Mail Eingabefeld -->
                         <p:outputLabel for="email"
                                        class="block text-900 font-medium mb-2" value="Email"/>
-                        <p:inputText id="email" value="#{userBean.userAccount.email}"
+                        <p:inputText id="email" value="#{userBean.userAccountDTO.email}"
                                      required="true" requiredMessage="Email is required."
                                      validatorMessage="Invalid email format"
                                      styleClass="w-full mb-3" placeholder="Email address">
@@ -50,7 +50,7 @@
                         <!-- Passwort Eingabefeld -->
                         <p:outputLabel for="password"
                                        class="block text-900 font-medium mb-2" value="Password"/>
-                        <p:password id="password" value="#{userBean.userAccount.password}"
+                        <p:password id="password" value="#{userBean.userAccountDTO.password}"
                                     required="true" requiredMessage="Password is required."
                                     feedback="true" promptLabel="Enter a password" weakLabel="Weak"
                                     goodLabel="Good" strongLabel="Strong"
@@ -61,7 +61,7 @@
                         <p:outputLabel for="confirmPassword" class="block text-900 font-medium mb-2"
                                        value="Confirm Password"/>
                         <p:password id="confirmPassword"
-                                    value="#{userBean.userAccount.confirmPassword}"
+                                    value="#{userBean.userAccountDTO.confirmPassword}"
                                     required="true" requiredMessage="Confirm password is required."
                                     styleClass="w-full mb-3" placeholder="Confirm Password"/>
                         <p:message for="confirmPassword" display="text"/>

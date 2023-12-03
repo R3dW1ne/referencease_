@@ -1,6 +1,6 @@
 package com.ffhs.referencease.dao;
 
-import com.ffhs.referencease.dao.dao_interfaces.IDepartmentDAO;
+import com.ffhs.referencease.dao.interfaces.IDepartmentDAO;
 import com.ffhs.referencease.entities.Department;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

@@ -1,4 +1,4 @@
-package com.ffhs.referencease.dao.dao_interfaces;
+package com.ffhs.referencease.dao.interfaces;
 
 import com.ffhs.referencease.entities.Employee;
 import java.util.List;

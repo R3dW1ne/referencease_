@@ -1,8 +1,11 @@
 package com.ffhs.referencease.beans;
 
 //import ch.ffhs.bude4u.utils.PBKDF2Hash;
+import com.ffhs.referencease.dto.UserAccountDTO;
 import com.ffhs.referencease.entities.UserAccount;
-import com.ffhs.referencease.services.UserService;
+import com.ffhs.referencease.exceptionhandling.PositionNotFoundException;
+import com.ffhs.referencease.services.UserAccountService;
+import com.ffhs.referencease.services.interfaces.IUserAccountService;
 import com.ffhs.referencease.utils.PBKDF2Hash;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.context.ExternalContext;
@@ -13,7 +16,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.Optional;
-import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,7 +28,9 @@ public class AuthenticationBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final UserService userService;
+    private final transient IUserAccountService userAccountService;
+
+    private transient UserAccountDTO userAccountDTO;
 
     private transient HttpSession session = null;
 
@@ -38,11 +42,11 @@ public class AuthenticationBean implements Serializable {
     private String lastName = null;
     private String updatePassword = null;
 
-    private transient UserAccount userAccount;
+
 
     @Inject
-    public AuthenticationBean(UserService userService) {
-        this.userService = userService;
+    public AuthenticationBean(IUserAccountService userAccountService) {
+        this.userAccountService = userAccountService;
     }
 
     public HttpSession getSession() {
@@ -53,38 +57,41 @@ public class AuthenticationBean implements Serializable {
         return session;
     }
 
-    public String login() {
+    public String login() throws PositionNotFoundException {
         String emailInput = getEmail();
         String hashedPasswordInput = PBKDF2Hash.createHash(getPassword());
         session = getSession();
 
-        Optional<UserAccount> userAccountAccess = userService.getUserByEmail(emailInput);
+//        Optional<UserAccount> userAccountAccess = userAccountService.getUserByEmail(emailInput);
+//
+//        if (userAccountAccess.isEmpty()) return "/resources/components/sites/login.xhtml?error=true";
 
-        if (userAccountAccess.isEmpty()) return "/resources/components/sites/login.xhtml?error=true";
+        UserAccountDTO userAccountDTO = userAccountService.getUserByEmail(emailInput);
 
-        String hashedSavedPw = userAccountAccess.get().getPassword();
-        boolean pwMatch = PBKDF2Hash.checkPassword(hashedPasswordInput, hashedSavedPw);
+//        String hashedSavedPw = userAccountAccess.get().getPassword();
+//        String hashedSavedPw = userAccountDTO.getPassword();
+//        boolean pwMatch = userAccountService.passwordMatches(emailInput, hashedPasswordInput);
 
 
-        if (pwMatch) {
+        if (userAccountService.passwordMatches(emailInput, hashedPasswordInput)) {
             session.setAttribute("authenticated", true);
-            session.setAttribute("email", emailInput);
-            session.setAttribute("userId", userAccountAccess.get().getUserId());
+            session.setAttribute("email", userAccountDTO.getEmail());
+            session.setAttribute("userId", userAccountDTO.getUserId());
 //            session.setAttribute("selectedTheme", userAccount.get().getSelectedTheme());
             this.authenticated = true;
-            setUserAccount(userAccountAccess.get());
+            setUserAccountDTO(userAccountDTO);
             // Navigate to landing page
             return "/resources/components/sites/home.xhtml";
         }
         this.authenticated = false;
-        setUserAccount(null);
+        setUserAccountDTO(null);
 
         return "/resources/components/sites/login.xhtml?error=true";
     }
 
 
     public String logout() {
-        userAccount = null;
+        userAccountDTO = null;
         this.authenticated = false;
         session.setAttribute("userId", null);
         FacesContext facesContext = FacesContext.getCurrentInstance();
