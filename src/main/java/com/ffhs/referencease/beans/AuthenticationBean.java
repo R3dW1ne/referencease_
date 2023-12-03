@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.Optional;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -104,33 +105,33 @@ public class AuthenticationBean implements Serializable {
         return authenticated;
     }
 
-    public String updateProfile() {
-        try {
-
-            Optional<UserAccount> updatedUser = userService.getUserById((Long) session.getAttribute("userId"));
-            if (updatedUser.isEmpty()) return "/resources/components/sites/login.xhtml?error=true";
-
-            if (getUpdatePassword() != null && !getUpdatePassword().isEmpty()) {
-                updatedUser.get().setPassword(getUpdatePassword());
-            }
-
-//            String theme = updatedUser.get().getSelectedTheme();
-//            session.setAttribute("selectedTheme", theme);
-
-            // Check if username has been updated
-            if (updatedUser.get().getEmail().equals(session.getAttribute("email"))) {
-                userService.updateUser(updatedUser.get());
-            } else {
-                // Check if username has already been set.
-                Optional<UserAccount> hasUser = userService.getUserByEmail(updatedUser.get().getEmail());
-                // Update failed -> Navigate to...
-                if (hasUser.isPresent()) return "/resources/components/sites/login.xhtml?error=true";
-                userService.updateUser(updatedUser.get());
-            }
-
-            return "/index.xhtml";
-        } catch (Exception ex) {
-            return "ERROR: " + ex.getMessage();
-        }
-    }
+//    public String updateProfile() {
+//        try {
+//
+//            Optional<UserAccount> updatedUser = userService.getUserById((UUID) session.getAttribute("userId"));
+//            if (updatedUser.isEmpty()) return "/resources/components/sites/login.xhtml?error=true";
+//
+//            if (getUpdatePassword() != null && !getUpdatePassword().isEmpty()) {
+//                updatedUser.get().setPassword(getUpdatePassword());
+//            }
+//
+////            String theme = updatedUser.get().getSelectedTheme();
+////            session.setAttribute("selectedTheme", theme);
+//
+//            // Check if username has been updated
+//            if (updatedUser.get().getEmail().equals(session.getAttribute("email"))) {
+//                userService.updateUser(updatedUser.get());
+//            } else {
+//                // Check if username has already been set.
+//                Optional<UserAccount> hasUser = userService.getUserByEmail(updatedUser.get().getEmail());
+//                // Update failed -> Navigate to...
+//                if (hasUser.isPresent()) return "/resources/components/sites/login.xhtml?error=true";
+//                userService.updateUser(updatedUser.get());
+//            }
+//
+//            return "/index.xhtml";
+//        } catch (Exception ex) {
+//            return "ERROR: " + ex.getMessage();
+//        }
+//    }
 }

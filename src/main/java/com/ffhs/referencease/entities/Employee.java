@@ -11,9 +11,11 @@ import java.time.LocalDate;
 @Table(name = "Employee")
 public class Employee implements Serializable {
 
+  private static final long serialVersionUID = 1L;
+
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long employeeId;
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private UUID employeeId;
 
   @Column(unique = true)
   private String employeeNumber;

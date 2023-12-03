@@ -7,6 +7,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Stateless
 public class EmployeeDAO implements IEmployeeDAO {
@@ -15,7 +16,7 @@ public class EmployeeDAO implements IEmployeeDAO {
   private EntityManager em;
 
   @Override
-  public Optional<Employee> find(Long id) {
+  public Optional<Employee> find(UUID id) {
     return Optional.ofNullable(em.find(Employee.class, id));
   }
 

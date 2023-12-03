@@ -2,6 +2,8 @@ package com.ffhs.referencease.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import java.io.Serializable;
+import java.util.UUID;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +11,9 @@ import lombok.NoArgsConstructor;
 @Data
 @Table(name = "UserAccount")
 @NoArgsConstructor
-public class UserAccount {
+public class UserAccount implements Serializable {
+
+  private static final long serialVersionUID = 1L;
 
   public UserAccount(String email, String password) {
     this.email = email;
@@ -17,8 +21,8 @@ public class UserAccount {
   }
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long userId;
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private UUID userId;
 
   @Column(unique = true)
 //  @Email(message = "Invalid email format.")

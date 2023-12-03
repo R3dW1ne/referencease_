@@ -10,6 +10,7 @@ import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import java.io.Serializable;
 import java.util.Optional;
+import java.util.UUID;
 import org.mindrot.jbcrypt.BCrypt;
 
 @Stateless
@@ -72,15 +73,15 @@ public class UserService implements Serializable {
     return Optional.of(userAccount);
   }
 
-  public Optional<UserAccount> getUserById(Long userId) {
-    TypedQuery<UserAccount> query = entityManager.createQuery(
-        "SELECT u FROM UserAccount u WHERE u.userId = :userId", UserAccount.class);
-    query.setParameter("userId", userId);
-    UserAccount userAccount = query.getSingleResult();
-    return Optional.of(userAccount);
-  }
+//  public Optional<UserAccount> getUserById(UUID userId) {
+//    TypedQuery<UserAccount> query = entityManager.createQuery(
+//        "SELECT u FROM UserAccount u WHERE u.userId = :userId", UserAccount.class);
+//    query.setParameter("userId", userId);
+//    UserAccount userAccount = query.getSingleResult();
+//    return Optional.of(userAccount);
+//  }
 
-  public Optional<UserAccount> get(Long id) {
+  public Optional<UserAccount> get(UUID id) {
     return Optional.ofNullable(entityManager.find(UserAccount.class, id));
   }
 

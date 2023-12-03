@@ -1,13 +1,16 @@
 package com.ffhs.referencease.entities;
 
 import jakarta.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import lombok.Data;
 
 @Entity
 @Data
 @Table(name = "AuditLog")
-public class AuditLog {
+public class AuditLog implements Serializable {
+
+  private static final long serialVersionUID = 1L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

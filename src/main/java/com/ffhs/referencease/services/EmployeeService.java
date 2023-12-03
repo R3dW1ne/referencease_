@@ -7,6 +7,7 @@ import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Stateless
 public class EmployeeService implements IEmployeeService {
@@ -23,7 +24,7 @@ public class EmployeeService implements IEmployeeService {
   }
 
   @Override
-  public Optional<Employee> getEmployee(Long id) {
+  public Optional<Employee> getEmployee(UUID id) {
     return employeeDao.find(id);
   }
 

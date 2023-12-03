@@ -38,10 +38,10 @@
                             <p:commandButton icon="pi pi-user"
                                              styleClass="rounded-button ui-button-info"
                                              action="#{employeeBean.loadSelectedEmployeeDetails(employee.employeeId)}"/>
-                            <h:link outcome="/resources/components/sites/secured/employeeDetails"
-                                    value="Details">
-                                <f:param name="employeeId" value="#{employeeBean.employees.indexOf(employee)}"/>
-                            </h:link>
+<!--                            <h:link outcome="/resources/components/sites/secured/employeeDetails"-->
+<!--                                    value="Details">-->
+<!--                                <f:param name="employeeId" value="#{employeeBean.employees.indexOf(employee)}"/>-->
+<!--                            </h:link>-->
                         </p:column>
                     </p:dataTable>
                 </h:form>

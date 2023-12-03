@@ -14,14 +14,15 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
 
 @Named
 @RequestScoped
-public class EmployeeBean implements Serializable {
+public class EmployeeBean{
 
-  private static final long serialVersionUID = 1L;
+//  private static final long serialVersionUID = 1L;
 
   private final IEmployeeService employeeService;
   private final IPositionService positionService;
@@ -31,9 +32,9 @@ public class EmployeeBean implements Serializable {
   @Setter
   private Employee employee = new Employee();
 
-  @Getter
-  @Setter
-  private Employee selectedEmployee;
+//  @Getter
+//  @Setter
+//  private Employee selectedEmployee;
 
   @Getter
   @Setter
@@ -68,22 +69,19 @@ public class EmployeeBean implements Serializable {
     filteredEmployees = employeeService.getAllEmployees();
     positions = positionService.getAllPositions();
     departments = departmentService.getAllDepartments();
-    if (selectedEmployeeId != null) {
-      setSelectedEmployeeById(selectedEmployeeId);
-    }
   }
 
-  public String loadSelectedEmployeeDetails(Long employeeId) {
+  public String loadSelectedEmployeeDetails(UUID employeeId) {
     return "/resources/components/sites/secured/employeeDetails.xhtml?faces-redirect=true&employeeId="
         + employeeId;
   }
 
-  public void setSelectedEmployeeById(Long employeeId) {
-    selectedEmployee = employeeService.getEmployee(employeeId)
-        .orElse(null); // Oder eine andere Handhabung, falls der Mitarbeiter nicht gefunden wird
-  }
+//  public void setSelectedEmployeeById(UUID employeeId) {
+//    selectedEmployee = employeeService.getEmployee(employeeId)
+//        .orElse(null); // Oder eine andere Handhabung, falls der Mitarbeiter nicht gefunden wird
+//  }
 
-  public void loadEmployee(Long id) {
+  public void loadEmployee(UUID id) {
     employee = employeeService.getEmployee(id).orElse(new Employee());
   }
 
