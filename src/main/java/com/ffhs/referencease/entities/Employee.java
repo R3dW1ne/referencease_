@@ -1,17 +1,40 @@
 package com.ffhs.referencease.entities;
 
-import jakarta.persistence.*;
+import com.ffhs.referencease.dto.EmployeeDTO;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.UUID;
 import lombok.Data;
-import java.time.LocalDate;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor
 @Data
 @Table(name = "Employee")
 public class Employee implements Serializable {
 
   private static final long serialVersionUID = 1L;
+
+  public Employee(EmployeeDTO dto) {
+    this.employeeId = dto.getEmployeeId();
+    this.employeeNumber = dto.getEmployeeNumber();
+    this.firstName = dto.getFirstName();
+    this.lastName = dto.getLastName();
+    this.dateOfBirth = dto.getDateOfBirth();
+    this.phone = dto.getPhone();
+    this.startDate = dto.getStartDate();
+    this.endDate = dto.getEndDate();
+    this.position = dto.getPosition();
+    this.department = dto.getDepartment();
+  }
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,6 +47,12 @@ public class Employee implements Serializable {
   private String lastName;
   private LocalDate dateOfBirth;
 
+
+  private String phone;
+  private LocalDate startDate;
+  private LocalDate endDate;
+
+
   @ManyToOne
   @JoinColumn(name = "positionId")
   private Position position;
@@ -31,10 +60,6 @@ public class Employee implements Serializable {
   @ManyToOne
   @JoinColumn(name = "departmentId")
   private Department department;
-
-  private String phone;
-  private LocalDate startDate;
-  private LocalDate endDate;
 
   // Getter, Setter, hashCode, equals und toString Methoden
 }

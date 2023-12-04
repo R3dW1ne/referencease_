@@ -1,5 +1,6 @@
 package com.ffhs.referencease.beans;
 
+import com.ffhs.referencease.dto.EmployeeDTO;
 import com.ffhs.referencease.entities.Department;
 import com.ffhs.referencease.entities.Employee;
 import com.ffhs.referencease.entities.Position;
@@ -8,43 +9,45 @@ import com.ffhs.referencease.services.interfaces.IEmployeeService;
 import com.ffhs.referencease.services.interfaces.IPositionService;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.annotation.ManagedProperty;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
 
 @Named
-@RequestScoped
-public class EmployeeBean{
+@SessionScoped
+public class EmployeeBean implements Serializable {
 
-//  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-  private final IEmployeeService employeeService;
-  private final IPositionService positionService;
-  private final IDepartmentService departmentService;
-
-  @Getter
-  @Setter
-  private Employee employee = new Employee();
-
-//  @Getter
-//  @Setter
-//  private Employee selectedEmployee;
+  private final transient IEmployeeService employeeService;
+  private final transient IPositionService positionService;
+  private final transient IDepartmentService departmentService;
 
   @Getter
   @Setter
-//  @ManagedProperty("#{param.employeeId}")
-  private Long selectedEmployeeId;
+  private EmployeeDTO employee = new EmployeeDTO();
+
+  @Setter
+  private EmployeeDTO selectedEmployee;
 
   @Getter
   @Setter
-  private List<Employee> employees;
+  @ManagedProperty("#{param.employeeId}")
+  private UUID selectedEmployeeId;
 
   @Getter
   @Setter
-  private List<Employee> filteredEmployees;
+  private List<EmployeeDTO> employees;
+
+  @Getter
+  @Setter
+  private List<EmployeeDTO> filteredEmployees;
 
   @Getter
   private List<Position> positions;
@@ -69,17 +72,17 @@ public class EmployeeBean{
   }
 
   public String loadSelectedEmployeeDetails(UUID employeeId) {
+    selectedEmployeeId = employeeId;
     return "/resources/components/sites/secured/employeeDetails.xhtml?faces-redirect=true&employeeId="
         + employeeId;
   }
 
-//  public void setSelectedEmployeeById(UUID employeeId) {
-//    selectedEmployee = employeeService.getEmployee(employeeId)
-//        .orElse(null); // Oder eine andere Handhabung, falls der Mitarbeiter nicht gefunden wird
-//  }
+  public void setSelectedEmployeeById(UUID employeeId) {
+    selectedEmployee = employeeService.getEmployee(employeeId);
+  }
 
   public void loadEmployee(UUID id) {
-    employee = employeeService.getEmployee(id).orElse(new Employee());
+    employee = employeeService.getEmployee(id);
   }
 
   public void saveEmployee() {
@@ -92,5 +95,22 @@ public class EmployeeBean{
 
   public void updateEmployee() {
     employee = employeeService.updateEmployee(employee);
+  }
+
+  public EmployeeDTO getSelectedEmployeeByIdString(String employeeId) {
+    UUID uuid = UUID.fromString(employeeId);
+    if (selectedEmployee != null && selectedEmployee.getEmployeeId().equals(uuid)) {
+      return selectedEmployee;
+    }
+    selectedEmployee = employeeService.getEmployee(uuid);
+    return selectedEmployee;
+  }
+
+  public EmployeeDTO getSelectedEmployee() {
+    if (selectedEmployee != null && selectedEmployee.getEmployeeId().equals(selectedEmployeeId)) {
+      return selectedEmployee;
+    }
+    selectedEmployee = employeeService.getEmployee(selectedEmployeeId);
+    return selectedEmployee;
   }
 }
