@@ -44,6 +44,9 @@
 <!--                            </h:link>-->
                         </p:column>
                     </p:dataTable>
+                    <p:commandButton icon="pi pi-user"
+                                     styleClass="rounded-button ui-button-info"
+                                     action="#{employeeBean.loadSelectedEmployeeDetails(employee.employeeId)}"/>
                 </h:form>
             </div>
         </div>

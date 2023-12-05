@@ -52,7 +52,7 @@
                         <p:menuitem value="Liste" icon="pi pi-fw pi-bars"
                                     outcome="/resources/components/sites/secured/employeeList"/>
                         <p:menuitem value="Neuer Mitarbeiter" icon="pi pi-fw pi-user-plus"
-                                    outcome="/resources/components/sites/secured/createEmployee"/>
+                                    action="#{employeeBean.setEditModeToFalseAndNavigate}"/>
                         <!--              <p:menuitem value="Delete" icon="pi pi-fw pi-user-minus"/>-->
                         <!--              <p:submenu label="Search" icon="pi pi-fw pi-users">-->
                         <!--                <p:submenu label="Filter" icon="pi pi-fw pi-filter">-->

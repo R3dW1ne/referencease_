@@ -2,11 +2,13 @@ package com.ffhs.referencease.beans;
 
 import com.ffhs.referencease.dto.EmployeeDTO;
 import com.ffhs.referencease.entities.Department;
+import com.ffhs.referencease.entities.Employee;
 import com.ffhs.referencease.entities.Position;
 import com.ffhs.referencease.services.interfaces.IDepartmentService;
 import com.ffhs.referencease.services.interfaces.IEmployeeService;
 import com.ffhs.referencease.services.interfaces.IPositionService;
 import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.annotation.ManagedProperty;
 import jakarta.faces.application.FacesMessage;
@@ -20,8 +22,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Named
-@SessionScoped
-public class EmployeeBean implements Serializable {
+@RequestScoped
+public class EmployeeModBean implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
@@ -43,10 +45,6 @@ public class EmployeeBean implements Serializable {
 
   @Getter
   @Setter
-  private Boolean editMode = false;
-
-  @Getter
-  @Setter
   private List<EmployeeDTO> employees;
 
   @Getter
@@ -60,7 +58,7 @@ public class EmployeeBean implements Serializable {
   private List<Department> departments;
 
   @Inject
-  public EmployeeBean(IEmployeeService employeeService, IPositionService positionService,
+  public EmployeeModBean(IEmployeeService employeeService, IPositionService positionService,
       IDepartmentService departmentService) {
     this.employeeService = employeeService;
     this.positionService = positionService;
@@ -82,13 +80,6 @@ public class EmployeeBean implements Serializable {
 
   public String loadSelectedEmployeeDetails(UUID employeeId) {
     employee = employeeService.getEmployee(employeeId);
-    editMode = true;
-    return "/resources/components/sites/secured/createEmployee.xhtml?faces-redirect=true";
-  }
-
-  public String setEditModeToFalseAndNavigate() {
-    editMode = false;
-    employee = new EmployeeDTO();
     return "/resources/components/sites/secured/createEmployee.xhtml?faces-redirect=true";
   }
 
@@ -103,10 +94,6 @@ public class EmployeeBean implements Serializable {
   public void saveEmployee() {
     employeeService.saveEmployee(employee);
     employee = new EmployeeDTO();
-//    -- Only needed if session scoped --
-    employees = employeeService.getAllEmployees();
-    filteredEmployees = employeeService.getAllEmployees();
-//    -- Only needed if session scoped --
     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Mitarbeiter erfolgreich gespeichert!", null));
   }
 

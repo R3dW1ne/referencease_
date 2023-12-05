@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import org.modelmapper.ModelMapper;
 
 @Stateless
 public class EmployeeService implements IEmployeeService {
@@ -20,9 +21,12 @@ public class EmployeeService implements IEmployeeService {
 
   private final IEmployeeDAO employeeDao;
 
+  private final ModelMapper modelMapper;
+
   @Inject
-  public EmployeeService(IEmployeeDAO employeeDao) {
+  public EmployeeService(IEmployeeDAO employeeDao, ModelMapper modelMapper) {
     this.employeeDao = employeeDao;
+    this.modelMapper = modelMapper;
   }
 
 
@@ -50,7 +54,9 @@ public class EmployeeService implements IEmployeeService {
 
   @Override
   public void saveEmployee(EmployeeDTO employeeDTO) {
-    employeeDao.save(convertToEntity(employeeDTO));
+    Employee employee = modelMapper.map(employeeDTO, Employee.class);
+//    employeeDao.save(convertToEntity(employeeDTO));
+    employeeDao.save(employee);
   }
 
   @Override

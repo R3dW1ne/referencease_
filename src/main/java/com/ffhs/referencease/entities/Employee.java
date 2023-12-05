@@ -1,7 +1,9 @@
 package com.ffhs.referencease.entities;
 
+import com.ffhs.referencease.converters.UUIDConverter;
 import com.ffhs.referencease.dto.EmployeeDTO;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,6 +16,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 @Entity
 @NoArgsConstructor
@@ -37,7 +40,10 @@ public class Employee implements Serializable {
   }
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+//  @GeneratedValue(strategy = GenerationType.AUTO)
+//  @Type(type="org.hibernate.type.UUIDCharType")
+  @GeneratedValue
+  @Convert(converter = UUIDConverter.class)
   private UUID employeeId;
 
   @Column(unique = true)
