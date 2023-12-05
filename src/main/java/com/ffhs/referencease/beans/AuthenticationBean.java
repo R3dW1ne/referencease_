@@ -1,8 +1,11 @@
 package com.ffhs.referencease.beans;
 
 //import ch.ffhs.bude4u.utils.PBKDF2Hash;
+import com.ffhs.referencease.dto.UserAccountDTO;
 import com.ffhs.referencease.entities.UserAccount;
-import com.ffhs.referencease.entityservices.UserService;
+import com.ffhs.referencease.exceptionhandling.PositionNotFoundException;
+import com.ffhs.referencease.services.UserAccountService;
+import com.ffhs.referencease.services.interfaces.IUserAccountService;
 import com.ffhs.referencease.utils.PBKDF2Hash;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.context.ExternalContext;
@@ -16,6 +19,8 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SessionScoped
 @Named
@@ -25,7 +30,12 @@ public class AuthenticationBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final UserService userService;
+    @Inject
+    private Logger LOGGER = LoggerFactory.getLogger(AuthenticationBean.class);
+
+    private final transient IUserAccountService userAccountService;
+
+    private transient UserAccountDTO userAccountDTO;
 
     private transient HttpSession session = null;
 
@@ -37,11 +47,11 @@ public class AuthenticationBean implements Serializable {
     private String lastName = null;
     private String updatePassword = null;
 
-    private transient UserAccount userAccount;
+
 
     @Inject
-    public AuthenticationBean(UserService userService) {
-        this.userService = userService;
+    public AuthenticationBean(IUserAccountService userAccountService) {
+        this.userAccountService = userAccountService;
     }
 
     public HttpSession getSession() {
@@ -52,38 +62,42 @@ public class AuthenticationBean implements Serializable {
         return session;
     }
 
-    public String login() {
+    public String login() throws PositionNotFoundException {
         String emailInput = getEmail();
         String hashedPasswordInput = PBKDF2Hash.createHash(getPassword());
         session = getSession();
 
-        Optional<UserAccount> userAccountAccess = userService.getUserByEmail(emailInput);
+//        Optional<UserAccount> userAccountAccess = userAccountService.getUserByEmail(emailInput);
+//
+//        if (userAccountAccess.isEmpty()) return "/resources/components/sites/login.xhtml?error=true";
 
-        if (userAccountAccess.isEmpty()) return "/resources/components/sites/login.xhtml?error=true";
+        UserAccountDTO userAccountDTO = userAccountService.getUserByEmail(emailInput);
 
-        String hashedSavedPw = userAccountAccess.get().getPassword();
-        boolean pwMatch = PBKDF2Hash.checkPassword(hashedPasswordInput, hashedSavedPw);
+//        String hashedSavedPw = userAccountAccess.get().getPassword();
+//        String hashedSavedPw = userAccountDTO.getPassword();
+//        boolean pwMatch = userAccountService.passwordMatches(emailInput, hashedPasswordInput);
 
 
-        if (pwMatch) {
+        if (userAccountService.passwordMatches(emailInput, hashedPasswordInput)) {
             session.setAttribute("authenticated", true);
-            session.setAttribute("email", emailInput);
-            session.setAttribute("userId", userAccountAccess.get().getUserId());
+            session.setAttribute("email", userAccountDTO.getEmail());
+            session.setAttribute("userId", userAccountDTO.getUserId());
 //            session.setAttribute("selectedTheme", userAccount.get().getSelectedTheme());
             this.authenticated = true;
-            setUserAccount(userAccountAccess.get());
+            setUserAccountDTO(userAccountDTO);
+            LOGGER.info("User " + userAccountDTO.getEmail() + " logged in.");
             // Navigate to landing page
             return "/resources/components/sites/home.xhtml";
         }
         this.authenticated = false;
-        setUserAccount(null);
+        setUserAccountDTO(null);
 
         return "/resources/components/sites/login.xhtml?error=true";
     }
 
 
     public String logout() {
-        userAccount = null;
+        userAccountDTO = null;
         this.authenticated = false;
         session.setAttribute("userId", null);
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -104,33 +118,33 @@ public class AuthenticationBean implements Serializable {
         return authenticated;
     }
 
-    public String updateProfile() {
-        try {
-
-            Optional<UserAccount> updatedUser = userService.getUserById((Long) session.getAttribute("userId"));
-            if (updatedUser.isEmpty()) return "/resources/components/sites/login.xhtml?error=true";
-
-            if (getUpdatePassword() != null && !getUpdatePassword().isEmpty()) {
-                updatedUser.get().setPassword(getUpdatePassword());
-            }
-
-//            String theme = updatedUser.get().getSelectedTheme();
-//            session.setAttribute("selectedTheme", theme);
-
-            // Check if username has been updated
-            if (updatedUser.get().getEmail().equals(session.getAttribute("email"))) {
-                userService.updateUser(updatedUser.get());
-            } else {
-                // Check if username has already been set.
-                Optional<UserAccount> hasUser = userService.getUserByEmail(updatedUser.get().getEmail());
-                // Update failed -> Navigate to...
-                if (hasUser.isPresent()) return "/resources/components/sites/login.xhtml?error=true";
-                userService.updateUser(updatedUser.get());
-            }
-
-            return "/index.xhtml";
-        } catch (Exception ex) {
-            return "ERROR: " + ex.getMessage();
-        }
-    }
+//    public String updateProfile() {
+//        try {
+//
+//            Optional<UserAccount> updatedUser = userService.getUserById((UUID) session.getAttribute("userId"));
+//            if (updatedUser.isEmpty()) return "/resources/components/sites/login.xhtml?error=true";
+//
+//            if (getUpdatePassword() != null && !getUpdatePassword().isEmpty()) {
+//                updatedUser.get().setPassword(getUpdatePassword());
+//            }
+//
+////            String theme = updatedUser.get().getSelectedTheme();
+////            session.setAttribute("selectedTheme", theme);
+//
+//            // Check if username has been updated
+//            if (updatedUser.get().getEmail().equals(session.getAttribute("email"))) {
+//                userService.updateUser(updatedUser.get());
+//            } else {
+//                // Check if username has already been set.
+//                Optional<UserAccount> hasUser = userService.getUserByEmail(updatedUser.get().getEmail());
+//                // Update failed -> Navigate to...
+//                if (hasUser.isPresent()) return "/resources/components/sites/login.xhtml?error=true";
+//                userService.updateUser(updatedUser.get());
+//            }
+//
+//            return "/index.xhtml";
+//        } catch (Exception ex) {
+//            return "ERROR: " + ex.getMessage();
+//        }
+//    }
 }

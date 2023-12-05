@@ -40,7 +40,7 @@
 <!--  </security-role>-->
 
 <!--  <welcome-file-list>-->
-<!--    <welcome-file>/resources/components/sites/secured/employees.xhtml</welcome-file>-->
+<!--    <welcome-file>/resources/components/sites/secured/employeeList.xhtml</welcome-file>-->
 <!--  </welcome-file-list>-->
 
 </web-app>
