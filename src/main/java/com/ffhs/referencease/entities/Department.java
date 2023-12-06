@@ -21,5 +21,10 @@ public class Department implements Serializable {
 
   @Column(unique = true)
   private String departmentName;
+
+  @Override
+  public String toString() {
+    return departmentName;
+  }
 }
 

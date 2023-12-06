@@ -16,9 +16,6 @@ import org.modelmapper.ModelMapper;
 public class EmployeeService implements IEmployeeService {
 
 
-//  @Inject
-//  private IEmployeeDAO employeeDao;
-
   private final IEmployeeDAO employeeDao;
 
   private final ModelMapper modelMapper;

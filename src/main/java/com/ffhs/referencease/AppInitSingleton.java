@@ -2,8 +2,10 @@ package com.ffhs.referencease;
 
 import com.ffhs.referencease.entities.Department;
 import com.ffhs.referencease.entities.Employee;
+import com.ffhs.referencease.entities.Gender;
 import com.ffhs.referencease.entities.Position;
 import com.ffhs.referencease.entities.Role;
+import com.ffhs.referencease.entities.enums.EGender;
 import com.ffhs.referencease.entities.enums.ERole;
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.Singleton;
@@ -26,7 +28,10 @@ public class AppInitSingleton {
   @PostConstruct
   public void init() {
     for (ERole roleEnum : ERole.values()) {
-      createRoleIfNotExists(roleEnum.name());
+      createRoleIfNotExists(roleEnum.getDisplayName());
+    }
+    for (EGender genderEnum : EGender.values()) {
+      createGenderIfNotExists(genderEnum.getDisplayName());
     }
     createDepartmentIfNotExists("Human Resources");
     createDepartmentIfNotExists("Finance");
@@ -37,6 +42,16 @@ public class AppInitSingleton {
     createPositionIfNotExists("Application Engineer");
     createPositionIfNotExists("Elektroinstallateur");
     createRandomEmployees(10);
+  }
+
+  private void createGenderIfNotExists(String genderName) {
+    if (entityManager.createQuery("SELECT g FROM Gender g WHERE g.genderName = :genderName", Gender.class)
+        .setParameter("genderName", genderName)
+        .getResultList().isEmpty()) {
+      Gender gender = new Gender();
+      gender.setGenderName(genderName);
+      entityManager.persist(gender);
+    }
   }
 
   private void createRoleIfNotExists(String roleName) {
@@ -93,9 +108,29 @@ public class AppInitSingleton {
         employee.setPosition(randomPosition);
       }
 
+      // Zufälliges Gender auswählen
+      Gender randomGender = getRandomGender();
+      if (randomGender != null) {
+        employee.setGender(randomGender);
+      }
+
       entityManager.persist(employee);
     }
   }
+
+  private Gender getRandomGender() {
+    // Annahme: Alle vorhandenen Geschlechter abrufen
+    List<Gender> genders = entityManager.createQuery("SELECT g FROM Gender g", Gender.class)
+        .getResultList();
+
+    if (!genders.isEmpty()) {
+      Random random = new Random();
+      return genders.get(random.nextInt(genders.size()));
+    } else {
+      return null;
+    }
+  }
+
 
   // Methode zum Abrufen einer zufälligen Abteilung aus der Datenbank
   private Department getRandomDepartment() {
