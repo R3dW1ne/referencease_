@@ -15,7 +15,6 @@ import org.modelmapper.ModelMapper;
 @Stateless
 public class EmployeeService implements IEmployeeService {
 
-
   private final IEmployeeDAO employeeDao;
 
   private final ModelMapper modelMapper;

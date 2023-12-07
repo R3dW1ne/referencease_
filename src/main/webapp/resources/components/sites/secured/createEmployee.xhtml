@@ -7,7 +7,6 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:define name="content">
         <div id="card" class="card">
-
             <h:form id="employeeForm">
                 <h:panelGroup rendered="#{param.success}">
                     <h:outputText value="Mitarbeiter erfolgreich gespeichert."
@@ -48,23 +47,23 @@
                                 <p:message for="gender"/>
                             </div>
 
-<!--                            <div class="field col-12 md:col-6">-->
-<!--                                <p:outputLabel for="department"-->
-<!--                                               class="block text-900 font-medium mb-2"-->
-<!--                                               value="Abteilung:"/>-->
-<!--                                <p:selectOneMenu id="department"-->
-<!--                                                 value="#{employeeBean.employee.department}"-->
-<!--                                                 converter="entityConverter" required="true"-->
-<!--                                                 requiredMessage="Abteilung ist erforderlich.">-->
-<!--                                    <f:selectItem itemLabel="Abteilung auswählen" itemValue=""-->
-<!--                                                  noSelectionOption="true"/>-->
-<!--                                    <f:selectItems value="#{employeeBean.departments}"-->
-<!--                                                   var="department"-->
-<!--                                                   itemLabel="#{department.departmentName}"-->
-<!--                                                   itemValue="#{department}"/>-->
-<!--                                </p:selectOneMenu>-->
-<!--                                <p:message for="department"/>-->
-<!--                            </div>-->
+                            <!--                            <div class="field col-12 md:col-6">-->
+                            <!--                                <p:outputLabel for="department"-->
+                            <!--                                               class="block text-900 font-medium mb-2"-->
+                            <!--                                               value="Abteilung:"/>-->
+                            <!--                                <p:selectOneMenu id="department"-->
+                            <!--                                                 value="#{employeeBean.employee.department}"-->
+                            <!--                                                 converter="entityConverter" required="true"-->
+                            <!--                                                 requiredMessage="Abteilung ist erforderlich.">-->
+                            <!--                                    <f:selectItem itemLabel="Abteilung auswählen" itemValue=""-->
+                            <!--                                                  noSelectionOption="true"/>-->
+                            <!--                                    <f:selectItems value="#{employeeBean.departments}"-->
+                            <!--                                                   var="department"-->
+                            <!--                                                   itemLabel="#{department.departmentName}"-->
+                            <!--                                                   itemValue="#{department}"/>-->
+                            <!--                                </p:selectOneMenu>-->
+                            <!--                                <p:message for="department"/>-->
+                            <!--                            </div>-->
 
 
                             <div class="field col-12 md:col-6">
@@ -167,12 +166,14 @@
                                 <p:message for="department"/>
                             </div>
 
-                            <p:commandButton
-                                    value="#{employeeBean.editMode ? 'Aktualisieren' : 'Speichern'}"
-                                    icon="pi pi-check"
-                                    styleClass="rounded-button"
-                                    action="#{employeeBean.saveEmployee}"
-                                    update="employeeForm"/>
+                            <div class="field col-12 md:col-6">
+                                <p:commandButton
+                                        value="#{employeeBean.editMode ? 'Aktualisieren' : 'Speichern'}"
+                                        icon="pi pi-check"
+                                        styleClass="rounded-button"
+                                        action="#{employeeBean.saveEmployee}"
+                                        update="employeeForm"/>
+                            </div>
 
                         </div>
                         <!-- Globale Feedback Nachrichten -->

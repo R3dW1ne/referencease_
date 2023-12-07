@@ -30,7 +30,7 @@ public class Company implements Serializable {
   @Id
   @GeneratedValue
   @Convert(converter = UUIDConverter.class)
-  private UUID id;
+  private UUID companyId;
 
   @Column(nullable = false)
   private String name;

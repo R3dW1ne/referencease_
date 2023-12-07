@@ -1,0 +1,45 @@
+<ui:composition template="/resources/components/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <ui:define name="content">
+        <h:form>
+            <div class="flex align-items-center justify-content-center">
+                <div class="surface-card p-4 shadow-2 border-round w-full lg:w-6">
+                    <div class="card-header text-center">
+                        <h1 class="card-title">Mitarbeiter</h1>
+                    </div>
+                    <p:outputPanel styleClass="p-grid">
+                        <p:outputPanel styleClass="p-col-12">
+                            <h3>Introduction</h3>
+                            <p:outputLabel
+                                    value="#{referenceLetterBean.referenceLetter.introduction}"/>
+                        </p:outputPanel>
+                        <p:outputPanel styleClass="p-col-12">
+                            <h3>Company Description</h3>
+                            <p:outputLabel
+                                    value="#{referenceLetterBean.referenceLetter.companyDescription}"/>
+                        </p:outputPanel>
+                        <p:outputPanel styleClass="p-col-12">
+                            <h3>Responsibilities</h3>
+                            <p:outputLabel
+                                    value="#{referenceLetterBean.referenceLetter.responsibilities}"/>
+                        </p:outputPanel>
+                        <p:outputPanel styleClass="p-col-12">
+                            <h3>Properties</h3>
+                            <p:outputLabel
+                                    value="#{referenceLetterBean.referenceLetter.properties}"/>
+                        </p:outputPanel>
+                        <p:outputPanel styleClass="p-col-12">
+                            <h3>Conclusion</h3>
+                            <p:outputLabel
+                                    value="#{referenceLetterBean.referenceLetter.conclusion}"/>
+                        </p:outputPanel>
+                    </p:outputPanel>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
