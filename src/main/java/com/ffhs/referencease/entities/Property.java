@@ -1,29 +1,25 @@
 package com.ffhs.referencease.entities;
 
 import com.ffhs.referencease.converters.UUIDConverter;
-import jakarta.persistence.*;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import java.io.Serializable;
 import java.util.UUID;
 import lombok.Data;
+import lombok.Setter;
 
-@Entity
 @Data
-@Table(name = "Department")
-public class Department implements Serializable {
+@Entity
+public class Property implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
   @Id
   @GeneratedValue
   @Convert(converter = UUIDConverter.class)
-  private UUID departmentId;
+  private UUID propertyId;
 
-  @Column(unique = true)
-  private String departmentName;
-
-  @Override
-  public String toString() {
-    return departmentName;
-  }
+  private String name;
 }
-

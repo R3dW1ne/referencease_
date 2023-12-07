@@ -1,5 +1,6 @@
 package com.ffhs.referencease.entities;
 
+import com.ffhs.referencease.converters.UUIDConverter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import java.io.Serializable;
@@ -21,7 +22,8 @@ public class UserAccount implements Serializable {
   }
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue
+  @Convert(converter = UUIDConverter.class)
   private UUID userId;
 
   @Column(unique = true)

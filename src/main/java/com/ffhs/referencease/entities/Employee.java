@@ -2,6 +2,7 @@ package com.ffhs.referencease.entities;
 
 import com.ffhs.referencease.converters.UUIDConverter;
 import com.ffhs.referencease.dto.EmployeeDTO;
+import jakarta.inject.Inject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -17,6 +18,7 @@ import java.util.UUID;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
+import org.modelmapper.ModelMapper;
 
 @Entity
 @NoArgsConstructor
@@ -32,9 +34,11 @@ public class Employee implements Serializable {
     this.firstName = dto.getFirstName();
     this.lastName = dto.getLastName();
     this.dateOfBirth = dto.getDateOfBirth();
+//    this.placeOfOrigin = dto.getPlaceOfOrigin();
     this.phone = dto.getPhone();
     this.startDate = dto.getStartDate();
     this.endDate = dto.getEndDate();
+    this.gender = dto.getGender();
     this.position = dto.getPosition();
     this.department = dto.getDepartment();
   }
@@ -52,12 +56,17 @@ public class Employee implements Serializable {
   private String firstName;
   private String lastName;
   private LocalDate dateOfBirth;
+//  private String placeOfOrigin;
 
 
   private String phone;
   private LocalDate startDate;
   private LocalDate endDate;
 
+
+  @ManyToOne
+  @JoinColumn(name = "genderId")
+  private Gender gender;
 
   @ManyToOne
   @JoinColumn(name = "positionId")

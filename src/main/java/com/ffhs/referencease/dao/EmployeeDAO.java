@@ -5,6 +5,7 @@ import com.ffhs.referencease.entities.Employee;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -16,14 +17,15 @@ public class EmployeeDAO implements IEmployeeDAO {
   private EntityManager em;
 
   @Override
+  @Transactional
   public Optional<Employee> find(UUID id) {
     return Optional.ofNullable(em.find(Employee.class, id));
   }
-
+  @Transactional
   public List<Employee> findAll() {
     return em.createQuery("SELECT e FROM Employee e", Employee.class).getResultList();
   }
-
+  @Transactional
   public void save(Employee employee) {
     if (employee.getEmployeeId() == null) {
       em.persist(employee);
@@ -31,7 +33,7 @@ public class EmployeeDAO implements IEmployeeDAO {
       em.merge(employee);
     }
   }
-
+  @Transactional
   public void delete(Employee employee) {
     if (em.contains(employee)) {
       em.remove(employee);
@@ -39,7 +41,7 @@ public class EmployeeDAO implements IEmployeeDAO {
       em.remove(em.merge(employee));
     }
   }
-
+  @Transactional
   public Employee update(Employee employee) {
     return em.merge(employee);
   }

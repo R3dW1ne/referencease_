@@ -2,9 +2,11 @@ package com.ffhs.referencease.beans;
 
 import com.ffhs.referencease.dto.EmployeeDTO;
 import com.ffhs.referencease.entities.Department;
+import com.ffhs.referencease.entities.Gender;
 import com.ffhs.referencease.entities.Position;
 import com.ffhs.referencease.services.interfaces.IDepartmentService;
 import com.ffhs.referencease.services.interfaces.IEmployeeService;
+import com.ffhs.referencease.services.interfaces.IGenderService;
 import com.ffhs.referencease.services.interfaces.IPositionService;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
@@ -28,10 +30,11 @@ public class EmployeeBean implements Serializable {
   private final transient IEmployeeService employeeService;
   private final transient IPositionService positionService;
   private final transient IDepartmentService departmentService;
+  private final transient IGenderService genderService;
 
   @Getter
   @Setter
-  private EmployeeDTO employee = new EmployeeDTO();
+  private EmployeeDTO employee;
 
   @Setter
   private EmployeeDTO selectedEmployee;
@@ -59,20 +62,26 @@ public class EmployeeBean implements Serializable {
   @Getter
   private List<Department> departments;
 
+  @Getter
+  private List<Gender> genders;
+
   @Inject
   public EmployeeBean(IEmployeeService employeeService, IPositionService positionService,
-      IDepartmentService departmentService) {
+      IDepartmentService departmentService, IGenderService genderService) {
     this.employeeService = employeeService;
     this.positionService = positionService;
     this.departmentService = departmentService;
+    this.genderService = genderService;
   }
 
   @PostConstruct
   public void init() {
+    employee = new EmployeeDTO();
     employees = employeeService.getAllEmployees();
     filteredEmployees = employeeService.getAllEmployees();
     positions = positionService.getAllPositions();
     departments = departmentService.getAllDepartments();
+    genders = genderService.getAllGenders();
   }
 
 //  public String loadSelectedEmployeeDetails(UUID employeeId) {
@@ -85,6 +94,12 @@ public class EmployeeBean implements Serializable {
     editMode = true;
     return "/resources/components/sites/secured/createEmployee.xhtml?faces-redirect=true";
   }
+
+//  public String navigateToCreateEmployee() {
+//    editMode = false;
+//    employeeDTO = new EmployeeDTO();
+//    return "/resources/components/sites/secured/createEmployee.xhtml?faces-redirect=true";
+//  }
 
   public String setEditModeToFalseAndNavigate() {
     editMode = false;
@@ -101,6 +116,7 @@ public class EmployeeBean implements Serializable {
   }
 
   public void saveEmployee() {
+//    employee.setDepartment();
     employeeService.saveEmployee(employee);
     employee = new EmployeeDTO();
 //    -- Only needed if session scoped --
