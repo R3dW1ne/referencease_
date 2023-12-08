@@ -1,4 +1,4 @@
-package com.ffhs.referencease.converters;
+package com.ffhs.referencease.converters.jsf;
 
 import com.ffhs.referencease.services.interfaces.IEmployeeService;
 import jakarta.faces.component.UIComponent;

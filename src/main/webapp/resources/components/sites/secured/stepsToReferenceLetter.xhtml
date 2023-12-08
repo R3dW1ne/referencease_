@@ -1,0 +1,79 @@
+<!-- /stepsToReferenceLetter.xhtml -->
+<ui:composition template="/resources/components/templates/layout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:define name="content">
+        <!-- stepsToReferenceLetter -->
+        <div class="card" id="stepsToReferenceLetterCard">
+
+            <h:form id="stepsToReferenceLetterForm">
+                <p:steps id="stepsToReferenceLetter"
+                         activeIndex="#{createRLetterController.activeIndex}"
+                         styleClass="stepsToReferenceLetter"
+                         readonly="false">
+                    <p:menuitem value="Mitarbeiter"
+                                update="stepsToReferenceLetterForm"
+                                action="#{createRLetterController.onTabSet(0)}"/>
+                    <p:menuitem value="Unternehmen"
+                                update="stepsToReferenceLetterForm"
+                                action="#{createRLetterController.onTabSet(1)}"/>
+                    <p:menuitem value="Aufgabengebiet"
+                                update="stepsToReferenceLetterForm"
+                                action="#{createRLetterController.onTabSet(2)}"/>
+                    <p:menuitem value="Eigenschaften"
+                                update="stepsToReferenceLetterForm"
+                                action="#{createRLetterController.onTabSet(3)}"/>
+                    <p:menuitem value="Arbeitszeugnis"
+                                update="stepsToReferenceLetterForm"
+                                action="#{createRLetterController.onTabSet(4)}"/>
+                </p:steps>
+            </h:form>
+
+            <h:panelGroup id="createRLetterForm">
+                <h:panelGroup id="employeeInformation"
+                              rendered="#{createRLetterController.activeIndex == 0}">
+                    <h:panelGroup id="createEmployeeInclude" rendered="#{employeeBean.editMode}">
+                        <ui:include
+                                src="/resources/components/sites/secured/createEmployee.xhtml"
+                                name="createEmployee" id="createEmployee"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+
+                <h:panelGroup id="companyInformation"
+                              rendered="#{createRLetterController.activeIndex == 1}">
+                    <ui:insert name="company"/>
+                </h:panelGroup>
+
+                <h:panelGroup id="fieldOfActivityInformation"
+                              rendered="#{createRLetterController.activeIndex == 2}">
+                    <ui:insert name="fieldOfActivity"/>
+                </h:panelGroup>
+
+                <h:panelGroup id="propertyInformation"
+                              rendered="#{createRLetterController.activeIndex == 3}">
+                    <ui:insert name="property"/>
+                </h:panelGroup>
+
+                <h:panelGroup id="referenceLetter"
+                              rendered="#{createRLetterController.activeIndex == 4}">
+                    <ui:insert name="referenceLetter"/>
+                </h:panelGroup>
+            </h:panelGroup>
+
+            <h:panelGroup id="navigationButtons">
+                <p:commandButton icon="pi pi-arrow-left" styleClass="rounded-button"
+                                 update="stepsToReferenceLetterForm createRLetterForm navigationButtons"
+                                 action="#{createRLetterController.onTabBack()}"
+                                 disabled="#{createRLetterController.activeIndex == 0}"/>
+
+                <p:commandButton icon="pi pi-arrow-right" styleClass="rounded-button"
+                                 update="stepsToReferenceLetterForm createRLetterForm navigationButtons"
+                                 action="#{createRLetterController.onTabSet()}"
+                                 disabled="#{createRLetterController.activeIndex == 4}"/>
+            </h:panelGroup>
+        </div>
+    </ui:define>
+</ui:composition>

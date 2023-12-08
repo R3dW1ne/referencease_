@@ -1,4 +1,4 @@
-package com.ffhs.referencease.converters;
+package com.ffhs.referencease.converters.jsf;
 
 import com.ffhs.referencease.entities.Gender;
 import jakarta.faces.component.UIComponent;

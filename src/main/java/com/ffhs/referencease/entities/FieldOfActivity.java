@@ -1,7 +1,6 @@
 package com.ffhs.referencease.entities;
 
-import com.ffhs.referencease.converters.UUIDConverter;
-import jakarta.persistence.Column;
+import com.ffhs.referencease.converters.jpa.UUIDConverter;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

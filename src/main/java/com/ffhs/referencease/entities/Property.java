@@ -1,6 +1,6 @@
 package com.ffhs.referencease.entities;
 
-import com.ffhs.referencease.converters.UUIDConverter;
+import com.ffhs.referencease.converters.jpa.UUIDConverter;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,7 +8,6 @@ import jakarta.persistence.Id;
 import java.io.Serializable;
 import java.util.UUID;
 import lombok.Data;
-import lombok.Setter;
 
 @Data
 @Entity

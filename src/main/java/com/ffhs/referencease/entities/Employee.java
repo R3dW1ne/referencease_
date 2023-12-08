@@ -1,13 +1,11 @@
 package com.ffhs.referencease.entities;
 
-import com.ffhs.referencease.converters.UUIDConverter;
+import com.ffhs.referencease.converters.jpa.UUIDConverter;
 import com.ffhs.referencease.dto.EmployeeDTO;
-import jakarta.inject.Inject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -15,13 +13,13 @@ import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.UUID;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
-import org.modelmapper.ModelMapper;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 @Table(name = "Employee")
 public class Employee implements Serializable {

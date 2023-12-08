@@ -1,4 +1,4 @@
-package com.ffhs.referencease.converters;
+package com.ffhs.referencease.converters.jsf;
 
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;

@@ -5,8 +5,8 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:define name="content">
-        <div class="flex align-items-center justify-content-center">
-            <div class="surface-card p-4 shadow-2 border-round w-full lg:w-6">
+<!--        <div class="flex align-items-center justify-content-center">-->
+<!--            <div class="surface-card p-4 shadow-2 border-round w-full lg:w-6">-->
                 <div class="card-header text-center">
                     <h1 class="card-title">Mitarbeiter</h1>
                 </div>
@@ -37,18 +37,11 @@
                         <p:column styleClass="view-link">
                             <p:commandButton icon="pi pi-user"
                                              styleClass="rounded-button ui-button-info"
-                                             action="#{employeeBean.loadSelectedEmployeeDetails(employee.employeeId)}"/>
-<!--                            <h:link outcome="/resources/components/sites/secured/employeeDetails"-->
-<!--                                    value="Details">-->
-<!--                                <f:param name="employeeId" value="#{employeeBean.employees.indexOf(employee)}"/>-->
-<!--                            </h:link>-->
+                                             action="#{employeeBean.loadSelectedEmployeeDetailsAndNavigate(employee.employeeId)}"/>
                         </p:column>
                     </p:dataTable>
-                    <p:commandButton icon="pi pi-user"
-                                     styleClass="rounded-button ui-button-info"
-                                     action="#{employeeBean.loadSelectedEmployeeDetails(employee.employeeId)}"/>
                 </h:form>
-            </div>
-        </div>
+<!--            </div>-->
+<!--        </div>-->
     </ui:define>
 </ui:composition>

@@ -1,8 +1,7 @@
 package com.ffhs.referencease.entities;
 
-import com.ffhs.referencease.converters.UUIDConverter;
+import com.ffhs.referencease.converters.jpa.UUIDConverter;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import java.io.Serializable;
 import java.util.UUID;
 import lombok.Data;

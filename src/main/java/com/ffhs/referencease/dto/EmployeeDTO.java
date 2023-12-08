@@ -6,6 +6,7 @@ import com.ffhs.referencease.entities.Gender;
 import com.ffhs.referencease.entities.Position;
 import jakarta.inject.Inject;
 import java.time.LocalDate;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +17,7 @@ import java.util.UUID;
 import org.modelmapper.ModelMapper;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class EmployeeDTO implements Serializable {

@@ -1,10 +1,10 @@
-package com.ffhs.referencease.converters;
+package com.ffhs.referencease.converters.jpa;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import java.util.UUID;
 
-@Converter
+@Converter(autoApply = true)
 public class UUIDConverter implements AttributeConverter<UUID, String> {
   @Override
   public String convertToDatabaseColumn(UUID attribute) {

@@ -54,6 +54,10 @@ public class UserBean {
     userAccountDTO.setConfirmPassword(null);
     userAccountDTO.setEmail(null);
 
+    // Setzen einer Erfolgsmeldung im Flash Scope
+    FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Benutzeraccount erfolgreich erstellt.", "Viel Spass! \n :)"));
+
     return "login?faces-redirect=true"; // Weiterleitung zur Login-Seite nach erfolgreicher Registrierung
   }
 

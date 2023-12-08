@@ -2,6 +2,7 @@ package com.ffhs.referencease.beans;
 
 import com.ffhs.referencease.dto.EmployeeDTO;
 import com.ffhs.referencease.entities.Department;
+import com.ffhs.referencease.entities.Employee;
 import com.ffhs.referencease.entities.Gender;
 import com.ffhs.referencease.entities.Position;
 import com.ffhs.referencease.services.interfaces.IDepartmentService;
@@ -18,6 +19,7 @@ import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Logger;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,6 +28,8 @@ import lombok.Setter;
 public class EmployeeBean implements Serializable {
 
   private static final long serialVersionUID = 1L;
+
+  private static final Logger LOG = Logger.getLogger(EmployeeBean.class.getName());
 
   private final transient IEmployeeService employeeService;
   private final transient IPositionService positionService;
@@ -36,13 +40,17 @@ public class EmployeeBean implements Serializable {
   @Setter
   private EmployeeDTO employee;
 
+
   @Setter
   private EmployeeDTO selectedEmployee;
 
   @Getter
   @Setter
-  @ManagedProperty("#{param.employeeId}")
   private UUID selectedEmployeeId;
+
+  @Getter
+  @Setter
+  private String selectedEmployeeIdAsString;
 
   @Getter
   @Setter
@@ -89,10 +97,28 @@ public class EmployeeBean implements Serializable {
 //    return "/resources/components/sites/secured/employeeDetails.xhtml?faces-redirect=true";
 //  }
 
-  public String loadSelectedEmployeeDetails(UUID employeeId) {
+  public void onEmployeeSelect() {
+
+  }
+
+  public void loadSelectedEmployeeDetails(UUID employeeId) {
     employee = employeeService.getEmployee(employeeId);
     editMode = true;
-    return "/resources/components/sites/secured/createEmployee.xhtml?faces-redirect=true";
+  }
+
+  public String loadSelectedEmployeeDetailsAndNavigate(UUID employeeId) {
+    loadSelectedEmployeeDetails(employeeId);
+    return "/resources/components/sites/secured/employeeMod.xhtml?faces-redirect=true";
+  }
+
+
+
+  public void loadSelectedEmployeeDetails() {
+    LOG.info("Selected Employee ID: " + selectedEmployeeId);
+    if (selectedEmployeeId != null) {
+      selectedEmployee = employeeService.getEmployee(selectedEmployeeId);
+      // Weitere Aktionen, falls erforderlich
+    }
   }
 
 //  public String navigateToCreateEmployee() {
@@ -104,7 +130,7 @@ public class EmployeeBean implements Serializable {
   public String setEditModeToFalseAndNavigate() {
     editMode = false;
     employee = new EmployeeDTO();
-    return "/resources/components/sites/secured/createEmployee.xhtml?faces-redirect=true";
+    return "/resources/components/sites/secured/employeeMod.xhtml?faces-redirect=true";
   }
 
   public void setSelectedEmployeeById(UUID employeeId) {
@@ -115,15 +141,19 @@ public class EmployeeBean implements Serializable {
     employee = employeeService.getEmployee(id);
   }
 
+//  public Employee loadEmployee(EmployeeDTO employeeDTO) {
+//    Employee employee = employeeService.
+//  }
+
   public void saveEmployee() {
 //    employee.setDepartment();
-    employeeService.saveEmployee(employee);
-    employee = new EmployeeDTO();
+    employee = employeeService.updateEmployee(employee);
 //    -- Only needed if session scoped --
     employees = employeeService.getAllEmployees();
     filteredEmployees = employeeService.getAllEmployees();
 //    -- Only needed if session scoped --
-    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Mitarbeiter erfolgreich gespeichert!", null));
+    FacesContext.getCurrentInstance().addMessage(null,
+        new FacesMessage(FacesMessage.SEVERITY_INFO, "Mitarbeiter erfolgreich gespeichert!", null));
   }
 
   public void deleteEmployee() {
