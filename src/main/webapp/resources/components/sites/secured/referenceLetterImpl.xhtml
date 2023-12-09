@@ -1,0 +1,65 @@
+<!--referenceLetterImpl.xhtml-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <!--    referenceLetterImpl-->
+    <div id="referenceLetterCard" class="card">
+
+        <h:form id="referenceLetterForm">
+            <div class="card-header text-center">
+                <h1 class="card-title">Arbeitszeugnis</h1>
+            </div>
+
+            <p:selectOneButton value="#{referenceLetterBean.selectedReferenceReason}"
+                               converter="entityConverter">
+                <f:selectItems value="#{referenceLetterBean.referenceReasons}"
+                               var="reason"
+                               itemValue="#{reason}"
+                               itemLabel="#{reason.name}" />
+                <p:ajax event="change" listener="#{referenceLetterBean.updateSelectedReferenceReason}"
+                        update="referenceLetterForm"/>
+            </p:selectOneButton>
+
+
+
+            <p:outputPanel styleClass="p-grid">
+                <p:outputPanel styleClass="p-col-12">
+                    <h3>Introduction</h3>
+                    <p:outputLabel
+                            value="#{referenceLetterBean.referenceLetter.introduction}"/>
+                </p:outputPanel>
+                <p:outputPanel styleClass="p-col-12">
+                    <h3>Company Description</h3>
+                    <p:outputLabel
+                            value="#{referenceLetterBean.referenceLetter.companyDescription}"/>
+                </p:outputPanel>
+                <p:outputPanel styleClass="p-col-12">
+                    <h3>Responsibilities</h3>
+                    <p:outputLabel
+                            value="#{referenceLetterBean.referenceLetter.responsibilities}"/>
+                </p:outputPanel>
+                <p:outputPanel styleClass="p-col-12">
+                    <h3>Properties</h3>
+                    <p:outputLabel
+                            value="#{referenceLetterBean.referenceLetter.properties}"/>
+                </p:outputPanel>
+                <p:outputPanel styleClass="p-col-12">
+                    <h3>Conclusion</h3>
+                    <p:outputLabel
+                            value="#{referenceLetterBean.referenceLetter.conclusion}"/>
+                </p:outputPanel>
+            </p:outputPanel>
+            <div class="field col-12 md:col-6">
+                <p:commandButton
+                  value="Generieren"
+                  icon="pi pi-check"
+                  styleClass="rounded-button"
+                  action="#{referenceLetterBean.generateIntroduction()}"
+                  update="referenceLetterForm"/>
+            </div>
+        </h:form>
+    </div>
+</ui:composition>

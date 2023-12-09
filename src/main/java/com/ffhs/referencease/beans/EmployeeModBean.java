@@ -80,7 +80,7 @@ public class EmployeeModBean implements Serializable {
 
   public String loadSelectedEmployeeDetails(UUID employeeId) {
     employee = employeeService.getEmployee(employeeId);
-    return "/resources/components/sites/secured/createEmployee.xhtml?faces-redirect=true";
+    return "/resources/components/sites/secured/createEmployeeImpl.xhtml?faces-redirect=true";
   }
 
   public void setSelectedEmployeeById(UUID employeeId) {

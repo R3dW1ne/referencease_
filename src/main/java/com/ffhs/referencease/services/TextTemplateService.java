@@ -56,6 +56,6 @@ public class TextTemplateService implements ITextTemplateService {
 
   @Override
   public List<TextTemplate> getTextTemplatesForReason(ReferenceReason reason) {
-    return getTextTemplatesForReason(reason);
+    return textTemplateDAO.getTextTemplatesForReason(reason);
   }
 }

@@ -2,6 +2,7 @@ package com.ffhs.referencease.dao;
 
 import com.ffhs.referencease.dao.interfaces.IRoleDAO;
 import com.ffhs.referencease.entities.Role;
+import jakarta.ejb.Stateless;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -11,7 +12,7 @@ import jakarta.persistence.TypedQuery;
 import java.util.Optional;
 import java.util.UUID;
 
-@ApplicationScoped
+@Stateless
 public class RoleDAO implements IRoleDAO {
 
   @PersistenceContext

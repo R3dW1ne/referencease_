@@ -2,7 +2,6 @@ package com.ffhs.referencease.beans;
 
 import com.ffhs.referencease.dto.EmployeeDTO;
 import com.ffhs.referencease.entities.Department;
-import com.ffhs.referencease.entities.Employee;
 import com.ffhs.referencease.entities.Gender;
 import com.ffhs.referencease.entities.Position;
 import com.ffhs.referencease.services.interfaces.IDepartmentService;
@@ -31,6 +30,9 @@ public class EmployeeBean implements Serializable {
 
   private static final Logger LOG = Logger.getLogger(EmployeeBean.class.getName());
 
+  @ManagedProperty(value = "#{referenceLetterBean}")
+  private ReferenceLetterBean referenceLetterBean;
+
   private final transient IEmployeeService employeeService;
   private final transient IPositionService positionService;
   private final transient IDepartmentService departmentService;
@@ -41,6 +43,7 @@ public class EmployeeBean implements Serializable {
   private EmployeeDTO employee;
 
 
+  @Getter
   @Setter
   private EmployeeDTO selectedEmployee;
 
@@ -59,6 +62,10 @@ public class EmployeeBean implements Serializable {
   @Getter
   @Setter
   private List<EmployeeDTO> employees;
+
+  @Getter
+  @Setter
+  private List<EmployeeDTO> selectedEmployees;
 
   @Getter
   @Setter
@@ -85,6 +92,7 @@ public class EmployeeBean implements Serializable {
   @PostConstruct
   public void init() {
     employee = new EmployeeDTO();
+    selectedEmployee = new EmployeeDTO();
     employees = employeeService.getAllEmployees();
     filteredEmployees = employeeService.getAllEmployees();
     positions = positionService.getAllPositions();
@@ -99,6 +107,11 @@ public class EmployeeBean implements Serializable {
 
   public void onEmployeeSelect() {
 
+  }
+
+  // Methode, um den ausgewählten Employee in ReferenceLetterBean zu setzen
+  public void selectEmployeeForReferenceLetter(EmployeeDTO employeeDTO) {
+    referenceLetterBean.setEmployee(employeeDTO);
   }
 
   public void loadSelectedEmployeeDetails(UUID employeeId) {
@@ -124,7 +137,7 @@ public class EmployeeBean implements Serializable {
 //  public String navigateToCreateEmployee() {
 //    editMode = false;
 //    employeeDTO = new EmployeeDTO();
-//    return "/resources/components/sites/secured/createEmployee.xhtml?faces-redirect=true";
+//    return "/resources/components/sites/secured/createEmployeeImpl.xhtml?faces-redirect=true";
 //  }
 
   public String setEditModeToFalseAndNavigate() {
@@ -173,11 +186,11 @@ public class EmployeeBean implements Serializable {
     return selectedEmployee;
   }
 
-  public EmployeeDTO getSelectedEmployee() {
-    if (selectedEmployee != null && selectedEmployee.getEmployeeId().equals(selectedEmployeeId)) {
-      return selectedEmployee;
-    }
-    selectedEmployee = employeeService.getEmployee(selectedEmployeeId);
-    return selectedEmployee;
-  }
+//  public EmployeeDTO getSelectedEmployee() {
+//    if (selectedEmployee != null && selectedEmployee.getEmployeeId().equals(selectedEmployeeId)) {
+//      return selectedEmployee;
+//    }
+//    selectedEmployee = employeeService.getEmployee(selectedEmployeeId);
+//    return selectedEmployee;
+//  }
 }

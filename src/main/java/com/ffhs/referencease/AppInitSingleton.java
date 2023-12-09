@@ -220,6 +220,12 @@ public class AppInitSingleton {
   }
 
   private void createRandomEmployees(int count) {
+    // Überprüfen, ob bereits Mitarbeiter in der Datenbank existieren
+    long employeeCount = (long) entityManager.createQuery("SELECT COUNT(e) FROM Employee e").getSingleResult();
+    if (employeeCount > 0) {
+      // Es gibt bereits Mitarbeiter, also keine neuen hinzufügen
+      return;
+    }
     Random random = new Random();
 
     for (int i = 0; i < count; i++) {

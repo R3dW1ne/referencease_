@@ -1,0 +1,56 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+>
+    <div id="employeeCard" class="card">
+        <div class="card-header text-center">
+            <h1 class="card-title">Mitarbeiter</h1>
+        </div>
+        <h:form>
+            <p:dataTable var="employee" value="#{employeeBean.employees}"
+                         widgetVar="employeeTable"
+                         emptyMessage="Kein Mitarbeiter mit diesen Angaben gefunden."
+                         filteredValue="#{employeeBean.filteredEmployees}"
+                         rowKey="#{employee.employeeId}" selectionMode="single"
+                         selection="#{employeeBean.selectedEmployee}"
+                         paginator="true" rows="10" paginatorPosition="bottom"
+                         reflow="true" styleClass="products-table">
+                <p:ajax event="rowSelect" listener="#{referenceLetterBean.setEmployee(employeeBean.selectedEmployee)}"/>
+<!--                <p:ajax event="rowUnselect" listener="#{employeeBean.unselectEmployeeForReferenceLetter(employeeBean.selectedEmployee)}" update=":formToUpdate" />-->
+                <p:column headerText="Vorname" sortBy="#{employee.firstName}"
+                          filterBy="#{employee.firstName}" filterMatchMode="contains">
+                    <h:outputText value="#{employee.firstName}"/>
+                </p:column>
+                <p:column headerText="Nachname" sortBy="#{employee.lastName}"
+                          filterBy="#{employee.lastName}" filterMatchMode="contains">
+                    <h:outputText value="#{employee.lastName}"/>
+                </p:column>
+                <p:column headerText="Abteilung"
+                          sortBy="#{employee.department.departmentName}"
+                          filterBy="#{employee.department.departmentName}"
+                          filterMatchMode="contains">
+                    <h:outputText value="#{employee.department.departmentName}"/>
+                </p:column>
+                <p:column headerText="Position" sortBy="#{employee.position.positionName}"
+                          filterBy="#{employee.position.positionName}"
+                          filterMatchMode="contains">
+                    <h:outputText value="#{employee.position.positionName}"/>
+                </p:column>
+                <p:column styleClass="view-link">
+                    <p:commandButton icon="pi pi-user"
+                                     styleClass="rounded-button ui-button-info"
+                                     action="#{employeeBean.loadSelectedEmployeeDetailsAndNavigate(employee.employeeId)}"
+                                     title="Mitarbeiter bearbeiten"/>
+                </p:column>
+                <p:column styleClass="view-link">
+                    <p:commandButton icon="pi pi-check"
+                                     styleClass="rounded-button ui-button-info"
+                                     action="#{employeeBean.loadSelectedEmployeeDetailsAndNavigate(employee.employeeId)}"
+                                     title="Mitarbeiter auswählen"/>
+                </p:column>
+
+            </p:dataTable>
+        </h:form>
+    </div>
+</ui:composition>

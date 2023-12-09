@@ -3,6 +3,7 @@ package com.ffhs.referencease.dao;
 import com.ffhs.referencease.dao.interfaces.IUserAccountDAO;
 import com.ffhs.referencease.entities.UserAccount;
 import com.ffhs.referencease.utils.PBKDF2Hash;
+import jakarta.ejb.Stateless;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -12,7 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 
-@ApplicationScoped
+@Stateless
 public class UserAccountDAO implements IUserAccountDAO {
 
   @PersistenceContext
