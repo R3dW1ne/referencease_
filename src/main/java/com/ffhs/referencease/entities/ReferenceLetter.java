@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.UUID;
 import lombok.Data;
+import org.hibernate.annotations.Cascade;
 
 
 @Entity
@@ -19,6 +20,7 @@ public class ReferenceLetter implements Serializable {
   @GeneratedValue
   @Convert(converter = UUIDConverter.class)
   private UUID referenceId;
+  private LocalDate endDate;
 
   @Lob
   private String introduction;

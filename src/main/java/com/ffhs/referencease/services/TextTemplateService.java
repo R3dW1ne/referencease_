@@ -1,8 +1,10 @@
-package com.ffhs.referencease.service;
+package com.ffhs.referencease.services;
 
 import com.ffhs.referencease.dao.interfaces.ITextTemplateDAO;
+import com.ffhs.referencease.entities.Gender;
 import com.ffhs.referencease.entities.ReferenceReason;
 import com.ffhs.referencease.entities.TextTemplate;
+import com.ffhs.referencease.entities.TextType;
 import com.ffhs.referencease.services.interfaces.ITextTemplateService;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
@@ -55,7 +57,8 @@ public class TextTemplateService implements ITextTemplateService {
   }
 
   @Override
-  public List<TextTemplate> getTextTemplatesForReason(ReferenceReason reason) {
-    return textTemplateDAO.getTextTemplatesForReason(reason);
+  public List<TextTemplate> getTextTemplatesForReasonTypeAndGender(ReferenceReason reason,
+      TextType textType, Gender gender) {
+    return textTemplateDAO.getTextTemplatesForReasonTypeAndGender(reason,textType,gender);
   }
 }

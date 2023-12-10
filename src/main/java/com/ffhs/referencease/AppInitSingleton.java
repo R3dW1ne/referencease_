@@ -20,8 +20,11 @@ import jakarta.ejb.Startup;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -33,6 +36,8 @@ public class AppInitSingleton {
 
   @PersistenceContext
   private EntityManager entityManager;
+
+  Random random = new Random();
 
   @PostConstruct
   public void init() {
@@ -60,7 +65,7 @@ public class AppInitSingleton {
     createPositionIfNotExists("Application Engineer");
     createPositionIfNotExists("Elektroinstallateur");
     initializeTextTemplates();
-    createRandomEmployees(10);
+    createRandomEmployees(20);
   }
 
   private void initializeTextTemplates() {
@@ -83,7 +88,7 @@ public class AppInitSingleton {
     createTextTemplateIfNotExists("afterEndDate", ", als ", abschlussUndPositionswechsel, allGenders, textType);
 
     // Spezifisches TextTemplate für Zwischenzeugnis
-    List<ReferenceReason> nurZwischenzeugnis = Arrays.asList(zwischenzeugnis);
+    List<ReferenceReason> nurZwischenzeugnis = Collections.singletonList(zwischenzeugnis);
     createTextTemplateIfNotExists("afterDateOfBirth", ", ist seit ", nurZwischenzeugnis, allGenders, textType);
     createTextTemplateIfNotExists("afterStartDate", ", als ", nurZwischenzeugnis, allGenders, textType);
   }
@@ -107,20 +112,6 @@ public class AppInitSingleton {
     }
   }
 
-  private Gender getGender(String displayName) {
-    try {
-      return entityManager.createQuery("SELECT g FROM Gender g WHERE g.genderName = :displayName", Gender.class)
-          .setParameter("displayName", displayName)
-          .getSingleResult();
-    } catch (NoResultException e) {
-      // Gender mit diesem displayName wurde nicht gefunden, Sie können ihn erstellen oder eine Ausnahme werfen
-      Gender gender = new Gender();
-      gender.setGenderName(displayName);
-      entityManager.persist(gender);
-      return gender;
-    }
-  }
-
   private TextType getTextType(String typeName) {
     try {
       return entityManager.createQuery("SELECT t FROM TextType t WHERE t.textTypeName = :typeName", TextType.class)
@@ -136,17 +127,27 @@ public class AppInitSingleton {
   }
 
   private void createTextTemplateIfNotExists(String key, String template, List<ReferenceReason> referenceReasons, List<Gender> genders, TextType textType) {
-    if (entityManager.createQuery("SELECT t FROM TextTemplate t WHERE t.key = :key", TextTemplate.class)
+    // Erstellt eine Query, die alle Bedingungen überprüft
+    String queryStr = "SELECT t FROM TextTemplate t WHERE t.key = :key AND t.template = :template AND t.textType = :textType";
+    TypedQuery<TextTemplate> query = entityManager.createQuery(queryStr, TextTemplate.class)
         .setParameter("key", key)
-        .getResultList().isEmpty()) {
-      TextTemplate textTemplate = new TextTemplate();
-      textTemplate.setKey(key);
-      textTemplate.setTemplate(template);
-      textTemplate.setReferenceReasons(referenceReasons);
-      textTemplate.setGenders(genders);
-      textTemplate.setTextType(textType);
+        .setParameter("template", template)
+        .setParameter("textType", textType);
 
-      entityManager.persist(textTemplate);
+    // Prüft, ob ein TextTemplate mit den gegebenen Kriterien existiert
+    boolean exists = query.getResultList().stream().anyMatch(textTemplate ->
+        new HashSet<>(textTemplate.getReferenceReasons()).containsAll(referenceReasons) &&
+            new HashSet<>(textTemplate.getGenders()).containsAll(genders));
+
+    if (!exists) {
+      TextTemplate newTextTemplate = new TextTemplate();
+      newTextTemplate.setKey(key);
+      newTextTemplate.setTemplate(template);
+      newTextTemplate.setReferenceReasons(referenceReasons);
+      newTextTemplate.setGenders(genders);
+      newTextTemplate.setTextType(textType);
+
+      entityManager.persist(newTextTemplate);
     }
   }
 
@@ -226,17 +227,15 @@ public class AppInitSingleton {
       // Es gibt bereits Mitarbeiter, also keine neuen hinzufügen
       return;
     }
-    Random random = new Random();
 
     for (int i = 0; i < count; i++) {
       Employee employee = new Employee();
       employee.setEmployeeNumber(UUID.randomUUID().toString().substring(0, 8)); // Zufällige Mitarbeiternummer
-      employee.setFirstName("First" + i);
-      employee.setLastName("Last" + i);
+      employee.setFirstName("Firstname" + i);
+      employee.setLastName("Lastname" + i);
       employee.setDateOfBirth(LocalDate.now().minusYears(random.nextInt(40) + 18)); // Zufälliges Geburtsdatum zwischen 18 und 58 Jahren
       employee.setPhone("123-456-7890"); // Beispieltelefonnummer
       employee.setStartDate(LocalDate.now().minusYears(random.nextInt(10))); // Zufälliges Anfangsdatum der Beschäftigung in den letzten 10 Jahren
-      employee.setEndDate(null); // Enddatum auf null setzen
 
       // Abteilung kann auch zufällig zugewiesen werden
       Department randomDepartment = getRandomDepartment();
@@ -266,7 +265,6 @@ public class AppInitSingleton {
         .getResultList();
 
     if (!genders.isEmpty()) {
-      Random random = new Random();
       return genders.get(random.nextInt(genders.size()));
     } else {
       return null;
@@ -281,7 +279,6 @@ public class AppInitSingleton {
         .getResultList();
 
     if (!departments.isEmpty()) {
-      Random random = new Random();
       return departments.get(random.nextInt(departments.size()));
     } else {
       return null;
@@ -295,7 +292,6 @@ public class AppInitSingleton {
         .getResultList();
 
     if (!positions.isEmpty()) {
-      Random random = new Random();
       return positions.get(random.nextInt(positions.size()));
     } else {
       return null;

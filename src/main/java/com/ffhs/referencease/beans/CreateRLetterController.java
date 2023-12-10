@@ -1,14 +1,16 @@
 package com.ffhs.referencease.beans;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import java.io.Serializable;
 import lombok.Data;
 
 @Data
 @Named
-@SessionScoped
+@ViewScoped
 public class CreateRLetterController implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -26,7 +28,7 @@ public class CreateRLetterController implements Serializable {
     }
   }
 
-  public void onTabSet() {
+  public void onTabFurther() {
     if (activeIndex < 4) {
       activeIndex++;
     }

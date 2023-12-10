@@ -5,6 +5,7 @@ import com.ffhs.referencease.entities.Employee;
 import com.ffhs.referencease.entities.Gender;
 import com.ffhs.referencease.entities.Position;
 import jakarta.inject.Inject;
+import jakarta.persistence.Converter;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,7 +32,6 @@ public class EmployeeDTO implements Serializable {
 //    this.placeOfOrigin = employee.getPlaceOfOrigin();
     this.phone = employee.getPhone();
     this.startDate = employee.getStartDate();
-    this.endDate = employee.getEndDate();
     this.gender = employee.getGender();
     this.position = employee.getPosition();
     this.department = employee.getDepartment();
@@ -46,7 +46,6 @@ public class EmployeeDTO implements Serializable {
 //  private String placeOfOrigin;
   private String phone;
   private LocalDate startDate;
-  private LocalDate endDate;
   private Gender gender;
   private Position position;
   private Department department;

@@ -17,4 +17,8 @@ public interface IReferenceLetterService {
   void deleteReferenceLetter(UUID id);
 
   String generateIntroduction(ReferenceLetter referenceLetter);
+
+  Boolean checkReasonAndEmployeeSet(ReferenceLetter referenceLetter, Boolean needsEndDate);
+
+  String setIntroductionButtonMessage(ReferenceLetter referenceLetter, Boolean needsEndDate);
 }

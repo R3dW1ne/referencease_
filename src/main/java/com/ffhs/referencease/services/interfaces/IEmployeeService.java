@@ -18,5 +18,7 @@ public interface IEmployeeService {
 
   void deleteEmployee(EmployeeDTO employeeDTO);
 
+  void deleteEmployeeById(UUID id);
+
   EmployeeDTO updateEmployee(EmployeeDTO employeeDTO);
 }

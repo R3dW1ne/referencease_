@@ -4,7 +4,7 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+>
     <ui:define name="content">
         <!-- stepsToReferenceLetter -->
         <div class="card" id="stepsToReferenceLetterCard">
@@ -13,32 +13,47 @@
                 <p:steps id="stepsToReferenceLetter"
                          activeIndex="#{createRLetterController.activeIndex}"
                          styleClass="stepsToReferenceLetter"
-                         readonly="false">
+                         readonly="true"
+                         activeStepExecutable="true">
                     <p:menuitem value="Mitarbeiter"
-                                update="stepsToReferenceLetterForm"
+                                update="stepsToReferenceLetterForm createRLetterForm navigationButtons"
                                 action="#{createRLetterController.onTabSet(0)}"/>
                     <p:menuitem value="Unternehmen"
-                                update="stepsToReferenceLetterForm"
+                                update="stepsToReferenceLetterForm createRLetterForm navigationButtons"
                                 action="#{createRLetterController.onTabSet(1)}"/>
                     <p:menuitem value="Aufgabengebiet"
-                                update="stepsToReferenceLetterForm"
+                                update="stepsToReferenceLetterForm createRLetterForm navigationButtons"
                                 action="#{createRLetterController.onTabSet(2)}"/>
                     <p:menuitem value="Eigenschaften"
-                                update="stepsToReferenceLetterForm"
+                                update="stepsToReferenceLetterForm createRLetterForm navigationButtons"
                                 action="#{createRLetterController.onTabSet(3)}"/>
                     <p:menuitem value="Arbeitszeugnis"
-                                update="stepsToReferenceLetterForm"
+                                update="stepsToReferenceLetterForm createRLetterForm navigationButtons"
                                 action="#{createRLetterController.onTabSet(4)}"/>
                 </p:steps>
             </h:form>
+
+
+            <p:outputPanel styleClass="col-12 text-center" id="navigationButtons">
+                <p:commandButton icon="pi pi-arrow-left" styleClass="rounded-button"
+                                 update="stepsToReferenceLetterForm createRLetterForm navigationButtons"
+                                 action="#{createRLetterController.onTabBack()}"
+                                 disabled="#{createRLetterController.activeIndex == 0}"/>
+
+                <p:commandButton icon="pi pi-arrow-right" styleClass="rounded-button"
+                                 update="stepsToReferenceLetterForm createRLetterForm navigationButtons"
+                                 action="#{createRLetterController.onTabFurther()}"
+                                 disabled="#{createRLetterController.activeIndex == 4}"/>
+            </p:outputPanel>
+
 
             <h:panelGroup id="createRLetterForm">
                 <h:panelGroup id="employeeInformation"
                               rendered="#{createRLetterController.activeIndex == 0}">
 
                     <h:panelGroup id="employeeListInclude" rendered="#{!employeeBean.editMode}">
-                    <ui:include
-                      src="/resources/components/sites/secured/employeeListImpl.xhtml"/>
+                        <ui:include
+                                src="/resources/components/sites/secured/employeeListImpl.xhtml"/>
                     </h:panelGroup>
                     <h:panelGroup id="createEmployeeInclude" rendered="#{employeeBean.editMode}">
                         <ui:include
@@ -65,20 +80,8 @@
                 <h:panelGroup id="referenceLetter"
                               rendered="#{createRLetterController.activeIndex == 4}">
                     <ui:include
-                      src="/resources/components/sites/secured/referenceLetterImpl.xhtml"/>
+                            src="/resources/components/sites/secured/referenceLetterImpl.xhtml"/>
                 </h:panelGroup>
-            </h:panelGroup>
-
-            <h:panelGroup id="navigationButtons">
-                <p:commandButton icon="pi pi-arrow-left" styleClass="rounded-button"
-                                 update="stepsToReferenceLetterForm createRLetterForm navigationButtons"
-                                 action="#{createRLetterController.onTabBack()}"
-                                 disabled="#{createRLetterController.activeIndex == 0}"/>
-
-                <p:commandButton icon="pi pi-arrow-right" styleClass="rounded-button"
-                                 update="stepsToReferenceLetterForm createRLetterForm navigationButtons"
-                                 action="#{createRLetterController.onTabSet()}"
-                                 disabled="#{createRLetterController.activeIndex == 4}"/>
             </h:panelGroup>
         </div>
     </ui:define>

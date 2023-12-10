@@ -1,8 +1,10 @@
 package com.ffhs.referencease.dao;
 
 import com.ffhs.referencease.dao.interfaces.ITextTemplateDAO;
+import com.ffhs.referencease.entities.Gender;
 import com.ffhs.referencease.entities.ReferenceReason;
 import com.ffhs.referencease.entities.TextTemplate;
+import com.ffhs.referencease.entities.TextType;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.ejb.Stateless;
@@ -44,9 +46,12 @@ public class TextTemplateDAO implements ITextTemplateDAO {
     entityManager.remove(textTemplate);
   }
   @Override
-  public List<TextTemplate> getTextTemplatesForReason(ReferenceReason reason) {
-    return entityManager.createQuery("SELECT tt FROM TextTemplate tt JOIN tt.referenceReasons rr WHERE rr = :reason", TextTemplate.class)
+  public List<TextTemplate> getTextTemplatesForReasonTypeAndGender(ReferenceReason reason,
+      TextType textType, Gender gender) {
+    return entityManager.createQuery("SELECT tt FROM TextTemplate tt JOIN tt.referenceReasons rr JOIN tt.genders g WHERE rr = :reason AND tt.textType = :textType AND g = :gender", TextTemplate.class)
         .setParameter("reason", reason)
+        .setParameter("textType", textType)
+        .setParameter("gender", gender)
         .getResultList();
   }
 }

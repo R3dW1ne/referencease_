@@ -21,10 +21,12 @@ public class EmployeeDAO implements IEmployeeDAO {
   public Optional<Employee> find(UUID id) {
     return Optional.ofNullable(em.find(Employee.class, id));
   }
+  @Override
   @Transactional
   public List<Employee> findAll() {
     return em.createQuery("SELECT e FROM Employee e", Employee.class).getResultList();
   }
+  @Override
   @Transactional
   public void save(Employee employee) {
     if (employee.getEmployeeId() == null) {
@@ -33,6 +35,7 @@ public class EmployeeDAO implements IEmployeeDAO {
       em.merge(employee);
     }
   }
+  @Override
   @Transactional
   public void delete(Employee employee) {
     if (em.contains(employee)) {
@@ -41,8 +44,17 @@ public class EmployeeDAO implements IEmployeeDAO {
       em.remove(em.merge(employee));
     }
   }
+
+  @Override
   @Transactional
   public Employee update(Employee employee) {
     return em.merge(employee);
+  }
+
+  @Override
+  @Transactional
+  public void deleteById(UUID id) {
+    Employee employee = em.find(Employee.class, id);
+    em.remove(employee);
   }
 }

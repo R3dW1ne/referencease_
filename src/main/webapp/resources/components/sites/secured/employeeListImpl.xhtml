@@ -2,13 +2,54 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
 >
-    <div id="employeeCard" class="card">
+    <div id="employeeListCard" class="card">
         <div class="card-header text-center">
             <h1 class="card-title">Mitarbeiter</h1>
         </div>
-        <h:form>
-            <p:dataTable var="employee" value="#{employeeBean.employees}"
+        <h:form id="employeeListForm">
+            <p:growl id="messages" showDetail="true"/>
+            <p:toolbar>
+                <p:toolbarGroup>
+                    <p:commandButton value="New" icon="pi pi-plus"
+                                     actionListener="#{employeeBean.openNew}"
+                                     update=":dialogs:manage-product-content"
+                                     oncomplete="PF('manageProductDialog').show()"
+                                     styleClass="ui-button-success" style="margin-right: .5rem">
+                        <p:resetInput target=":dialogs:manage-product-content"/>
+                    </p:commandButton>
+                    <p:commandButton id="delete-products-button" value="Mitarbeiter löschen"
+                                     icon="pi pi-trash"
+                                     actionListener="#{employeeBean.deleteEmployee()}"
+                                     styleClass="ui-button-danger"
+                                     disabled="#{!employeeBean.hasSelectedEmployee()}"
+                                     update="@this">
+                        <p:confirm header="Confirmation" message="Delete the selected Employee?"
+                                   icon="pi pi-exclamation-triangle"/>
+                    </p:commandButton>
+                </p:toolbarGroup>
+                <p:toolbarGroup align="right">
+                    <p:fileUpload mode="simple" skinSimple="true" label="Import"
+                                  chooseIcon="pi pi-download"/>
+                    <p:commandButton value="Export" icon="pi pi-upload" styleClass="ui-button-help"
+                                     ajax="false">
+                        <p:dataExporter type="pdf" target="dt-products" fileName="products"/>
+                    </p:commandButton>
+                </p:toolbarGroup>
+            </p:toolbar>
+
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+                             responsive="true" width="350">
+                <p:commandButton value="No" type="button"
+                                 styleClass="ui-confirmdialog-no ui-button-flat"/>
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes"
+                                 update="employeeTable"/>
+            </p:confirmDialog>
+
+
+            <p:dataTable id="employeeTable" var="employee" value="#{employeeBean.employees}"
                          widgetVar="employeeTable"
                          emptyMessage="Kein Mitarbeiter mit diesen Angaben gefunden."
                          filteredValue="#{employeeBean.filteredEmployees}"
@@ -16,8 +57,17 @@
                          selection="#{employeeBean.selectedEmployee}"
                          paginator="true" rows="10" paginatorPosition="bottom"
                          reflow="true" styleClass="products-table">
-                <p:ajax event="rowSelect" listener="#{referenceLetterBean.setEmployee(employeeBean.selectedEmployee)}"/>
-<!--                <p:ajax event="rowUnselect" listener="#{employeeBean.unselectEmployeeForReferenceLetter(employeeBean.selectedEmployee)}" update=":formToUpdate" />-->
+                <p:ajax event="rowSelect"
+                        listener="#{referenceLetterBean.setEmployee(employeeBean.selectedEmployee)}"
+                        update=":employeeListForm:delete-products-button"/>
+                <p:ajax event="rowUnselect" update=":employeeListForm:delete-products-button"/>
+                <p:ajax event="rowSelectCheckbox"
+                        update=":employeeListForm:delete-products-button"/>
+                <p:ajax event="rowUnselectCheckbox"
+                        update=":employeeListForm:delete-products-button"/>
+                <p:ajax event="toggleSelect" update=":employeeListForm:delete-products-button"/>
+
+
                 <p:column headerText="Vorname" sortBy="#{employee.firstName}"
                           filterBy="#{employee.firstName}" filterMatchMode="contains">
                     <h:outputText value="#{employee.firstName}"/>
@@ -44,13 +94,53 @@
                                      title="Mitarbeiter bearbeiten"/>
                 </p:column>
                 <p:column styleClass="view-link">
-                    <p:commandButton icon="pi pi-check"
-                                     styleClass="rounded-button ui-button-info"
-                                     action="#{employeeBean.loadSelectedEmployeeDetailsAndNavigate(employee.employeeId)}"
-                                     title="Mitarbeiter auswählen"/>
+                    <p:commandButton icon="pi pi-trash"
+                                     styleClass="rounded-button ui-button-danger"
+                                     action="#{employeeBean.deleteEmployee(employee)}"
+                                     title="Mitarbeiter löschen"
+                    >
+                        <p:confirm header="Mitarbeiter löschen"
+                                   message="Wollen Sie den Mitarbeiter wirklich löschen?"
+                                   icon="pi pi-info-circle"/>
+                    </p:commandButton>
                 </p:column>
-
             </p:dataTable>
+        </h:form>
+
+        <h:form id="dialogs">
+            <p:dialog header="Product Details" showEffect="fade" modal="true"
+                      widgetVar="manageProductDialog"
+                      responsive="true">
+                <p:outputPanel id="manage-product-content" class="ui-fluid">
+                    <div class="flex align-items-center justify-content-center">
+                        <div class="surface-card p-4 shadow-2 border-round w-full lg:w-6">
+                            <ui:include
+                                    src="/resources/components/sites/secured/createEmployeeImpl.xhtml"/>
+                        </div>
+                    </div>
+                </p:outputPanel>
+
+                <f:facet name="footer">
+                    <p:commandButton value="Save" icon="pi pi-check"
+                                     actionListener="#{employeeBean.saveEmployee()}"
+                                     update="manage-product-content"
+                                     process="manage-product-content @this"/>
+                    <p:commandButton value="Cancel" icon="pi pi-times"
+                                     onclick="PF('manageProductDialog').hide()"
+                                     class="ui-button-secondary" type="button"/>
+                </f:facet>
+            </p:dialog>
+
+            <p:confirmDialog widgetVar="deleteProductDialog" showEffect="fade" width="300"
+                             message="Delete the product?" header="Confirm" severity="warn">
+                <p:commandButton value="Yes" icon="pi pi-check"
+                                 actionListener="#{employeeBean.deleteEmployee}"
+                                 process="@this" update=":employeeListForm:delete-products-button"
+                                 oncomplete="PF('deleteProductDialog').hide()"/>
+                <p:commandButton value="No" type="button" styleClass="ui-button-secondary"
+                                 icon="pi pi-times"
+                                 onclick="PF('deleteProductDialog').hide()"/>
+            </p:confirmDialog>
         </h:form>
     </div>
 </ui:composition>

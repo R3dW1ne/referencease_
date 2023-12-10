@@ -12,54 +12,80 @@
             <div class="card-header text-center">
                 <h1 class="card-title">Arbeitszeugnis</h1>
             </div>
-
-            <p:selectOneButton value="#{referenceLetterBean.selectedReferenceReason}"
-                               converter="entityConverter">
-                <f:selectItems value="#{referenceLetterBean.referenceReasons}"
-                               var="reason"
-                               itemValue="#{reason}"
-                               itemLabel="#{reason.name}" />
-                <p:ajax event="change" listener="#{referenceLetterBean.updateSelectedReferenceReason}"
-                        update="referenceLetterForm"/>
-            </p:selectOneButton>
-
+            <p:outputPanel styleClass="p-grid">
+                <p:outputPanel styleClass="col-12 text-center">
+                    <p:selectOneButton value="#{referenceLetterBean.selectedReferenceReason}"
+                                       converter="entityConverter" unselectable="false">
+                        <f:selectItems id="reason" value="#{referenceLetterBean.referenceReasons}"
+                                       var="reason"
+                                       itemValue="#{reason}"
+                                       itemLabel="#{reason.name}"/>
+                        <p:ajax event="change"
+                                listener="#{referenceLetterBean.updateSelectedReferenceReason}"
+                                update="referenceLetterForm"/>
+                    </p:selectOneButton>
+                </p:outputPanel>
+                <h:panelGroup rendered="#{referenceLetterBean.needsEndDate}">
+                    <p:outputPanel styleClass="field col-12 md:col-6 flex align-items-center">
+                        <p:outputLabel for="endDate" class="block text-900 font-medium mb-2"
+                                       value="Enddatum:"/>
+                        <p:calendar id="endDate"
+                                    value="#{referenceLetterBean.referenceLetter.endDate}"
+                                    navigator="true"
+                                    pattern="dd/MM/yyyy" yearRange="c-65:c-0"
+                                    styleClass="w-full mb-3"/>
+                        <p:message for="endDate"/>
+                    </p:outputPanel>
+                </h:panelGroup>
+            </p:outputPanel>
 
 
             <p:outputPanel styleClass="p-grid">
-                <p:outputPanel styleClass="p-col-12">
-                    <h3>Introduction</h3>
-                    <p:outputLabel
-                            value="#{referenceLetterBean.referenceLetter.introduction}"/>
+                <p:outputPanel styleClass="p-col-12 text-center">
+                    <h3>Einleitungstext</h3>
+                    <p:inputTextarea styleClass="p-col-12"
+                                     style="width:75%;"
+                                     value="#{referenceLetterBean.referenceLetter.introduction}"
+                                     autoResize="true"/>
+                    <br/>
+                    <p:commandButton
+                            id="generateIntroductionButton"
+                            value="Einleitungstext generieren"
+                            styleClass="ui-button-raised ui-button-secondary ui-button-flat"
+                            action="#{referenceLetterBean.generateIntroduction()}"
+                            update="referenceLetterForm"/>
+                    <br/>
+                    <p:message for="generateIntroductionButton"/>
                 </p:outputPanel>
-                <p:outputPanel styleClass="p-col-12">
-                    <h3>Company Description</h3>
+                <p:outputPanel styleClass="p-col-12 text-center">
+                    <h3>Beschreibung des Unternehmen</h3>
                     <p:outputLabel
                             value="#{referenceLetterBean.referenceLetter.companyDescription}"/>
                 </p:outputPanel>
-                <p:outputPanel styleClass="p-col-12">
-                    <h3>Responsibilities</h3>
+                <p:outputPanel styleClass="p-col-12 text-center">
+                    <h3>Verantwortlichkeiten</h3>
                     <p:outputLabel
                             value="#{referenceLetterBean.referenceLetter.responsibilities}"/>
                 </p:outputPanel>
-                <p:outputPanel styleClass="p-col-12">
-                    <h3>Properties</h3>
+                <p:outputPanel styleClass="p-col-12 text-center">
+                    <h3>Eigenschaften</h3>
                     <p:outputLabel
                             value="#{referenceLetterBean.referenceLetter.properties}"/>
                 </p:outputPanel>
-                <p:outputPanel styleClass="p-col-12">
-                    <h3>Conclusion</h3>
+                <p:outputPanel styleClass="p-col-12 text-center">
+                    <h3>Abschlusstext</h3>
                     <p:outputLabel
                             value="#{referenceLetterBean.referenceLetter.conclusion}"/>
                 </p:outputPanel>
             </p:outputPanel>
-            <div class="field col-12 md:col-6">
-                <p:commandButton
-                  value="Generieren"
-                  icon="pi pi-check"
-                  styleClass="rounded-button"
-                  action="#{referenceLetterBean.generateIntroduction()}"
-                  update="referenceLetterForm"/>
-            </div>
+            <!-- Speichern Button -->
+            <p:outputPanel styleClass="p-col-12 text-center">
+                <p:commandButton value="Speichern"
+                                 icon="pi pi-save"
+                                 action="#{referenceLetterBean.saveReferenceLetter()}"
+                                 styleClass="ui-button-raised ui-button-primary"
+                                 update="referenceLetterForm"/>
+            </p:outputPanel>
         </h:form>
     </div>
 </ui:composition>

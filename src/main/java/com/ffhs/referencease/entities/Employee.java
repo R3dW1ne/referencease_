@@ -35,7 +35,6 @@ public class Employee implements Serializable {
 //    this.placeOfOrigin = dto.getPlaceOfOrigin();
     this.phone = dto.getPhone();
     this.startDate = dto.getStartDate();
-    this.endDate = dto.getEndDate();
     this.gender = dto.getGender();
     this.position = dto.getPosition();
     this.department = dto.getDepartment();
@@ -59,7 +58,6 @@ public class Employee implements Serializable {
 
   private String phone;
   private LocalDate startDate;
-  private LocalDate endDate;
 
 
   @ManyToOne
@@ -73,6 +71,4 @@ public class Employee implements Serializable {
   @ManyToOne
   @JoinColumn(name = "departmentId")
   private Department department;
-
-  // Getter, Setter, hashCode, equals und toString Methoden
 }

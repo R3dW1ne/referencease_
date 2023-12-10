@@ -61,6 +61,11 @@ public class EmployeeService implements IEmployeeService {
   }
 
   @Override
+  public void deleteEmployeeById(UUID id) {
+    employeeDao.deleteById(id);
+  }
+
+  @Override
   public EmployeeDTO updateEmployee(EmployeeDTO employeeDTO) {
     return convertToDTO(employeeDao.update(convertToEntity(employeeDTO)));
   }

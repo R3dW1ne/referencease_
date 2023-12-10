@@ -20,5 +20,4 @@ public class TextType {
 
   @Column(unique = true)
   private String textTypeName;
-
 }

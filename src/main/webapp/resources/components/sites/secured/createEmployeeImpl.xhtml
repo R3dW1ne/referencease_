@@ -26,23 +26,16 @@
                     <p:message for="employeeNumber"/>
                 </div>
 
-
                 <div class="field col-12 md:col-6">
-                    <p:outputLabel for="gender"
+                    <p:outputLabel for="startDate"
                                    class="block text-900 font-medium mb-2"
-                                   value="Geschlecht:"/>
-                    <p:selectOneMenu id="gender"
-                                     value="#{employeeBean.employee.gender}"
-                                     converter="entityConverter"
-                                     required="true"
-                                     requiredMessage="Geschlecht ist erforderlich.">
-                        <f:selectItem itemLabel="Geschlecht auswählen" itemValue=""
-                                      noSelectionOption="true"/>
-                        <f:selectItems value="#{employeeBean.genders}" var="gender"
-                                       itemLabel="#{gender.genderName}"
-                                       itemValue="#{gender}"/>
-                    </p:selectOneMenu>
-                    <p:message for="gender"/>
+                                   value="Anfangsdatum:"/>
+                    <p:calendar id="startDate"
+                                value="#{employeeBean.employee.startDate}"
+                                navigator="true" pattern="dd/MM/yyyy" required="true"
+                                requiredMessage="Anfangsdatum ist erforderlich."
+                                yearRange="c-65:c-0" styleClass="w-full mb-3"/>
+                    <p:message for="startDate"/>
                 </div>
 
                 <!--                            <div class="field col-12 md:col-6">-->
@@ -88,6 +81,24 @@
                 </div>
 
                 <div class="field col-12 md:col-6">
+                    <p:outputLabel for="gender"
+                                   class="block text-900 font-medium mb-2"
+                                   value="Geschlecht:"/>
+                    <p:selectOneMenu id="gender"
+                                     value="#{employeeBean.employee.gender}"
+                                     converter="entityConverter"
+                                     required="true"
+                                     requiredMessage="Geschlecht ist erforderlich.">
+                        <f:selectItem itemLabel="Geschlecht auswählen" itemValue=""
+                                      noSelectionOption="true"/>
+                        <f:selectItems value="#{employeeBean.genders}" var="gender"
+                                       itemLabel="#{gender.genderName}"
+                                       itemValue="#{gender}"/>
+                    </p:selectOneMenu>
+                    <p:message for="gender"/>
+                </div>
+
+                <div class="field col-12 md:col-6">
                     <p:outputLabel for="dateOfBirth"
                                    class="block text-900 font-medium mb-2"
                                    value="Geburtsdatum:"/>
@@ -99,34 +110,12 @@
                     <p:message for="dateOfBirth"/>
                 </div>
 
-                <div class="field col-12 md:col-6">
+                <div class="field col-12 md:col-12">
                     <p:outputLabel for="phone" class="block text-900 font-medium mb-2"
                                    value="Telefon:"/>
                     <p:inputMask id="phone" value="#{employeeBean.employee.phone}"
                                  mask="999 / 999 99 99" styleClass="mb-3"/>
                     <p:message for="phone"/>
-                </div>
-
-                <div class="field col-12 md:col-6">
-                    <p:outputLabel for="startDate"
-                                   class="block text-900 font-medium mb-2"
-                                   value="Anfangsdatum:"/>
-                    <p:calendar id="startDate"
-                                value="#{employeeBean.employee.startDate}"
-                                navigator="true" pattern="dd/MM/yyyy" required="true"
-                                requiredMessage="Anfangsdatum ist erforderlich."
-                                yearRange="c-65:c-0" styleClass="w-full mb-3"/>
-                    <p:message for="startDate"/>
-                </div>
-
-                <div class="field col-12 md:col-6">
-                    <p:outputLabel for="endDate" class="block text-900 font-medium mb-2"
-                                   value="Enddatum:"/>
-                    <p:calendar id="endDate" value="#{employeeBean.employee.endDate}"
-                                navigator="true"
-                                pattern="dd/MM/yyyy" yearRange="c-65:c-0"
-                                styleClass="w-full mb-3"/>
-                    <p:message for="endDate"/>
                 </div>
 
                 <div class="field col-12 md:col-6">
@@ -179,5 +168,6 @@
                         globalOnly="true"/>
             <p:growl id="growl" showDetail="true" sticky="true" globalOnly="true"/>
         </h:form>
+
     </div>
 </ui:composition>
