@@ -23,6 +23,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
@@ -115,6 +116,7 @@ public class AppInitSingleton {
         textType);
   }
 
+
   private List<Gender> getAllGenders() {
     return entityManager.createQuery("SELECT g FROM Gender g", Gender.class)
         .getResultList();
@@ -150,6 +152,7 @@ public class AppInitSingleton {
     }
   }
 
+  @Transactional
   private void createTextTemplateIfNotExists(String key, String template,
       List<ReferenceReason> referenceReasons, List<Gender> genders, TextType textType) {
     // Erstellt eine Query, die alle Bedingungen überprüft
@@ -175,7 +178,7 @@ public class AppInitSingleton {
       entityManager.persist(newTextTemplate);
     }
   }
-
+  @Transactional
   private void createReferenceReasonIfNotExists(String reasonName) {
     if (entityManager.createQuery("SELECT r FROM ReferenceReason r WHERE r.name = :reasonName",
             ReferenceReason.class)
@@ -186,7 +189,7 @@ public class AppInitSingleton {
       entityManager.persist(referenceReason);
     }
   }
-
+  @Transactional
   private void createTextTypeIfNotExists(String typeName) {
     if (entityManager.createQuery("SELECT t FROM TextType t WHERE t.textTypeName = :typeName",
             TextType.class)
@@ -197,7 +200,7 @@ public class AppInitSingleton {
       entityManager.persist(textType);
     }
   }
-
+  @Transactional
   private void createPropertyIfNotExists(String propertyName) {
     if (entityManager.createQuery("SELECT p FROM Property p WHERE p.name = :propertyName",
             Property.class)
@@ -208,7 +211,7 @@ public class AppInitSingleton {
       entityManager.persist(property);
     }
   }
-
+  @Transactional
   private void createGenderIfNotExists(String genderName) {
     if (entityManager.createQuery("SELECT g FROM Gender g WHERE g.genderName = :genderName",
             Gender.class)
@@ -219,7 +222,7 @@ public class AppInitSingleton {
       entityManager.persist(gender);
     }
   }
-
+  @Transactional
   private void createRoleIfNotExists(String roleName) {
     if (entityManager.createQuery("SELECT r FROM Role r WHERE r.roleName = :roleName", Role.class)
         .setParameter("roleName", roleName)
@@ -228,7 +231,7 @@ public class AppInitSingleton {
       entityManager.persist(role);
     }
   }
-
+  @Transactional
   private void createDepartmentIfNotExists(String departmentName) {
     if (entityManager.createQuery(
             "SELECT d FROM Department d WHERE d.departmentName = :departmentName", Department.class)
@@ -239,7 +242,7 @@ public class AppInitSingleton {
       entityManager.persist(department);
     }
   }
-
+  @Transactional
   private void createPositionIfNotExists(String positionName) {
     if (entityManager.createQuery("SELECT p FROM Position p WHERE p.positionName = :positionName",
             Position.class)
@@ -250,7 +253,7 @@ public class AppInitSingleton {
       entityManager.persist(position);
     }
   }
-
+  @Transactional
   private void createRandomEmployees(int count) {
     // Überprüfen, ob bereits Mitarbeiter in der Datenbank existieren
     long employeeCount = (long) entityManager.createQuery("SELECT COUNT(e) FROM Employee e")

@@ -8,6 +8,7 @@ import com.ffhs.referencease.entities.TextType;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.ejb.Stateless;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,16 +33,19 @@ public class TextTemplateDAO implements ITextTemplateDAO {
   }
 
   @Override
+  @Transactional
   public void create(TextTemplate textTemplate) {
     entityManager.persist(textTemplate);
   }
 
   @Override
+  @Transactional
   public TextTemplate update(TextTemplate textTemplate) {
     return entityManager.merge(textTemplate);
   }
 
   @Override
+  @Transactional
   public void delete(TextTemplate textTemplate) {
     entityManager.remove(textTemplate);
   }

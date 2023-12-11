@@ -9,6 +9,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -39,6 +40,7 @@ public class UserAccountDAO implements IUserAccountDAO {
 
 
   @Override
+  @Transactional
   public void save(UserAccount userAccount) {
     if (userAccount.getUserId() == null) {
       entityManager.persist(userAccount);
@@ -57,6 +59,7 @@ public class UserAccountDAO implements IUserAccountDAO {
   }
 
   @Override
+  @Transactional
   public boolean passwordMatches(String email, String password) {
     TypedQuery<UserAccount> query = entityManager.createQuery(
         "SELECT u FROM UserAccount u WHERE u.email = :email", UserAccount.class);
@@ -68,8 +71,4 @@ public class UserAccountDAO implements IUserAccountDAO {
       return false;
     }
   }
-
-
-
-  // Weitere DAO-Methoden
 }

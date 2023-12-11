@@ -167,6 +167,8 @@ public class ReferenceLetterService implements IReferenceLetterService {
     Employee employee = referenceLetter.getEmployee();
     if (employee == null) {
       missingFields.append("\n[Kein Mitarbeiter ausgewählt]");
+    } else if (employee.getGender() == null){
+      missingFields.append("\n[Geschlecht des Mitarbeiters nicht ausgewählt]");
     }
 
     ReferenceReason reason = referenceLetter.getReferenceReason();
@@ -175,13 +177,8 @@ public class ReferenceLetterService implements IReferenceLetterService {
       if (endDate == null) {
         missingFields.append("\n[Enddatum nicht ausgewählt]");
       }
-    } else {
+    } else if (reason == null){
       missingFields.append("\n[Zeugnisart nicht ausgewählt]");
-    }
-
-    Gender gender = employee != null ? employee.getGender() : null;
-    if (gender == null) {
-      missingFields.append("\n[Geschlecht des Mitarbeiters nicht ausgewählt]");
     }
 
     if (missingFields.length() > 0) {

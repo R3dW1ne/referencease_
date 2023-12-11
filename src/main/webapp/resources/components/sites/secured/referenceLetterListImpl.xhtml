@@ -3,55 +3,62 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
-  <div id="referenceLetterListCard" class="card">
-    <div class="card-header text-center">
-      <h1 class="card-title">Arbeitszeugnisse</h1>
+    <div id="referenceLetterListCard" class="card">
+        <div class="card-header text-center">
+            <h1 class="card-title">Arbeitszeugnisse</h1>
+        </div>
+        <h:form id="referenceLetterListForm">
+            <p:growl id="messages" showDetail="true"/>
+            <p:dataTable id="referenceLetterTable" var="referenceLetter"
+                         value="#{referenceLetterBean.referenceLetters}"
+                         widgetVar="dtReferenceLetter" styleClass="products-table"
+                         rowKey="#{referenceLetter.referenceId}" reflow="true"
+                         paginator="true" rows="10" paginatorPosition="bottom">
+                <!-- Spalten Definition -->
+                <p:column headerText="Mitarbeiter" sortBy="#{referenceLetter.employee.firstName}">
+                    <h:outputText
+                            value="#{referenceLetter.employee.firstName} #{referenceLetter.employee.lastName}"/>
+                </p:column>
+                <p:column headerText="Grund" sortBy="#{referenceLetter.referenceReason.name}">
+                    <h:outputText value="#{referenceLetter.referenceReason.name}"/>
+                </p:column>
+                <p:column headerText="Ausstellungsdatum" sortBy="#{referenceLetter.deliveryDate}">
+                    <h:outputText value="#{referenceLetter.deliveryDate}">
+                        <f:convertDateTime pattern="dd.MM.yyyy"/>
+                    </h:outputText>
+                </p:column>
+                <!-- Aktionen für jedes Arbeitszeugnis -->
+                <p:column styleClass="view-link">
+                    <p:commandButton styleClass="edit-button rounded-button ui-button-success"
+                                     icon="pi pi-pencil"
+                                     oncomplete="PF('manageReferenceLetterDialog').show()"
+                                     title="Arbeitszeugnis bearbeiten"
+                                     action="#{referenceLetterBean.loadReferenceLetter(referenceLetter)}">
+                        <f:setPropertyActionListener target="#{referenceLetterBean.referenceLetter}"
+                                                     value="#{referenceLetter}"/>
+                        <f:setPropertyActionListener target="#{employeeBean.selectedEmployee}"
+                                                     value="#{referenceLetterBean.getEmployeeAsDTO()}"/>
+                        <p:ajax oncomplete="#{createRLetterController.onTabSet(4)}"/>
+                    </p:commandButton>
+                    <p:commandButton styleClass="ui-button-warning rounded-button"
+                                     icon="pi pi-trash"
+                                     title="Arbeitszeugnis löschen"
+                                     action="#{referenceLetterBean.deleteReferenceLetter(referenceLetter)}"
+                                     update=":referenceLetterListForm">
+                        <p:confirm header="Arbeitszeugnis löschen"
+                                   message="Wollen Sie dieses Arbeitszeugnis wirklich löschen?"
+                                   icon="pi pi-info-circle"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+            <p:toolbar>
+                <p:toolbarGroup align="left">
+                    <p:commandButton id="addReferenceLetterButton" value="Arbeitszeugnis hinzufügen"
+                                     icon="pi pi-plus"
+                                     oncomplete="PF('manageReferenceLetterDialog').show()"
+                                     action="#{referenceLetterBean.newReferenceLetter()}"/>
+                </p:toolbarGroup>
+            </p:toolbar>
+        </h:form>
     </div>
-    <h:form id="referenceLetterListForm">
-      <p:growl id="messages" showDetail="true"/>
-      <p:dataTable id="referenceLetterTable" var="referenceLetter"
-                   value="#{referenceLetterBean.referenceLetters}"
-                   widgetVar="dtReferenceLetter" styleClass="products-table"
-                   rowKey="#{referenceLetter.referenceId}" reflow="true"
-                   paginator="true" rows="10" paginatorPosition="bottom">
-        <!-- Spalten Definition -->
-        <p:column headerText="Mitarbeiter" sortBy="#{referenceLetter.employee.firstName}">
-          <h:outputText value="#{referenceLetter.employee.firstName} #{referenceLetter.employee.lastName}"/>
-        </p:column>
-        <p:column headerText="Grund" sortBy="#{referenceLetter.referenceReason.name}">
-          <h:outputText value="#{referenceLetter.referenceReason.name}"/>
-        </p:column>
-        <p:column headerText="Ausstellungsdatum" sortBy="#{referenceLetter.deliveryDate}">
-          <h:outputText value="#{referenceLetter.deliveryDate}">
-            <f:convertDateTime pattern="dd.MM.yyyy"/>
-          </h:outputText>
-        </p:column>
-        <!-- Aktionen für jedes Arbeitszeugnis -->
-        <p:column styleClass="view-link">
-          <p:commandButton styleClass="edit-button rounded-button ui-button-success"
-                           icon="pi pi-pencil"
-                           oncomplete="PF('manageReferenceLetterDialog').show()"
-                           title="Arbeitszeugnis bearbeiten"
-                           action="#{referenceLetterBean.loadReferenceLetter(referenceLetter)}">
-            <p:ajax action="#{employeeBean.setSelectedEmployee(referenceLetterBean.getEmployeeAsDTO())}"/>
-          </p:commandButton>
-          <p:commandButton styleClass="ui-button-warning rounded-button"
-                           icon="pi pi-trash"
-                           title="Arbeitszeugnis löschen"
-                           action="#{referenceLetterBean.deleteReferenceLetter(referenceLetter)}"
-                           update=":referenceLetterListForm">
-            <p:confirm header="Arbeitszeugnis löschen" message="Wollen Sie dieses Arbeitszeugnis wirklich löschen?" icon="pi pi-info-circle"/>
-          </p:commandButton>
-        </p:column>
-      </p:dataTable>
-      <p:toolbar>
-        <p:toolbarGroup align="left">
-          <p:commandButton id="addReferenceLetterButton" value="Arbeitszeugnis hinzufügen"
-                           icon="pi pi-plus"
-                           oncomplete="PF('manageReferenceLetterDialog').show()"
-                           action="#{referenceLetterBean.newReferenceLetter()}"/>
-        </p:toolbarGroup>
-      </p:toolbar>
-    </h:form>
-  </div>
 </ui:composition>

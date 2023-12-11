@@ -31,20 +31,20 @@ public class GenderDAO implements IGenderDAO {
         .getResultList();
   }
 
-  @Transactional
   @Override
+  @Transactional
   public void saveGender(Gender gender) {
     entityManager.persist(gender);
   }
 
-  @Transactional
   @Override
+  @Transactional
   public void updateGender(Gender gender) {
     entityManager.merge(gender);
   }
 
-  @Transactional
   @Override
+  @Transactional
   public void deleteGender(UUID genderId) {
     Gender gender = entityManager.find(Gender.class, genderId);
     if (gender != null) {

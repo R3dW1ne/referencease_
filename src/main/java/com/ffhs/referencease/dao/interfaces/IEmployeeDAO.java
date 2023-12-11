@@ -13,10 +13,7 @@ public interface IEmployeeDAO {
   void save(Employee employee);
   void delete(Employee employee);
   Employee update(Employee employee);
-
-  @Transactional
   void deleteById(UUID id);
-
   boolean findByEmployeeNumber(String employeeNumber);
 }
 

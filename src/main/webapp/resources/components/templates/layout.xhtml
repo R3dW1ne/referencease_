@@ -38,7 +38,7 @@
                             <p:divider/>
                             <p:menuitem value="Neu" icon="pi pi-fw pi-plus"
                                         action="#{referenceLetterBean.newReferenceLetter()}">
-                                <p:ajax action="#{employeeBean.resetEmployee()}"/>
+                                <f:actionListener binding="#{employeeBean.resetEmployee()}"/>
                             </p:menuitem>
                         </p:submenu>
 

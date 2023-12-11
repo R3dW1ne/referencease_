@@ -5,6 +5,7 @@ import com.ffhs.referencease.entities.ReferenceLetter;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.ejb.Stateless;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,16 +27,19 @@ public class ReferenceLetterDAO implements IReferenceLetterDAO {
   }
 
   @Override
+  @Transactional
   public void create(ReferenceLetter referenceLetter) {
     entityManager.persist(referenceLetter);
   }
 
   @Override
+  @Transactional
   public ReferenceLetter update(ReferenceLetter referenceLetter) {
     return entityManager.merge(referenceLetter);
   }
 
   @Override
+  @Transactional
   public void delete(ReferenceLetter referenceLetter) {
     entityManager.remove(entityManager.contains(referenceLetter) ? referenceLetter : entityManager.merge(referenceLetter));
   }

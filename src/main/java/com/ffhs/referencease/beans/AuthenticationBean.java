@@ -1,7 +1,5 @@
 package com.ffhs.referencease.beans;
 
-//import ch.ffhs.bude4u.utils.PBKDF2Hash;
-
 import com.ffhs.referencease.dto.UserAccountDTO;
 import com.ffhs.referencease.exceptionhandling.PositionNotFoundException;
 import com.ffhs.referencease.services.interfaces.IUserAccountService;

@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.PrimeFaces;
 
 @Named
 @Setter
@@ -30,6 +31,7 @@ public class ReferenceLetterBean implements Serializable {
   private final transient IReferenceLetterService referenceLetterService;
   private final transient IReferenceReasonService referenceReasonService;
   private final transient IEmployeeService employeeService;
+  private EmployeeBean employeeBean;
 
   private Boolean needsEndDate;
   private Boolean allValuesSet;
@@ -100,6 +102,12 @@ public class ReferenceLetterBean implements Serializable {
 
   public void saveReferenceLetter() {
     referenceLetterService.saveReferenceLetter(referenceLetter);
+    String message =
+        referenceLetter.getReferenceReason().getName() + " von " + referenceLetter.getEmployee().getFirstName() + " wurde erfolgreich gespeichert.";
+    FacesContext.getCurrentInstance().addMessage(null,
+        new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
+//    PrimeFaces.current().ajax()
+//        .update("employeeListForm:messages", "employeeListForm:employeeTable");
   }
 
   public void resetReferenceLetter() {
@@ -115,6 +123,7 @@ public class ReferenceLetterBean implements Serializable {
 
   public String loadReferenceLetter(ReferenceLetter referenceLetter) {
     this.referenceLetter = referenceLetter;
+    this.selectedReferenceReason = referenceLetter.getReferenceReason();
     return "/resources/components/sites/secured/stepsToReferenceLetter.xhtml?faces-redirect=true";
   }
 
