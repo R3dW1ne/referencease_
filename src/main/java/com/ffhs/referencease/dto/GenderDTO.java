@@ -6,6 +6,8 @@ import java.util.UUID;
 
 @Data
 public class GenderDTO implements Serializable {
+
+  private static final long serialVersionUID = 1L;
   private UUID genderId;
   private String genderName;
 

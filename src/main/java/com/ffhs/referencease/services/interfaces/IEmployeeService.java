@@ -21,4 +21,14 @@ public interface IEmployeeService {
   void deleteEmployeeById(UUID id);
 
   EmployeeDTO updateEmployee(EmployeeDTO employeeDTO);
+
+  boolean existsByEmployeeNumber(String employeeNumber);
+
+  // Hilfsmethode zur Konvertierung von Entity zu DTO
+
+  EmployeeDTO convertToDTO(Employee employee);
+
+  // Hilfsmethode zur Konvertierung von DTO zu Entity
+
+  Employee convertToEntity(EmployeeDTO dto);
 }

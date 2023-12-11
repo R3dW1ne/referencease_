@@ -4,6 +4,7 @@ import com.ffhs.referencease.dto.EmployeeDTO;
 import com.ffhs.referencease.entities.Employee;
 import com.ffhs.referencease.entities.ReferenceLetter;
 import com.ffhs.referencease.entities.ReferenceReason;
+import com.ffhs.referencease.services.interfaces.IEmployeeService;
 import com.ffhs.referencease.services.interfaces.IReferenceLetterService;
 import com.ffhs.referencease.services.interfaces.IReferenceReasonService;
 import jakarta.annotation.PostConstruct;
@@ -20,44 +21,30 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Named
+@Setter
+@Getter
 @SessionScoped
 public class ReferenceLetterBean implements Serializable {
 
   private static final long serialVersionUID = 1L;
-
   private final transient IReferenceLetterService referenceLetterService;
-
   private final transient IReferenceReasonService referenceReasonService;
+  private final transient IEmployeeService employeeService;
 
-  @Setter
-  @Getter
   private Boolean needsEndDate;
-
-  @Setter
-  @Getter
   private Boolean allValuesSet;
-
-  @Setter
-  @Getter
   private String introductionButtonMessage;
-
-  @Setter
-  @Getter
   private ReferenceLetter referenceLetter;
-
-  @Setter
-  @Getter
+  private List<ReferenceLetter> referenceLetters;
   private ReferenceReason selectedReferenceReason;
-
-  @Setter
-  @Getter
   private List<ReferenceReason> referenceReasons;
 
   @Inject
   public ReferenceLetterBean(IReferenceLetterService referenceLetterService,
-      IReferenceReasonService referenceReasonService) {
+      IReferenceReasonService referenceReasonService, IEmployeeService employeeService) {
     this.referenceLetterService = referenceLetterService;
     this.referenceReasonService = referenceReasonService;
+    this.employeeService = employeeService;
   }
 
   @PostConstruct
@@ -126,8 +113,17 @@ public class ReferenceLetterBean implements Serializable {
     return "/resources/components/sites/secured/stepsToReferenceLetter.xhtml?faces-redirect=true";
   }
 
-  public void loadReferenceLetter(ReferenceLetter referenceLetter) {
+  public String loadReferenceLetter(ReferenceLetter referenceLetter) {
     this.referenceLetter = referenceLetter;
+    return "/resources/components/sites/secured/stepsToReferenceLetter.xhtml?faces-redirect=true";
+  }
+
+  public void deleteReferenceLetter(ReferenceLetter referenceLetter) {
+    referenceLetterService.deleteReferenceLetter(referenceLetter.getReferenceId());
+  }
+
+  public EmployeeDTO getEmployeeAsDTO() {
+    return employeeService.convertToDTO(referenceLetter.getEmployee());
   }
 }
 

@@ -20,7 +20,7 @@
     <f:view>
         <ui:insert name="Metadata"/>
         <h:outputStylesheet library="webjars" name="primeflex/3.3.1/primeflex.min.css"/>
-<!--        <p:growl id="growl" showDetail="true" life="3000" escape="true"/>-->
+        <p:growl id="messages" showDetail="true" life="3000" escape="true" globalOnly="true"/>
         <div class="flex align-items-center justify-content-center">
             <div class="surface-card shadow-2 border-round w-full lg:w-6">
                 <h:form>
@@ -31,46 +31,27 @@
                                             width="50" height="50"/>
                         </p:menuitem>
                         <p:submenu label="Arbeitszeugnisse" icon="pi pi-fw pi-file">
+                            <p:menuitem value="Liste" icon="pi pi-fw pi-bars"
+                                        outcome="/resources/components/sites/secured/referenceLetterListView">
+                                <p:ajax action="#{employeeBean.resetEmployee()}"/>
+                            </p:menuitem>
+                            <p:divider/>
                             <p:menuitem value="Neu" icon="pi pi-fw pi-plus"
                                         action="#{referenceLetterBean.newReferenceLetter()}">
-                                <f:actionListener binding="#{employeeBean.resetEmployee()}"/>
+                                <p:ajax action="#{employeeBean.resetEmployee()}"/>
                             </p:menuitem>
-                            <!--                    <p:menuitem value="Delete" icon="pi pi-fw pi-trash"/>-->
-                            <p:divider/>
-                            <!--                    vorübergehend deaktiviert-->
-                            <!--                    <p:menuitem value="Speichern" icon="pi pi-fw pi-save" rendered="#{session.getAttribute('authenticated')}"/>-->
-                            <p:menuitem value="Speichern" icon="pi pi-fw pi-save"/>
-                            <p:menuitem value="Exportieren" icon="pi pi-fw pi-external-link"/>
                         </p:submenu>
 
-                        <!--            <p:submenu label="Edit" icon="pi pi-fw pi-pencil">-->
-                        <!--              <p:menuitem value="Left" icon="pi pi-fw pi-align-left"/>-->
-                        <!--              <p:menuitem value="Right" icon="pi pi-fw pi-align-right"/>-->
-                        <!--              <p:menuitem value="Center" icon="pi pi-fw pi-align-center"/>-->
-                        <!--              <p:menuitem value="Justify" icon="pi pi-fw pi-align-justify"/>-->
-                        <!--            </p:submenu>-->
-
-
-                        <!--                    vorübergehend deaktiviert-->
-                        <!--                <p:submenu label="Mitarbeiter" icon="pi pi-fw pi-user" rendered="#{session.getAttribute('authenticated')}">-->
                         <p:submenu label="Mitarbeiter" icon="pi pi-fw pi-user">
                             <p:menuitem value="Liste" icon="pi pi-fw pi-bars"
                                         outcome="/resources/components/sites/secured/employeeList"/>
+                            <p:divider/>
                             <p:menuitem value="Neuer Mitarbeiter" icon="pi pi-fw pi-user-plus"
-                                        action="#{employeeBean.setEditModeToFalseAndNavigate}"/>
-                            <!--              <p:menuitem value="Delete" icon="pi pi-fw pi-user-minus"/>-->
-                            <!--              <p:submenu label="Search" icon="pi pi-fw pi-users">-->
-                            <!--                <p:submenu label="Filter" icon="pi pi-fw pi-filter">-->
-                            <!--                  <p:menuitem value="Print" icon="pi pi-fw pi-print"/>-->
-                            <!--                </p:submenu>-->
-                            <!--                <p:menuitem value="List" icon="pi pi-fw pi-bars"/>-->
-                            <!--              </p:submenu>-->
+                                        action="#{employeeBean.newEmployee}"/>
                         </p:submenu>
 
 
                         <p:divider layout="vertical"/>
-
-                        <!--                <p:menuitem value="Quit" icon="pi pi-fw pi-power-off"/>-->
 
                         <f:facet name="options">
                             <p:button value="Login" icon="pi pi-fw pi-sign-in"

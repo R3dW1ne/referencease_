@@ -70,13 +70,20 @@ public class EmployeeService implements IEmployeeService {
     return convertToDTO(employeeDao.update(convertToEntity(employeeDTO)));
   }
 
+  @Override
+  public boolean existsByEmployeeNumber(String employeeNumber) {
+    return employeeDao.findByEmployeeNumber(employeeNumber);
+  }
+
+  @Override
   // Hilfsmethode zur Konvertierung von Entity zu DTO
-  private EmployeeDTO convertToDTO(Employee employee) {
+  public EmployeeDTO convertToDTO(Employee employee) {
     return new EmployeeDTO(employee);
   }
 
+  @Override
   // Hilfsmethode zur Konvertierung von DTO zu Entity
-  private Employee convertToEntity(EmployeeDTO dto) {
+  public Employee convertToEntity(EmployeeDTO dto) {
     return new Employee(dto);
   }
 }

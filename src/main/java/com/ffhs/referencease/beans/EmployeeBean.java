@@ -24,6 +24,8 @@ import lombok.Setter;
 import org.primefaces.PrimeFaces;
 
 @Named
+@Setter
+@Getter
 @SessionScoped
 public class EmployeeBean implements Serializable {
 
@@ -47,10 +49,6 @@ public class EmployeeBean implements Serializable {
   @Getter
   @Setter
   private EmployeeDTO selectedEmployee;
-
-
-
-
 
 //  @Getter
 //  @Setter
@@ -163,13 +161,20 @@ public class EmployeeBean implements Serializable {
 
   public void saveEmployee() {
 //    employee.setDepartment();
-    employee = employeeService.updateEmployee(employee);
+    employee = employeeService.updateEmployee(selectedEmployee);
+    editMode = true;
 //    -- Only needed if session scoped --
     employees = employeeService.getAllEmployees();
     filteredEmployees = employeeService.getAllEmployees();
 //    -- Only needed if session scoped --
+
+    String message =
+        "Mitarbeiter " + selectedEmployee.getFirstName() + " " + selectedEmployee.getLastName()
+            + " erfolgreich gespeichert";
     FacesContext.getCurrentInstance().addMessage(null,
-        new FacesMessage(FacesMessage.SEVERITY_INFO, "Mitarbeiter erfolgreich gespeichert!", null));
+        new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
+    PrimeFaces.current().ajax()
+        .update("employeeListForm:messages", "employeeListForm:employeeTable");
   }
 
   public boolean hasSelectedEmployee() {
@@ -177,34 +182,44 @@ public class EmployeeBean implements Serializable {
   }
 
   public void deleteEmployee() {
-    employees.removeIf(employeeDTO -> employeeDTO.getEmployeeId().equals(selectedEmployee.getEmployeeId()));
+    employees.removeIf(
+        employeeDTO -> employeeDTO.getEmployeeId().equals(selectedEmployee.getEmployeeId()));
     filteredEmployees.remove(selectedEmployee);
     employeeService.deleteEmployee(selectedEmployee);
+    String message =
+        "Mitarbeiter " + selectedEmployee.getFirstName() + " " + selectedEmployee.getLastName()
+            + " erfolgreich gelöscht";
     selectedEmployee = null;
-    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Product Removed"));
-    PrimeFaces.current().ajax().update("employeeListForm:messages", "employeeListForm:employeeTable");
+    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, message, null));
+    PrimeFaces.current().ajax()
+        .update("employeeListForm:messages", "employeeListForm:employeeTable");
   }
 
-  public void openNew() {
-    this.selectedEmployee = new EmployeeDTO();
-  }
 
-  public void deleteEmployee(EmployeeDTO employee) {
-    employeeService.deleteEmployee(employee);
-    employees = employeeService.getAllEmployees();
-    filteredEmployees = employeeService.getAllEmployees();
-    FacesContext.getCurrentInstance().addMessage(null,
-        new FacesMessage(FacesMessage.SEVERITY_INFO, "Mitarbeiter erfolgreich gelöscht", null));
-    PrimeFaces.current().ajax().update("form:messages", "form:dt-products");
-  }
 
-  public void deleteEmployeeById(UUID id) {
-    employeeService.deleteEmployeeById(id);
-    employees = employeeService.getAllEmployees();
-    filteredEmployees = employeeService.getAllEmployees();
-    FacesContext.getCurrentInstance().addMessage(null,
-        new FacesMessage(FacesMessage.SEVERITY_INFO, "Mitarbeiter erfolgreich gelöscht", null));
-  }
+
+
+//  public void deleteEmployee(EmployeeDTO employee) {
+//    employees.removeIf(
+//        employeeDTO -> employeeDTO.getEmployeeId().equals(selectedEmployee.getEmployeeId()));
+//    filteredEmployees.remove(selectedEmployee);
+//    employeeService.deleteEmployee(selectedEmployee);
+//    String message =
+//        "Mitarbeiter " + selectedEmployee.getFirstName() + " " + selectedEmployee.getLastName()
+//            + " erfolgreich gelöscht";
+//    selectedEmployee = null;
+//    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, message, null));
+//    PrimeFaces.current().ajax()
+//        .update("employeeListForm:messages", "employeeListForm:employeeTable");
+//  }
+
+//  public void deleteEmployeeById(UUID id) {
+//    employeeService.deleteEmployeeById(id);
+//    employees = employeeService.getAllEmployees();
+//    filteredEmployees = employeeService.getAllEmployees();
+//    FacesContext.getCurrentInstance().addMessage(null,
+//        new FacesMessage(FacesMessage.SEVERITY_INFO, "Mitarbeiter erfolgreich gelöscht", null));
+//  }
 
   public void updateEmployee() {
     employee = employeeService.updateEmployee(employee);
@@ -221,8 +236,18 @@ public class EmployeeBean implements Serializable {
 
   public void resetEmployee() {
     employee = new EmployeeDTO();
-    selectedEmployee = null;
+    selectedEmployee = new EmployeeDTO();
     editMode = false;
+  }
+
+  public String newEmployee() {
+    resetEmployee();
+    return "/resources/components/sites/secured/employeeMod.xhtml?faces-redirect=true";
+  }
+
+  public void startEdit(EmployeeDTO employee) {
+    this.selectedEmployee = employee;
+    this.editMode = true;
   }
 
 //  public EmployeeDTO getSelectedEmployee() {

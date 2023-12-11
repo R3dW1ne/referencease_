@@ -1,5 +1,6 @@
 package com.ffhs.referencease;
 
+import com.ffhs.referencease.dao.interfaces.IEmployeeDAO;
 import com.ffhs.referencease.entities.Department;
 import com.ffhs.referencease.entities.Employee;
 import com.ffhs.referencease.entities.Gender;
@@ -17,6 +18,7 @@ import com.ffhs.referencease.entities.enums.ETextType;
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
@@ -37,7 +39,14 @@ public class AppInitSingleton {
   @PersistenceContext
   private EntityManager entityManager;
 
+  private final IEmployeeDAO employeeDao;
+
   Random random = new Random();
+
+  @Inject
+  public AppInitSingleton(IEmployeeDAO employeeDao) {
+    this.employeeDao = employeeDao;
+  }
 
   @PostConstruct
   public void init() {
@@ -69,28 +78,41 @@ public class AppInitSingleton {
   }
 
   private void initializeTextTemplates() {
-    ReferenceReason abschlusszeugnis = getReferenceReason(EReferenceReason.ABSCHLUSSZEUGNIS.getDisplayName());
-    ReferenceReason zwischenzeugnis = getReferenceReason(EReferenceReason.ZWISCHENZEUGNIS.getDisplayName());
-    ReferenceReason positionswechsel = getReferenceReason(EReferenceReason.POSITIONSWECHSEL.getDisplayName());
-    List<ReferenceReason> alleReferenceReasons = Arrays.asList(abschlusszeugnis, zwischenzeugnis, positionswechsel);
+    ReferenceReason abschlusszeugnis = getReferenceReason(
+        EReferenceReason.ABSCHLUSSZEUGNIS.getDisplayName());
+    ReferenceReason zwischenzeugnis = getReferenceReason(
+        EReferenceReason.ZWISCHENZEUGNIS.getDisplayName());
+    ReferenceReason positionswechsel = getReferenceReason(
+        EReferenceReason.POSITIONSWECHSEL.getDisplayName());
+    List<ReferenceReason> alleReferenceReasons = Arrays.asList(abschlusszeugnis, zwischenzeugnis,
+        positionswechsel);
     List<Gender> allGenders = getAllGenders();
     TextType textType = getTextType(ETextType.EINLEITUNG.getDisplayName());
 
     // Gemeinsame TextTemplates für alle ReferenceReasons
-    createTextTemplateIfNotExists("afterName", ", geboren am ", alleReferenceReasons, allGenders, textType);
-    createTextTemplateIfNotExists("afterPosition", " in der Abteilung ", alleReferenceReasons, allGenders, textType);
-    createTextTemplateIfNotExists("afterDepartment", " in unserem Unternehmen beschäftigt.", alleReferenceReasons, allGenders, textType);
+    createTextTemplateIfNotExists("afterName", ", geboren am ", alleReferenceReasons, allGenders,
+        textType);
+    createTextTemplateIfNotExists("afterPosition", " in der Abteilung ", alleReferenceReasons,
+        allGenders, textType);
+    createTextTemplateIfNotExists("afterDepartment", " in unserem Unternehmen beschäftigt.",
+        alleReferenceReasons, allGenders, textType);
 
     // Spezifische TextTemplates für Abschlusszeugnis und Positionswechsel
-    List<ReferenceReason> abschlussUndPositionswechsel = Arrays.asList(abschlusszeugnis, positionswechsel);
-    createTextTemplateIfNotExists("afterDateOfBirth", ", war vom ", abschlussUndPositionswechsel, allGenders, textType);
-    createTextTemplateIfNotExists("afterStartDate", " bis ", abschlussUndPositionswechsel, allGenders, textType);
-    createTextTemplateIfNotExists("afterEndDate", ", als ", abschlussUndPositionswechsel, allGenders, textType);
+    List<ReferenceReason> abschlussUndPositionswechsel = Arrays.asList(abschlusszeugnis,
+        positionswechsel);
+    createTextTemplateIfNotExists("afterDateOfBirth", ", war vom ", abschlussUndPositionswechsel,
+        allGenders, textType);
+    createTextTemplateIfNotExists("afterStartDate", " bis ", abschlussUndPositionswechsel,
+        allGenders, textType);
+    createTextTemplateIfNotExists("afterEndDate", ", als ", abschlussUndPositionswechsel,
+        allGenders, textType);
 
     // Spezifisches TextTemplate für Zwischenzeugnis
     List<ReferenceReason> nurZwischenzeugnis = Collections.singletonList(zwischenzeugnis);
-    createTextTemplateIfNotExists("afterDateOfBirth", ", ist seit ", nurZwischenzeugnis, allGenders, textType);
-    createTextTemplateIfNotExists("afterStartDate", ", als ", nurZwischenzeugnis, allGenders, textType);
+    createTextTemplateIfNotExists("afterDateOfBirth", ", ist seit ", nurZwischenzeugnis, allGenders,
+        textType);
+    createTextTemplateIfNotExists("afterStartDate", ", als ", nurZwischenzeugnis, allGenders,
+        textType);
   }
 
   private List<Gender> getAllGenders() {
@@ -100,7 +122,8 @@ public class AppInitSingleton {
 
   private ReferenceReason getReferenceReason(String name) {
     try {
-      return entityManager.createQuery("SELECT r FROM ReferenceReason r WHERE r.name = :name", ReferenceReason.class)
+      return entityManager.createQuery("SELECT r FROM ReferenceReason r WHERE r.name = :name",
+              ReferenceReason.class)
           .setParameter("name", name)
           .getSingleResult();
     } catch (NoResultException e) {
@@ -114,7 +137,8 @@ public class AppInitSingleton {
 
   private TextType getTextType(String typeName) {
     try {
-      return entityManager.createQuery("SELECT t FROM TextType t WHERE t.textTypeName = :typeName", TextType.class)
+      return entityManager.createQuery("SELECT t FROM TextType t WHERE t.textTypeName = :typeName",
+              TextType.class)
           .setParameter("typeName", typeName)
           .getSingleResult();
     } catch (NoResultException e) {
@@ -126,7 +150,8 @@ public class AppInitSingleton {
     }
   }
 
-  private void createTextTemplateIfNotExists(String key, String template, List<ReferenceReason> referenceReasons, List<Gender> genders, TextType textType) {
+  private void createTextTemplateIfNotExists(String key, String template,
+      List<ReferenceReason> referenceReasons, List<Gender> genders, TextType textType) {
     // Erstellt eine Query, die alle Bedingungen überprüft
     String queryStr = "SELECT t FROM TextTemplate t WHERE t.key = :key AND t.template = :template AND t.textType = :textType";
     TypedQuery<TextTemplate> query = entityManager.createQuery(queryStr, TextTemplate.class)
@@ -152,7 +177,8 @@ public class AppInitSingleton {
   }
 
   private void createReferenceReasonIfNotExists(String reasonName) {
-    if (entityManager.createQuery("SELECT r FROM ReferenceReason r WHERE r.name = :reasonName", ReferenceReason.class)
+    if (entityManager.createQuery("SELECT r FROM ReferenceReason r WHERE r.name = :reasonName",
+            ReferenceReason.class)
         .setParameter("reasonName", reasonName)
         .getResultList().isEmpty()) {
       ReferenceReason referenceReason = new ReferenceReason();
@@ -162,7 +188,8 @@ public class AppInitSingleton {
   }
 
   private void createTextTypeIfNotExists(String typeName) {
-    if (entityManager.createQuery("SELECT t FROM TextType t WHERE t.textTypeName = :typeName", TextType.class)
+    if (entityManager.createQuery("SELECT t FROM TextType t WHERE t.textTypeName = :typeName",
+            TextType.class)
         .setParameter("typeName", typeName)
         .getResultList().isEmpty()) {
       TextType textType = new TextType();
@@ -172,7 +199,8 @@ public class AppInitSingleton {
   }
 
   private void createPropertyIfNotExists(String propertyName) {
-    if (entityManager.createQuery("SELECT p FROM Property p WHERE p.name = :propertyName", Property.class)
+    if (entityManager.createQuery("SELECT p FROM Property p WHERE p.name = :propertyName",
+            Property.class)
         .setParameter("propertyName", propertyName)
         .getResultList().isEmpty()) {
       Property property = new Property();
@@ -182,7 +210,8 @@ public class AppInitSingleton {
   }
 
   private void createGenderIfNotExists(String genderName) {
-    if (entityManager.createQuery("SELECT g FROM Gender g WHERE g.genderName = :genderName", Gender.class)
+    if (entityManager.createQuery("SELECT g FROM Gender g WHERE g.genderName = :genderName",
+            Gender.class)
         .setParameter("genderName", genderName)
         .getResultList().isEmpty()) {
       Gender gender = new Gender();
@@ -201,7 +230,8 @@ public class AppInitSingleton {
   }
 
   private void createDepartmentIfNotExists(String departmentName) {
-    if (entityManager.createQuery("SELECT d FROM Department d WHERE d.departmentName = :departmentName", Department.class)
+    if (entityManager.createQuery(
+            "SELECT d FROM Department d WHERE d.departmentName = :departmentName", Department.class)
         .setParameter("departmentName", departmentName)
         .getResultList().isEmpty()) {
       Department department = new Department();
@@ -211,7 +241,8 @@ public class AppInitSingleton {
   }
 
   private void createPositionIfNotExists(String positionName) {
-    if (entityManager.createQuery("SELECT p FROM Position p WHERE p.positionName = :positionName", Position.class)
+    if (entityManager.createQuery("SELECT p FROM Position p WHERE p.positionName = :positionName",
+            Position.class)
         .setParameter("positionName", positionName)
         .getResultList().isEmpty()) {
       Position position = new Position();
@@ -222,7 +253,8 @@ public class AppInitSingleton {
 
   private void createRandomEmployees(int count) {
     // Überprüfen, ob bereits Mitarbeiter in der Datenbank existieren
-    long employeeCount = (long) entityManager.createQuery("SELECT COUNT(e) FROM Employee e").getSingleResult();
+    long employeeCount = (long) entityManager.createQuery("SELECT COUNT(e) FROM Employee e")
+        .getSingleResult();
     if (employeeCount > 0) {
       // Es gibt bereits Mitarbeiter, also keine neuen hinzufügen
       return;
@@ -230,13 +262,15 @@ public class AppInitSingleton {
 
     for (int i = 0; i < count; i++) {
       Employee employee = new Employee();
-      employee.setEmployeeNumber(UUID.randomUUID().toString().substring(0, 8)); // Zufällige Mitarbeiternummer
+      employee.setEmployeeNumber(
+          UUID.randomUUID().toString().substring(0, 8)); // Zufällige Mitarbeiternummer
       employee.setFirstName("Firstname" + i);
       employee.setLastName("Lastname" + i);
-      employee.setDateOfBirth(LocalDate.now().minusYears(random.nextInt(40) + 18)); // Zufälliges Geburtsdatum zwischen 18 und 58 Jahren
+      employee.setDateOfBirth(LocalDate.now().minusYears(
+          random.nextInt(40) + 18)); // Zufälliges Geburtsdatum zwischen 18 und 58 Jahren
       employee.setPhone("123-456-7890"); // Beispieltelefonnummer
-      employee.setStartDate(LocalDate.now().minusYears(random.nextInt(10))); // Zufälliges Anfangsdatum der Beschäftigung in den letzten 10 Jahren
-
+      employee.setStartDate(LocalDate.now().minusYears(random.nextInt(
+          10))); // Zufälliges Anfangsdatum der Beschäftigung in den letzten 10 Jahren
       // Abteilung kann auch zufällig zugewiesen werden
       Department randomDepartment = getRandomDepartment();
       if (randomDepartment != null) {
@@ -254,8 +288,8 @@ public class AppInitSingleton {
       if (randomGender != null) {
         employee.setGender(randomGender);
       }
-
-      entityManager.persist(employee);
+      employeeDao.save(employee);
+//      entityManager.persist(employee);
     }
   }
 
@@ -275,7 +309,8 @@ public class AppInitSingleton {
   // Methode zum Abrufen einer zufälligen Abteilung aus der Datenbank
   private Department getRandomDepartment() {
     // Annahme: Alle vorhandenen Abteilungen abrufen
-    List<Department> departments = entityManager.createQuery("SELECT d FROM Department d", Department.class)
+    List<Department> departments = entityManager.createQuery("SELECT d FROM Department d",
+            Department.class)
         .getResultList();
 
     if (!departments.isEmpty()) {

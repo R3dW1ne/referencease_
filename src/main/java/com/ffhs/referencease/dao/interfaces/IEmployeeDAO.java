@@ -16,5 +16,7 @@ public interface IEmployeeDAO {
 
   @Transactional
   void deleteById(UUID id);
+
+  boolean findByEmployeeNumber(String employeeNumber);
 }
 

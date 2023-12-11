@@ -1,9 +1,15 @@
 <!-- /createEmployee.xhtml -->
 <ui:composition template="/resources/components/templates/layout.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-  <ui:define name="content">
-    <ui:include
-      src="/resources/components/sites/secured/createEmployeeImpl.xhtml"/>
-  </ui:define>
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="content">
+        <h:form id="createEmployeeForm">
+            <p:outputPanel id="manage-employee-content">
+                <ui:include
+                        src="/resources/components/sites/secured/createEmployeeImpl.xhtml"/>
+            </p:outputPanel>
+        </h:form>
+    </ui:define>
 </ui:composition>

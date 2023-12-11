@@ -51,14 +51,9 @@
                 <h:panelGroup id="employeeInformation"
                               rendered="#{createRLetterController.activeIndex == 0}">
 
-                    <h:panelGroup id="employeeListInclude" rendered="#{!employeeBean.editMode}">
+                    <h:panelGroup id="employeeListInclude">
                         <ui:include
                                 src="/resources/components/sites/secured/employeeListImpl.xhtml"/>
-                    </h:panelGroup>
-                    <h:panelGroup id="createEmployeeInclude" rendered="#{employeeBean.editMode}">
-                        <ui:include
-                                src="/resources/components/sites/secured/createEmployeeImpl.xhtml"
-                                name="createEmployee" id="createEmployee"/>
                     </h:panelGroup>
                 </h:panelGroup>
 
