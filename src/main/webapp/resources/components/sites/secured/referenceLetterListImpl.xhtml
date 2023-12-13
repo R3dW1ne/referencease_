@@ -23,7 +23,7 @@
                     <h:outputText value="#{referenceLetter.referenceReason.name}"/>
                 </p:column>
                 <p:column headerText="Ausstellungsdatum" sortBy="#{referenceLetter.deliveryDate}">
-                    <h:outputText value="#{referenceLetter.deliveryDate}">
+                    <h:outputText value="#{referenceLetter.deliveryDate.toString()}">
                         <f:convertDateTime pattern="dd.MM.yyyy"/>
                     </h:outputText>
                 </p:column>

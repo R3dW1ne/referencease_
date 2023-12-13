@@ -3,6 +3,7 @@ package com.ffhs.referencease.entities;
 import com.ffhs.referencease.converters.jpa.UUIDConverter;
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 import java.util.UUID;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,6 +35,14 @@ public class UserAccount implements Serializable {
 
   @Transient // Diese Annotation sorgt dafür, dass das Feld nicht persistent gespeichert wird
   private String confirmPassword;
+
+  @ManyToMany
+  @JoinTable(
+      name = "user_roles",
+      joinColumns = @JoinColumn(name = "userId"),
+      inverseJoinColumns = @JoinColumn(name = "roleId")
+  )
+  private Set<Role> roles;
 
   @ManyToOne
   @JoinColumn(name = "roleId")

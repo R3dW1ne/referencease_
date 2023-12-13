@@ -21,6 +21,7 @@ public class ReferenceLetter implements Serializable {
   @Convert(converter = UUIDConverter.class)
   private UUID referenceId;
   private LocalDate endDate;
+  private LocalDate deliveryDate;
 
   @Lob
   private String introduction;
@@ -44,6 +45,4 @@ public class ReferenceLetter implements Serializable {
   @ManyToOne
   @JoinColumn(name = "referenceReasonId")
   private ReferenceReason referenceReason;
-
-  private LocalDate deliveryDate;
 }

@@ -40,6 +40,7 @@ public class ReferenceLetterBean implements Serializable {
   private List<ReferenceLetter> referenceLetters;
   private ReferenceReason selectedReferenceReason;
   private List<ReferenceReason> referenceReasons;
+  private Boolean editMode;
 
   @Inject
   public ReferenceLetterBean(IReferenceLetterService referenceLetterService,
@@ -72,6 +73,7 @@ public class ReferenceLetterBean implements Serializable {
     }
   }
 
+
   public void setEndDate(String endDate) {
     referenceLetter.setEndDate(LocalDate.parse(endDate));
   }
@@ -101,7 +103,8 @@ public class ReferenceLetterBean implements Serializable {
   }
 
   public void saveReferenceLetter() {
-    referenceLetterService.saveReferenceLetter(referenceLetter);
+    referenceLetterService.updateReferenceLetter(referenceLetter);
+    editMode = true;
     String message =
         referenceLetter.getReferenceReason().getName() + " von " + referenceLetter.getEmployee().getFirstName() + " wurde erfolgreich gespeichert.";
     FacesContext.getCurrentInstance().addMessage(null,
@@ -112,6 +115,7 @@ public class ReferenceLetterBean implements Serializable {
 
   public void resetReferenceLetter() {
     needsEndDate = false;
+    editMode = false;
     selectedReferenceReason = null;
     referenceLetter = new ReferenceLetter();
   }

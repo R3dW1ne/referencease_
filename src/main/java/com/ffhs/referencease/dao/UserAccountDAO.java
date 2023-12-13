@@ -1,6 +1,7 @@
 package com.ffhs.referencease.dao;
 
 import com.ffhs.referencease.dao.interfaces.IUserAccountDAO;
+import com.ffhs.referencease.entities.Role;
 import com.ffhs.referencease.entities.UserAccount;
 import com.ffhs.referencease.utils.PBKDF2Hash;
 import jakarta.ejb.Stateless;
@@ -11,6 +12,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 
@@ -70,5 +72,22 @@ public class UserAccountDAO implements IUserAccountDAO {
     } catch (NoResultException e) {
       return false;
     }
+  }
+
+  public void assignRolesToUser(String userEmail, Set<String> roleNames) {
+    UserAccount user = entityManager.createQuery("SELECT u FROM UserAccount u WHERE u.email = :email", UserAccount.class)
+        .setParameter("email", userEmail)
+        .getSingleResult();
+
+    Set<Role> roles = user.getRoles();
+    for (String roleName : roleNames) {
+      Role role = entityManager.createQuery("SELECT r FROM Role r WHERE r.roleName = :name", Role.class)
+          .setParameter("name", roleName)
+          .getSingleResult();
+      roles.add(role);
+    }
+
+    user.setRoles(roles);
+    entityManager.merge(user);
   }
 }

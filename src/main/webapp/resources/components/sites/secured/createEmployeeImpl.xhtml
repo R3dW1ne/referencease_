@@ -1,154 +1,151 @@
 <!-- /createEmployeeImpl.xhtml -->
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <!-- createEmployeeImpl -->
-    <div id="employeeCard" class="card">
-        <h:panelGroup rendered="#{param.success}">
-            <h:outputText value="Mitarbeiter erfolgreich gespeichert."
-                          styleClass="ui-message-info"/>
-        </h:panelGroup>
-        <div class="card-header text-center">
-            <h1 class="card-title">#{employeeBean.editMode ? 'Mitarbeiter bearbeiten' : 'Mitarbeiter erstellen'}</h1>
-        </div>
-        <div class="formgrid grid">
-            <div class="field col-12 md:col-6">
-                <p:outputLabel for="employeeNumber"
-                               class="block text-900 font-medium mb-2"
-                               value="Mitarbeiternummer:"/>
-                <p:inputText id="employeeNumber"
-                             value="#{employeeBean.selectedEmployee.employeeNumber}"
-                             styleClass="mb-3"/>
-                <p:message for="employeeNumber"/>
+    <div class="flex align-items-center justify-content-center">
+        <div id="employeeCard" class="card" style="max-width: 600px;">
+            <div class="card-header text-center">
+                <h1 class="card-title">#{employeeBean.editMode ? 'Mitarbeiter bearbeiten' : 'Mitarbeiter erstellen'}</h1>
             </div>
+            <div class="formgrid grid pl-5">
+                <div class="field col-10 md:col-5 col-offset-0 md:col-offset-1">
+                    <p:outputLabel for="employeeNumber"
+                                   class="block text-900 font-medium mb-2"
+                                   value="Mitarbeiternummer:"/>
+                    <p:inputText id="employeeNumber"
+                                 value="#{employeeBean.selectedEmployee.employeeNumber}"
+                                 styleClass="mb-3"/>
+                    <p:message for="employeeNumber"/>
+                </div>
 
-            <div class="field col-12 md:col-6">
-                <p:outputLabel for="startDate"
-                               class="block text-900 font-medium mb-2"
-                               value="Anfangsdatum:"/>
-                <p:calendar id="startDate"
-                            value="#{employeeBean.selectedEmployee.startDate}"
-                            navigator="true" pattern="dd/MM/yyyy" required="true"
-                            requiredMessage="Anfangsdatum ist erforderlich."
-                            yearRange="c-65:c-0" styleClass="w-full mb-3"/>
-                <p:message for="startDate"/>
-            </div>
+                <div class="field col-12 md:col-6">
+                    <p:outputLabel for="startDate"
+                                   class="block text-900 font-medium mb-2"
+                                   value="Anfangsdatum:"/>
+                    <p:calendar id="startDate"
+                                value="#{employeeBean.selectedEmployee.startDate}"
+                                navigator="true" pattern="dd/MM/yyyy" required="true"
+                                requiredMessage="Anfangsdatum ist erforderlich."
+                                yearRange="c-65:c-0" styleClass="w-full mb-3"/>
+                    <p:message for="startDate"/>
+                </div>
 
-            <div class="field col-12 md:col-6">
-                <p:outputLabel for="firstName"
-                               class="block text-900 font-medium mb-2"
-                               value="Vorname:"/>
-                <p:inputText id="firstName"
-                             value="#{employeeBean.selectedEmployee.firstName}"
-                             required="true"
-                             requiredMessage="Vorname ist erforderlich."
-                             styleClass="w-full mb-3"/>
-                <p:message for="firstName"/>
-            </div>
-
-            <div class="field col-12 md:col-6">
-                <p:outputLabel for="lastName"
-                               class="block text-900 font-medium mb-2"
-                               value="Nachname:"/>
-                <p:inputText id="lastName" value="#{employeeBean.selectedEmployee.lastName}"
-                             required="true"
-                             requiredMessage="Nachname ist erforderlich."
-                             styleClass="w-full mb-3"/>
-                <p:message for="lastName"/>
-            </div>
-
-            <div class="field col-12 md:col-6">
-                <p:outputLabel for="genderSelectItem"
-                               class="block text-900 font-medium mb-2"
-                               value="Geschlecht:"/>
-                <p:selectOneMenu id="gender"
-                                 value="#{employeeBean.selectedEmployee.gender}"
-                                 converter="entityConverter"
+                <div class="field col-10 md:col-5 col-offset-0 md:col-offset-1">
+                    <p:outputLabel for="firstName"
+                                   class="block text-900 font-medium mb-2"
+                                   value="Vorname:"/>
+                    <p:inputText id="firstName"
+                                 value="#{employeeBean.selectedEmployee.firstName}"
                                  required="true"
-                                 requiredMessage="Geschlecht ist erforderlich.">
-                    <f:selectItem id="genderSelectItem" itemLabel="Geschlecht auswählen"
-                                  itemValue=""
-                                  noSelectionOption="true"/>
-                    <f:selectItems id="genderSelectItems" value="#{employeeBean.genders}"
-                                   var="gender"
-                                   itemLabel="#{gender.genderName}"
-                                   itemValue="#{gender}"/>
-                </p:selectOneMenu>
-                <p:message for="gender"/>
-            </div>
+                                 requiredMessage="Vorname ist erforderlich."
+                                 styleClass="mb-3"/>
+                    <p:message for="firstName"/>
+                </div>
 
-            <div class="field col-12 md:col-6">
-                <p:outputLabel for="dateOfBirth"
-                               class="block text-900 font-medium mb-2"
-                               value="Geburtsdatum:"/>
-                <p:calendar id="dateOfBirth"
-                            value="#{employeeBean.selectedEmployee.dateOfBirth}"
-                            navigator="true" pattern="dd/MM/yyyy" required="true"
-                            requiredMessage="Geburtsdatum ist erforderlich."
-                            yearRange="c-65:c-0" styleClass="w-full mb-3"/>
-                <p:message for="dateOfBirth"/>
-            </div>
+                <div class="field col-12 md:col-6">
+                    <p:outputLabel for="lastName"
+                                   class="block text-900 font-medium mb-2"
+                                   value="Nachname:"/>
+                    <p:inputText id="lastName" value="#{employeeBean.selectedEmployee.lastName}"
+                                 required="true"
+                                 requiredMessage="Nachname ist erforderlich."
+                                 styleClass="mb-3"/>
+                    <p:message for="lastName"/>
+                </div>
 
-            <div class="field col-12 md:col-12">
-                <p:outputLabel for="phone" class="block text-900 font-medium mb-2"
-                               value="Telefon:"/>
-                <p:inputMask id="phone" value="#{employeeBean.selectedEmployee.phone}"
-                             mask="999 / 999 99 99" styleClass="mb-3" autocomplete="true"/>
-                <p:message for="phone"/>
-            </div>
+                <div class="field col-10 md:col-5 col-offset-0 md:col-offset-1">
+                    <p:outputLabel for="genderSelectItem"
+                                   class="block text-900 font-medium mb-2"
+                                   value="Geschlecht:"/>
+                    <p:selectOneMenu id="gender" style="width:200px"
+                                     value="#{employeeBean.selectedEmployee.gender}"
+                                     converter="entityConverter"
+                                     required="true"
+                                     requiredMessage="Geschlecht ist erforderlich.">
+                        <f:selectItem id="genderSelectItem" itemLabel="Geschlecht auswählen"
+                                      itemValue=""
+                                      noSelectionOption="true"/>
+                        <f:selectItems id="genderSelectItems" value="#{employeeBean.genders}"
+                                       var="gender"
+                                       itemLabel="#{gender.genderName}"
+                                       itemValue="#{gender}"/>
+                    </p:selectOneMenu>
+                    <p:message for="gender"/>
+                </div>
 
-            <div class="field col-12 md:col-6">
-                <p:outputLabel for="position"
-                               class="block text-900 font-medium mb-2"
-                               value="Position:"/>
-                <p:selectOneMenu id="position"
-                                 value="#{employeeBean.selectedEmployee.position}"
-                                 converter="entityConverter" required="true"
-                                 requiredMessage="Position ist erforderlich.">
-                    <f:selectItem itemLabel="Position auswählen" itemValue=""
-                                  noSelectionOption="true"/>
-                    <f:selectItems value="#{employeeBean.positions}" var="position"
-                                   itemLabel="#{position.positionName}"
-                                   itemValue="#{position}"/>
-                </p:selectOneMenu>
-                <p:message for="position"/>
-            </div>
+                <div class="field col-12 md:col-6">
+                    <p:outputLabel for="dateOfBirth"
+                                   class="block text-900 font-medium mb-2"
+                                   value="Geburtsdatum:"/>
+                    <p:calendar id="dateOfBirth"
+                                value="#{employeeBean.selectedEmployee.dateOfBirth}"
+                                navigator="true" pattern="dd/MM/yyyy" required="true"
+                                requiredMessage="Geburtsdatum ist erforderlich."
+                                yearRange="c-65:c-0" styleClass="w-full mb-3"/>
+                    <p:message for="dateOfBirth"/>
+                </div>
 
-            <div class="field col-12 md:col-6">
-                <p:outputLabel for="department"
-                               class="block text-900 font-medium mb-2"
-                               value="Abteilung:"/>
-                <p:selectOneMenu id="department"
-                                 value="#{employeeBean.selectedEmployee.department}"
-                                 converter="entityConverter" required="true"
-                                 requiredMessage="Abteilung ist erforderlich.">
-                    <f:selectItem itemLabel="Abteilung auswählen" itemValue=""
-                                  noSelectionOption="true"/>
-                    <f:selectItems value="#{employeeBean.departments}"
-                                   var="department"
-                                   itemLabel="#{department.departmentName}"
-                                   itemValue="#{department}"/>
-                </p:selectOneMenu>
-                <p:message for="department"/>
-            </div>
+                <div class="field col-10 md:col-10 col-offset-1">
+                    <p:outputLabel for="phone" class="block text-900 font-medium mb-2"
+                                   value="Telefon:"/>
+                    <p:inputMask id="phone" value="#{employeeBean.selectedEmployee.phone}"
+                                 mask="999 / 999 99 99" styleClass="mb-3" autocomplete="true"/>
+                    <p:message for="phone"/>
+                </div>
 
-            <div class="field col-12 md:col-6">
-                <p:commandButton
-                        value="#{employeeBean.editMode ? 'Aktualisieren' : 'Speichern'}"
-                        icon="pi pi-check"
-                        styleClass="rounded-button"
-                        action="#{employeeBean.saveEmployee}"
-                        update="@form:manage-employee-content"/>
+                <div class="field col-10 md:col-5 col-offset-0 md:col-offset-1">
+                    <p:outputLabel for="position" style="width:200px"
+                                   class="block text-900 font-medium mb-2"
+                                   value="Position:"/>
+                    <p:selectOneMenu id="position"
+                                     value="#{employeeBean.selectedEmployee.position}"
+                                     converter="entityConverter" required="true"
+                                     requiredMessage="Position ist erforderlich.">
+                        <f:selectItem itemLabel="Position auswählen" itemValue=""
+                                      noSelectionOption="true"/>
+                        <f:selectItems value="#{employeeBean.positions}" var="position"
+                                       itemLabel="#{position.positionName}"
+                                       itemValue="#{position}"/>
+                    </p:selectOneMenu>
+                    <p:message for="position"/>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <p:outputLabel for="department" style="width:200px"
+                                   class="block text-900 font-medium mb-2"
+                                   value="Abteilung:"/>
+                    <p:selectOneMenu id="department"
+                                     value="#{employeeBean.selectedEmployee.department}"
+                                     converter="entityConverter" required="true"
+                                     requiredMessage="Abteilung ist erforderlich.">
+                        <f:selectItem itemLabel="Abteilung auswählen" itemValue=""
+                                      noSelectionOption="true"/>
+                        <f:selectItems value="#{employeeBean.departments}"
+                                       var="department"
+                                       itemLabel="#{department.departmentName}"
+                                       itemValue="#{department}"/>
+                    </p:selectOneMenu>
+                    <p:message for="department"/>
+                </div>
+
+                <div class="field col-10 md:col-5 col-offset-0 md:col-offset-1">
+                    <p:commandButton
+                            value="#{employeeBean.editMode ? 'Aktualisieren' : 'Speichern'}"
+                            icon="pi pi-check"
+                            styleClass="rounded-button"
+                            action="#{employeeBean.saveEmployee}"
+                            update="@form:manage-employee-content"/>
+                </div>
+
             </div>
+            <!-- Globale Feedback Nachrichten -->
+            <p:messages id="messages" autoUpdate="true" closable="true"
+                        globalOnly="true"/>
+            <p:growl id="growl" showDetail="true" sticky="true" globalOnly="true"/>
 
         </div>
-        <!-- Globale Feedback Nachrichten -->
-        <p:messages id="messages" autoUpdate="true" closable="true"
-                    globalOnly="true"/>
-        <p:growl id="growl" showDetail="true" sticky="true" globalOnly="true"/>
-
     </div>
 </ui:composition>

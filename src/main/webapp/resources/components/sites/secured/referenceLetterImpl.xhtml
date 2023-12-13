@@ -22,20 +22,36 @@
                                        itemLabel="#{reason.name}"/>
                         <p:ajax event="change"
                                 listener="#{referenceLetterBean.updateSelectedReferenceReason}"
-                                update="referenceLetterForm"/>
+                                update="endDateWrapper"/>
                     </p:selectOneButton>
                 </p:outputPanel>
-                <h:panelGroup rendered="#{referenceLetterBean.needsEndDate}">
+                <h:panelGroup>
                     <p:outputPanel styleClass="field col-12 md:col-6 flex align-items-center">
+                        <p:outputLabel for="deliveryDate" class="block text-900 font-medium mb-2"
+                                       value="Ausstellungsdatum:"/>
+                        <p:calendar id="deliveryDate"
+                                    value="#{referenceLetterBean.referenceLetter.deliveryDate}"
+                                    navigator="true"
+                                    pattern="dd/MM/yyyy" yearRange="c-65:c-1"
+                                    styleClass="w-full mb-3"/>
+                        <p:message for="deliveryDate"/>
+                    </p:outputPanel>
+                </h:panelGroup>
+                <h:panelGroup id="endDateWrapper">
+                    <p:outputPanel id="endDatePanel"
+                                   styleClass="field col-12 md:col-6 flex align-items-center"
+                                   rendered="#{referenceLetterBean.needsEndDate}">
                         <p:outputLabel for="endDate" class="block text-900 font-medium mb-2"
                                        value="Enddatum:"/>
                         <p:calendar id="endDate"
                                     value="#{referenceLetterBean.referenceLetter.endDate}"
+                                    required="#{referenceLetterBean.needsEndDate}"
+                                    requiredMessage="Enddatum ist erforderlich bei dieser Referenzart."
                                     navigator="true"
                                     pattern="dd/MM/yyyy" yearRange="c-65:c-0"
                                     styleClass="w-full mb-3"/>
-                        <p:message for="endDate"/>
                     </p:outputPanel>
+                    <p:message for="endDate"/>
                 </h:panelGroup>
             </p:outputPanel>
 
@@ -80,7 +96,7 @@
             </p:outputPanel>
             <!-- Speichern Button -->
             <p:outputPanel styleClass="p-col-12 text-center">
-                <p:commandButton value="Speichern"
+                <p:commandButton value="#{referenceLetterBean.editMode ? 'Aktualisieren' : 'Speichern'}"
                                  icon="pi pi-save"
                                  action="#{referenceLetterBean.saveReferenceLetter()}"
                                  styleClass="ui-button-raised ui-button-primary"
