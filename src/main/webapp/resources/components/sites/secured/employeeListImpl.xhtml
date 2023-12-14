@@ -17,7 +17,7 @@
                          rowKey="#{employee.employeeId}" styleClass="products-table"
                          selectionMode="single"
                          selection="#{employeeBean.selectedEmployee}" reflow="true"
-                         paginator="true" rows="10" paginatorPosition="bottom">
+                         paginator="true" rows="8" paginatorPosition="bottom">
                 <p:ajax event="rowSelect"
                         listener="#{referenceLetterBean.setEmployee(employeeBean.selectedEmployee)}"/>
                 <p:column headerText="Vorname" sortBy="#{employee.firstName}"

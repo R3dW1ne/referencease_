@@ -1,0 +1,6 @@
+/* CSS in einer separaten Datei oder im <style>-Tag */
+@media screen and (max-width: 697px) { /* oder eine andere Breite, die Sie für geeignet halten */
+  .hide-submenu-labels .ui-menuitem-text {
+    display: none; /* Versteckt den Text der Submenü-Labels */
+  }
+}

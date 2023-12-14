@@ -60,5 +60,13 @@
                 </p:toolbarGroup>
             </p:toolbar>
         </h:form>
+        <h:form>
+            <p:confirmDialog global="true" widgetVar="confirmDialog" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Ja" type="button" styleClass="ui-confirmdialog-yes"
+                                 icon="pi pi-check" onclick="PF('confirmDialog').hide()"/>
+                <p:commandButton value="Nein" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                                 icon="pi pi-times" onclick="PF('confirmDialog').hide()"/>
+            </p:confirmDialog>
+        </h:form>
     </div>
 </ui:composition>
