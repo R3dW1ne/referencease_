@@ -12,6 +12,7 @@
             <p:growl id="messages" showDetail="true"/>
 
 
+
             <p:dataTable id="employeeTable" widgetVar="dtemployee" var="employee"
                          value="#{employeeBean.employees}"
                          rowKey="#{employee.employeeId}" styleClass="products-table"
@@ -20,6 +21,9 @@
                          paginator="true" rows="8" paginatorPosition="bottom">
                 <p:ajax event="rowSelect"
                         listener="#{referenceLetterBean.setEmployee(employeeBean.selectedEmployee)}"/>
+
+                <p:column selectionMode="single" exportable="false" rendered="#{employeeBean.listSelectionNeeded}"></p:column>
+
                 <p:column headerText="Vorname" sortBy="#{employee.firstName}"
                           filterBy="#{employee.firstName}">
                     <h:outputText value="#{employee.firstName}"/>

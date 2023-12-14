@@ -14,6 +14,7 @@
                 <p:menuitem value="Arbeitszeugnis" icon="pi pi-fw pi-plus"
                             action="#{referenceLetterBean.newReferenceLetter()}">
                     <f:actionListener binding="#{employeeBean.resetEmployee()}"/>
+                    <f:setPropertyActionListener value="#{true}" target="#{employeeBean.listSelectionNeeded}"/>
                 </p:menuitem>
                 <p:divider/>
                 <p:menuitem value="Liste" icon="pi pi-fw pi-bars"
@@ -27,7 +28,9 @@
                             action="#{employeeBean.newEmployee}"/>
                 <p:divider/>
                 <p:menuitem value="Liste" icon="pi pi-fw pi-bars"
-                            outcome="/resources/components/sites/secured/employeeList"/>
+                            action="#{employeeBean.navigateToEmployeeList()}">
+                <f:actionListener binding="#{employeeBean.resetEmployee()}"/>
+            </p:menuitem>
             </p:submenu>
 
 

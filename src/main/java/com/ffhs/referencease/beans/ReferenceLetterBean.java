@@ -12,6 +12,7 @@ import jakarta.el.MethodExpression;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
@@ -24,14 +25,14 @@ import org.primefaces.PrimeFaces;
 @Named
 @Setter
 @Getter
-@SessionScoped
+@ViewScoped
 public class ReferenceLetterBean implements Serializable {
 
   private static final long serialVersionUID = 1L;
   private final transient IReferenceLetterService referenceLetterService;
   private final transient IReferenceReasonService referenceReasonService;
   private final transient IEmployeeService employeeService;
-  private EmployeeBean employeeBean;
+
 
   private Boolean needsEndDate;
   private Boolean allValuesSet;

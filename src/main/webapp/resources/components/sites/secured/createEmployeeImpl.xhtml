@@ -136,7 +136,7 @@
                             value="#{employeeBean.editMode ? 'Aktualisieren' : 'Speichern'}"
                             icon="pi pi-check"
                             styleClass="rounded-button"
-                            action="#{employeeBean.saveEmployee}"
+                            action="#{employeeBean.saveEmployee(referenceLetterBean)}"
                             update="@form:manage-employee-content"/>
                 </div>
 

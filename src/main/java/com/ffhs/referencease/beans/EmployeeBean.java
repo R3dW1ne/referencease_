@@ -2,6 +2,7 @@ package com.ffhs.referencease.beans;
 
 import com.ffhs.referencease.dto.EmployeeDTO;
 import com.ffhs.referencease.entities.Department;
+import com.ffhs.referencease.entities.Employee;
 import com.ffhs.referencease.entities.Gender;
 import com.ffhs.referencease.entities.Position;
 import com.ffhs.referencease.services.interfaces.IDepartmentService;
@@ -41,46 +42,15 @@ public class EmployeeBean implements Serializable {
   private final transient IDepartmentService departmentService;
   private final transient IGenderService genderService;
 
-  @Getter
-  @Setter
   private EmployeeDTO employee;
-
-
-  @Getter
-  @Setter
   private EmployeeDTO selectedEmployee;
-
-//  @Getter
-//  @Setter
-//  private UUID selectedEmployeeId;
-
-  @Getter
-  @Setter
   private String selectedEmployeeIdAsString;
-
-  @Getter
-  @Setter
   private Boolean editMode = false;
-
-  @Getter
-  @Setter
+  private Boolean listSelectionNeeded = false;
   private List<EmployeeDTO> employees;
-
-//  @Getter
-//  @Setter
-//  private List<EmployeeDTO> selectedEmployees;
-
-  @Getter
-  @Setter
   private List<EmployeeDTO> filteredEmployees;
-
-  @Getter
   private List<Position> positions;
-
-  @Getter
   private List<Department> departments;
-
-  @Getter
   private List<Gender> genders;
 
   @Inject
@@ -159,15 +129,17 @@ public class EmployeeBean implements Serializable {
 //    Employee employee = employeeService.
 //  }
 
-  public void saveEmployee() {
-//    employee.setDepartment();
+  public void saveEmployee(ReferenceLetterBean referenceLetterBean) {
+    if (Boolean.TRUE.equals(listSelectionNeeded)){
+      Employee employee1 = employeeService.convertToEntity(selectedEmployee);
+      referenceLetterBean.getReferenceLetter().setEmployee(employee1);
+    }
     employee = employeeService.updateEmployee(selectedEmployee);
     editMode = true;
 //    -- Only needed if session scoped --
     employees = employeeService.getAllEmployees();
     filteredEmployees = employeeService.getAllEmployees();
 //    -- Only needed if session scoped --
-
     String message =
         "Mitarbeiter " + selectedEmployee.getFirstName() + " " + selectedEmployee.getLastName()
             + " erfolgreich gespeichert";
@@ -238,6 +210,17 @@ public class EmployeeBean implements Serializable {
     employee = new EmployeeDTO();
     selectedEmployee = new EmployeeDTO();
     editMode = false;
+  }
+
+  public void resetEmployeeList() {
+    employees = employeeService.getAllEmployees();
+    filteredEmployees = employeeService.getAllEmployees();
+    listSelectionNeeded = false;
+  }
+
+  public String navigateToEmployeeList() {
+    resetEmployeeList();
+    return "/resources/components/sites/secured/employeeList.xhtml?faces-redirect=true";
   }
 
   public String newEmployee() {
