@@ -2,6 +2,7 @@ package com.ffhs.referencease.entities;
 
 import com.ffhs.referencease.converters.jpa.UUIDConverter;
 import jakarta.persistence.*;
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -13,7 +14,7 @@ import org.hibernate.annotations.Cascade;
 @Data
 @Table(name = "ReferenceLetter")
 public class ReferenceLetter implements Serializable {
-
+  @Serial
   private static final long serialVersionUID = 1L;
 
   @Id

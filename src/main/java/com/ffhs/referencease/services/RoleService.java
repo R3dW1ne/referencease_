@@ -8,6 +8,7 @@ import com.ffhs.referencease.exceptionhandling.PositionNotFoundException;
 import com.ffhs.referencease.services.interfaces.IRoleService;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
+import java.util.Set;
 import java.util.UUID;
 
 @Stateless
@@ -41,9 +42,8 @@ public class RoleService implements IRoleService {
   }
 
   @Override
-  public Role findByRoleName(String roleName) throws PositionNotFoundException {
-    return roleDAO.findByRoleName(roleName)
-        .orElseThrow(() -> new PositionNotFoundException("Role not found with name: " + roleName));
+  public Set<Role> findByRoleName(String roleName) {
+    return roleDAO.findByRoleName(roleName);
   }
   @Override
   public RoleDTO toDTO(Role role) {

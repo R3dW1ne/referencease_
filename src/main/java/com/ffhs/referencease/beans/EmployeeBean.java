@@ -16,6 +16,7 @@ import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
@@ -30,6 +31,7 @@ import org.primefaces.PrimeFaces;
 @SessionScoped
 public class EmployeeBean implements Serializable {
 
+  @Serial
   private static final long serialVersionUID = 1L;
 
   private static final Logger LOG = Logger.getLogger(EmployeeBean.class.getName());

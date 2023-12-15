@@ -18,23 +18,21 @@ import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import java.io.Serial;
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.UUID;
-import org.modelmapper.ModelMapper;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class EmployeeDTO implements Serializable {
 
+  @Serial
   private static final long serialVersionUID = 1L;
 
   public EmployeeDTO(Employee employee) {
@@ -43,7 +41,6 @@ public class EmployeeDTO implements Serializable {
     this.firstName = employee.getFirstName();
     this.lastName = employee.getLastName();
     this.dateOfBirth = employee.getDateOfBirth();
-//    this.placeOfOrigin = employee.getPlaceOfOrigin();
     this.phone = employee.getPhone();
     this.startDate = employee.getStartDate();
     this.gender = employee.getGender();

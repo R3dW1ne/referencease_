@@ -16,13 +16,9 @@ import org.slf4j.LoggerFactory;
 
 @Stateless
 public class UserAccountService implements IUserAccountService{
-
   private static final Logger LOGGER = LoggerFactory.getLogger(UserAccountService.class);
 
-
   private final IRoleService roleService;
-
-
   private final IUserAccountDAO userAccountDAO;
 
   @Inject
@@ -65,7 +61,7 @@ public class UserAccountService implements IUserAccountService{
     userAccount.setEmail(dto.getEmail());
     userAccount.setPassword(PBKDF2Hash.createHash(dto.getPassword()));
     try {
-      userAccount.setRole(roleService.findByRoleName("ROLE_USER"));
+      userAccount.setRoles(roleService.findByRoleName("User"));
     } catch (PositionNotFoundException e) {
       LOGGER.info(e.getMessage());
     }
@@ -105,11 +101,6 @@ public class UserAccountService implements IUserAccountService{
 
   @Override
   public boolean emailExists(String email) {
-//    TypedQuery<Long> query = entityManager.createQuery(
-//        "SELECT COUNT(u) FROM UserAccount u WHERE u.email = :email", Long.class);
-//    query.setParameter("email", email);
-//    Long count = query.getSingleResult();
-//    return count > 0;
     return userAccountDAO.emailExists(email);
   }
 

@@ -14,15 +14,14 @@
     <class>com.ffhs.referencease.entities.ReferenceReason</class>
     <class>com.ffhs.referencease.entities.Position</class>
     <class>com.ffhs.referencease.entities.Property</class>
-    <class>com.ffhs.referencease.entities.PropertyRating</class>
     <class>com.ffhs.referencease.entities.PropertyRatingText</class>
     <class>com.ffhs.referencease.entities.ReferenceLetter</class>
     <class>com.ffhs.referencease.entities.Role</class>
     <class>com.ffhs.referencease.entities.Score</class>
     <class>com.ffhs.referencease.entities.UserAccount</class>
-    <class>com.ffhs.referencease.entities.IntroductoryText</class>
     <class>com.ffhs.referencease.entities.TextTemplate</class>
     <class>com.ffhs.referencease.entities.TextType</class>
+    <class>com.ffhs.referencease.entities.PropertyRating</class>
 
     <properties>
       <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>

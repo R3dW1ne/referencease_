@@ -2,19 +2,19 @@ package com.ffhs.referencease.entities;
 
 import com.ffhs.referencease.converters.jpa.UUIDConverter;
 import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.UUID;
-import javax.persistence.Entity;
-import lombok.Data;
 
-@Data
 @Entity
 public class PropertyRating implements Serializable {
 
+  @Serial
   private static final long serialVersionUID = 1L;
 
   @Id
@@ -38,5 +38,4 @@ public class PropertyRating implements Serializable {
   @JoinColumn(name = "scoreId")
   private Score score;
 
-  // Getter und Setter
 }

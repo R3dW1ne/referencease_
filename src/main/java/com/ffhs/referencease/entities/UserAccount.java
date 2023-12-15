@@ -1,7 +1,10 @@
 package com.ffhs.referencease.entities;
 
+import com.ffhs.referencease.annotations.Unique;
+import com.ffhs.referencease.annotations.UniqueEmail;
 import com.ffhs.referencease.converters.jpa.UUIDConverter;
 import jakarta.persistence.*;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Set;
 import java.util.UUID;
@@ -13,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "UserAccount")
 @NoArgsConstructor
 public class UserAccount implements Serializable {
-
+  @Serial
   private static final long serialVersionUID = 1L;
 
   public UserAccount(String email, String password) {
@@ -43,10 +46,6 @@ public class UserAccount implements Serializable {
       inverseJoinColumns = @JoinColumn(name = "roleId")
   )
   private Set<Role> roles;
-
-  @ManyToOne
-  @JoinColumn(name = "roleId")
-  private Role role;
 
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "employeeId")

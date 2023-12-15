@@ -4,6 +4,7 @@ import com.ffhs.referencease.dto.UserAccountDTO;
 import com.ffhs.referencease.exceptionhandling.PositionNotFoundException;
 import com.ffhs.referencease.services.interfaces.IUserAccountService;
 import com.ffhs.referencease.utils.PBKDF2Hash;
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.ExternalContext;
@@ -12,22 +13,23 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import java.io.Serial;
 import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-@SessionScoped
+
 @Named
 @Getter
 @Setter
+@SessionScoped
 public class AuthenticationBean implements Serializable {
 
+  @Serial
   private static final long serialVersionUID = 1L;
 
-  @Inject
-  private Logger LOGGER = LoggerFactory.getLogger(AuthenticationBean.class);
+//  @Inject
+//  private Logger LOGGER = LoggerFactory.getLogger(AuthenticationBean.class);
 
   private final transient IUserAccountService userAccountService;
 
@@ -49,12 +51,44 @@ public class AuthenticationBean implements Serializable {
     this.userAccountService = userAccountService;
   }
 
+  @PostConstruct
+  public void init() {
+    userAccountDTO = new UserAccountDTO();
+  }
+
   public HttpSession getSession() {
     FacesContext context = FacesContext.getCurrentInstance();
     HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
     session = request.getSession();
 
     return session;
+  }
+
+  public String register() {
+    if (userAccountService.emailExists(userAccountDTO.getEmail())) {
+      FacesContext.getCurrentInstance().addMessage("registerForm:messages",
+          new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "User already exists."));
+      return null; // Bleibt auf der Registrierungsseite
+    }
+    if (!userAccountDTO.getPassword().equals(userAccountDTO.getConfirmPassword())) {
+      FacesContext.getCurrentInstance().addMessage("registerForm:password",
+          new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+              "Password should match with Confirm Password."));
+      return null; // Bleibt auf der Registrierungsseite
+    }
+    // Passwort-Verschlüsselung und User-Persistierung im UserService
+    userAccountService.save(userAccountDTO);
+
+    // Passwort und confirmPassword zurücksetzen
+    userAccountDTO.setPassword("");
+    userAccountDTO.setConfirmPassword("");
+    userAccountDTO.setEmail("");
+
+    // Setzen einer Erfolgsmeldung im Flash Scope
+    FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Benutzeraccount erfolgreich erstellt.", "Viel Spass! \n :)"));
+
+    return "login?faces-redirect=true"; // Weiterleitung zur Login-Seite nach erfolgreicher Registrierung
   }
 
   public String login() throws PositionNotFoundException {
@@ -68,7 +102,7 @@ public class AuthenticationBean implements Serializable {
     try {
       userAccountDTO = userAccountService.getUserByEmail(emailInput);
     } catch (PositionNotFoundException e) {
-      LOGGER.error("User with email " + emailInput + " not found.");
+//      LOGGER.error("User with email " + emailInput + " not found.");
       FacesContext.getCurrentInstance().addMessage(null,
           new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
               "Keinen Benutzer unter diese Email-Adresse gefunden! \n Bitte registrieren Sie sich zuerst."));
@@ -95,7 +129,7 @@ public class AuthenticationBean implements Serializable {
           new FacesMessage(FacesMessage.SEVERITY_INFO, "Sie sind angemeldet.", null));
 
       // Navigate to landing page
-      return "/resources/components/sites/secured/employeeList.xhtml?faces-redirect=true";
+      return "/resources/components/sites/secured/home.xhtml?faces-redirect=true";
     }
     this.authenticated = false;
     setUserAccountDTO(null);

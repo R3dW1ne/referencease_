@@ -9,18 +9,18 @@ import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import java.io.Serial;
 import java.io.Serializable;
 import lombok.Data;
 
 @Named
 @Data
 @RequestScoped
-public class UserBean {
+public class UserBean implements Serializable {
 
-  private final IUserAccountService userAccountService;
-
-//  @Inject
-//  private transient UserService userService; // Service-Klasse zum Interagieren mit der DB
+  @Serial
+  private static final long serialVersionUID = 1L;
+  private final transient IUserAccountService userAccountService;
 
   private UserAccountDTO userAccountDTO; // Getter und Setter via Lombok
 
@@ -34,32 +34,32 @@ public class UserBean {
     userAccountDTO = new UserAccountDTO();
   }
 
-  public String register() {
-    if (userAccountService.emailExists(userAccountDTO.getEmail())) {
-      FacesContext.getCurrentInstance().addMessage("registerForm:messages",
-          new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "User already exists."));
-      return null; // Bleibt auf der Registrierungsseite
-    }
-    if (!userAccountDTO.getPassword().equals(userAccountDTO.getConfirmPassword())) {
-      FacesContext.getCurrentInstance().addMessage("registerForm:password",
-          new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-              "Password should match with Confirm Password."));
-      return null; // Bleibt auf der Registrierungsseite
-    }
-    // Passwort-Verschlüsselung und User-Persistierung im UserService
-    userAccountService.save(userAccountDTO);
-
-    // Passwort und confirmPassword zurücksetzen
-    userAccountDTO.setPassword(null);
-    userAccountDTO.setConfirmPassword(null);
-    userAccountDTO.setEmail(null);
-
-    // Setzen einer Erfolgsmeldung im Flash Scope
-    FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Benutzeraccount erfolgreich erstellt.", "Viel Spass! \n :)"));
-
-    return "login?faces-redirect=true"; // Weiterleitung zur Login-Seite nach erfolgreicher Registrierung
-  }
+//  public String register() {
+//    if (userAccountService.emailExists(userAccountDTO.getEmail())) {
+//      FacesContext.getCurrentInstance().addMessage("registerForm:messages",
+//          new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "User already exists."));
+//      return null; // Bleibt auf der Registrierungsseite
+//    }
+//    if (!userAccountDTO.getPassword().equals(userAccountDTO.getConfirmPassword())) {
+//      FacesContext.getCurrentInstance().addMessage("registerForm:password",
+//          new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+//              "Password should match with Confirm Password."));
+//      return null; // Bleibt auf der Registrierungsseite
+//    }
+//    // Passwort-Verschlüsselung und User-Persistierung im UserService
+//    userAccountService.save(userAccountDTO);
+//
+//    // Passwort und confirmPassword zurücksetzen
+//    userAccountDTO.setPassword(null);
+//    userAccountDTO.setConfirmPassword(null);
+//    userAccountDTO.setEmail(null);
+//
+//    // Setzen einer Erfolgsmeldung im Flash Scope
+//    FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+//    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Benutzeraccount erfolgreich erstellt.", "Viel Spass! \n :)"));
+//
+//    return "login?faces-redirect=true"; // Weiterleitung zur Login-Seite nach erfolgreicher Registrierung
+//  }
 
   public void saveUserAccount() {
     userAccountService.save(userAccountDTO);

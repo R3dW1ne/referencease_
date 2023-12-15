@@ -5,6 +5,7 @@ import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.UUID;
 import lombok.Data;
@@ -13,6 +14,8 @@ import lombok.Data;
 @Entity
 public class ReferenceReason implements Serializable {
 
+  @Serial
+  private static final long serialVersionUID = 1L;
 
   @Id
   @GeneratedValue

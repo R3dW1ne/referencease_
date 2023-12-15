@@ -3,35 +3,29 @@ package com.ffhs.referencease.dao;
 import com.ffhs.referencease.dao.interfaces.IRoleDAO;
 import com.ffhs.referencease.entities.Role;
 import jakarta.ejb.Stateless;
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.TypedQuery;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Stateless
 public class RoleDAO implements IRoleDAO {
 
   @PersistenceContext
-  private EntityManager entityManager;
+  private EntityManager em;
 
   @Override
   public Optional<Role> findById(UUID roleId) {
-    return Optional.ofNullable(entityManager.find(Role.class, roleId));
+    return Optional.ofNullable(em.find(Role.class, roleId));
   }
 
   @Override
-  public Optional<Role> findByRoleName(String roleName) {
-    TypedQuery<Role> query = entityManager.createQuery(
-        "SELECT r FROM Role r WHERE r.roleName = :roleName", Role.class);
-    query.setParameter("roleName", roleName);
-    try {
-      return Optional.of(query.getSingleResult());
-    } catch (NoResultException e) {
-      return Optional.empty();
-    }
+  public Set<Role> findByRoleName(String roleName) {
+    return new HashSet<>(em.createQuery("SELECT r FROM Role r WHERE r.roleName = :roleName", Role.class)
+        .setParameter("roleName", roleName)
+        .getResultList());
   }
 }

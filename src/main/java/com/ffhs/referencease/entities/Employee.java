@@ -12,8 +12,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -28,6 +28,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "Employee")
 public class Employee implements Serializable {
 
+  @Serial
   private static final long serialVersionUID = 1L;
 
   public Employee(EmployeeDTO dto) {

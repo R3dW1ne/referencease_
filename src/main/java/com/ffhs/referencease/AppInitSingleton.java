@@ -1,6 +1,7 @@
 package com.ffhs.referencease;
 
 import com.ffhs.referencease.dao.interfaces.IEmployeeDAO;
+import com.ffhs.referencease.dto.EmployeeDTO;
 import com.ffhs.referencease.entities.Department;
 import com.ffhs.referencease.entities.Employee;
 import com.ffhs.referencease.entities.Gender;
@@ -15,6 +16,7 @@ import com.ffhs.referencease.entities.enums.EProperty;
 import com.ffhs.referencease.entities.enums.EReferenceReason;
 import com.ffhs.referencease.entities.enums.ERole;
 import com.ffhs.referencease.entities.enums.ETextType;
+import com.ffhs.referencease.services.interfaces.IEmployeeService;
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
@@ -42,11 +44,14 @@ public class AppInitSingleton {
 
   private final IEmployeeDAO employeeDao;
 
+  private final IEmployeeService employeeService;
+
   Random random = new Random();
 
   @Inject
-  public AppInitSingleton(IEmployeeDAO employeeDao) {
+  public AppInitSingleton(IEmployeeDAO employeeDao, IEmployeeService employeeService) {
     this.employeeDao = employeeDao;
+    this.employeeService = employeeService;
   }
 
   @PostConstruct

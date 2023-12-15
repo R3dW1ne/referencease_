@@ -16,6 +16,8 @@ import lombok.Data;
 @Data
 @Entity
 public class TextTemplate {
+
+
   @Id
   @GeneratedValue
   @Convert(converter = UUIDConverter.class)
