@@ -1,17 +1,13 @@
 package com.ffhs.referencease.valadators;
 
-import com.ffhs.referencease.annotations.Unique;
+import com.ffhs.referencease.valadators.annotations.Unique;
 import com.ffhs.referencease.dao.interfaces.IUniqueDAO;
-import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
-import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 
 @AllArgsConstructor

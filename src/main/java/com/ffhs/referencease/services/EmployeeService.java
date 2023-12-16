@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 
 
@@ -73,8 +72,14 @@ public class EmployeeService implements IEmployeeService {
   }
 
   @Override
-  public boolean existsByEmployeeNumber(String employeeNumber) {
-    return employeeDao.findByEmployeeNumber(employeeNumber);
+  public boolean employeeNumberExists(String employeeNumber) {
+    return employeeDao.employeeNumberExists(employeeNumber);
+  }
+
+  @Override
+  public EmployeeDTO getEmployeeByEmployeeNumber(String employeeNumber) {
+    Optional<Employee> employee = employeeDao.findByEmployeeNumber(employeeNumber);
+    return employee.map(this::convertToDTO).orElse(null);
   }
 
   @Override

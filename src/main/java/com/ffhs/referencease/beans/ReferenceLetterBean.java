@@ -9,9 +9,11 @@ import com.ffhs.referencease.services.interfaces.IReferenceLetterService;
 import com.ffhs.referencease.services.interfaces.IReferenceReasonService;
 import jakarta.annotation.PostConstruct;
 import jakarta.el.MethodExpression;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.flow.FlowScoped;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -26,7 +28,7 @@ import org.primefaces.PrimeFaces;
 @Named
 @Setter
 @Getter
-@ViewScoped
+@SessionScoped
 public class ReferenceLetterBean implements Serializable {
 
   @Serial
@@ -88,12 +90,6 @@ public class ReferenceLetterBean implements Serializable {
   public void setRLetterEmployee(Employee employee) {
     referenceLetter.setEmployee(employee);
   }
-
-//  public Boolean checkAllValuesSet() {
-//    allValuesSet = referenceLetterService.checkReasonAndEmployeeSet(referenceLetter, needsEndDate);
-//    introductionButtonMessage = referenceLetterService.setIntroductionButtonMessage(referenceLetter, needsEndDate);
-//    return allValuesSet;
-//  }
 
   public void generateIntroduction() {
     if (Boolean.TRUE.equals(referenceLetterService.checkReasonAndEmployeeSet(referenceLetter, needsEndDate))) {

@@ -132,19 +132,40 @@ public class EmployeeBean implements Serializable {
 //  }
 
   public void saveEmployee(ReferenceLetterBean referenceLetterBean) {
-    if (Boolean.TRUE.equals(listSelectionNeeded)){
+    String message = "";
+//    String currentEmployeeNumber = selectedEmployee.getEmployeeNumber();
+//    if (employeeService.getEmployeeByEmployeeNumber(currentEmployeeNumber) != null) {
+//      UUID uuid = employeeService.getEmployeeByEmployeeNumber(currentEmployeeNumber)
+//          .getEmployeeId();
+//      UUID selectedEmployeeId = selectedEmployee.getEmployeeId();
+//      if (!(selectedEmployeeId != null && !selectedEmployeeId.equals(uuid)) {
+//
+//        message = "Mitarbeiternummer bereits vergeben";
+//        sendInfoToFrontend(message);
+//        return;
+//      }
+//    }
+
+    if (Boolean.TRUE.equals(listSelectionNeeded)) {
       Employee employee1 = employeeService.convertToEntity(selectedEmployee);
       referenceLetterBean.getReferenceLetter().setEmployee(employee1);
     }
     employee = employeeService.updateEmployee(selectedEmployee);
+    selectedEmployee = employee;
     editMode = true;
 //    -- Only needed if session scoped --
     employees = employeeService.getAllEmployees();
     filteredEmployees = employeeService.getAllEmployees();
 //    -- Only needed if session scoped --
-    String message =
+    message =
         "Mitarbeiter " + selectedEmployee.getFirstName() + " " + selectedEmployee.getLastName()
             + " erfolgreich gespeichert";
+    sendInfoToFrontend(message);
+
+  }
+
+
+  public void sendInfoToFrontend(String message) {
     FacesContext.getCurrentInstance().addMessage(null,
         new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
     PrimeFaces.current().ajax()
@@ -164,14 +185,11 @@ public class EmployeeBean implements Serializable {
         "Mitarbeiter " + selectedEmployee.getFirstName() + " " + selectedEmployee.getLastName()
             + " erfolgreich gelöscht";
     selectedEmployee = null;
-    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, message, null));
+    FacesContext.getCurrentInstance()
+        .addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, message, null));
     PrimeFaces.current().ajax()
         .update("employeeListForm:messages", "employeeListForm:employeeTable");
   }
-
-
-
-
 
 //  public void deleteEmployee(EmployeeDTO employee) {
 //    employees.removeIf(

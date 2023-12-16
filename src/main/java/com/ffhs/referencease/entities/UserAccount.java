@@ -1,7 +1,5 @@
 package com.ffhs.referencease.entities;
 
-import com.ffhs.referencease.annotations.Unique;
-import com.ffhs.referencease.annotations.UniqueEmail;
 import com.ffhs.referencease.converters.jpa.UUIDConverter;
 import jakarta.persistence.*;
 import java.io.Serial;

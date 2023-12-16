@@ -60,7 +60,7 @@ public class EmployeeDAO implements IEmployeeDAO {
 
 
   @Override
-  public boolean findByEmployeeNumber(String employeeNumber) {
+  public boolean employeeNumberExists(String employeeNumber) {
     try {
       Query query = em.createQuery("SELECT COUNT(e) FROM Employee e WHERE e.employeeNumber = :employeeNumber");
       query.setParameter("employeeNumber", employeeNumber);
@@ -68,6 +68,18 @@ public class EmployeeDAO implements IEmployeeDAO {
       return count == 0;
     } catch (NoResultException e) {
       return true;
+    }
+  }
+
+  @Override
+  public Optional<Employee> findByEmployeeNumber(String employeeNumber) {
+    try {
+      Query query = em.createQuery("SELECT e FROM Employee e WHERE e.employeeNumber = :employeeNumber");
+      query.setParameter("employeeNumber", employeeNumber);
+      Employee employee = (Employee) query.getSingleResult();
+      return Optional.ofNullable(employee);
+    } catch (NoResultException e) {
+      return Optional.empty();
     }
   }
 }

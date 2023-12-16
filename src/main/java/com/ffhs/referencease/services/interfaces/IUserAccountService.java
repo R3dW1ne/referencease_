@@ -2,6 +2,7 @@ package com.ffhs.referencease.services.interfaces;
 
 import com.ffhs.referencease.dto.UserAccountDTO;
 import com.ffhs.referencease.exceptionhandling.PositionNotFoundException;
+import java.io.Serializable;
 import java.util.UUID;
 
 public interface IUserAccountService {

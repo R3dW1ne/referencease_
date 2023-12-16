@@ -1,6 +1,6 @@
 package com.ffhs.referencease.valadators;
 
-import com.ffhs.referencease.annotations.UniqueEmployeeNumber;
+import com.ffhs.referencease.valadators.annotations.UniqueEmployeeNumber;
 import com.ffhs.referencease.services.interfaces.IEmployeeService;
 import jakarta.inject.Inject;
 import jakarta.validation.ConstraintValidator;
@@ -20,6 +20,6 @@ public class UniqueEmployeeNumberValidator implements ConstraintValidator<Unique
     if (employeeNumber == null) {
       return true; // Null-Werte werden von @NotBlank behandelt
     }
-    return employeeService.existsByEmployeeNumber(employeeNumber);
+    return employeeService.employeeNumberExists(employeeNumber);
   }
 }

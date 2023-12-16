@@ -8,11 +8,6 @@
     <ui:define name="content">
         <!-- Inhalt der Login-Seite -->
         <h:form id="LoginForm">
-
-            <h:panelGroup rendered="#{param.error}">
-                <h:outputText value="Login failed. Please try again." styleClass="error-message"/>
-            </h:panelGroup>
-
             <div class="flex align-items-center justify-content-center">
                 <div class="surface-card p-4 shadow-2 border-round w-full lg:w-6">
                     <div class="text-center mb-5">
@@ -24,24 +19,19 @@
                         <a class="font-medium no-underline ml-2 text-blue-500 cursor-pointer"
                            href="register.xhtml">Create today!</a>
                     </div>
-                    <!--                    <p:outputLabel for="email" class="block text-900 font-medium mb-2"-->
-                    <!--                                   value="Email"/>-->
-                    <!--                    <p:inputText id="email" value="#{authenticationBean.email}"-->
-                    <!--                                 styleClass="w-full mb-3" required="true"-->
-                    <!--                                 placeholder="Email address"-->
-                    <!--                                 />-->
 
                     <!-- E-Mail Eingabefeld -->
                     <p:outputLabel for="email"
                                    class="block text-900 font-medium mb-2" value="Email"/>
                     <p:inputText id="email" value="#{authenticationBean.email}"
-                                 required="true" requiredMessage="Email is required."
+                                 required="true" requiredMessage="Email ist obligatorisch."
                                  validatorMessage="Invalid email format"
                                  styleClass="w-full mb-3" placeholder="Email address">
                         <f:validateRegex
                                 pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"/>
-                        <p:ajax event="blur" update="messages"/>
+                        <p:ajax event="blur" update="emailMessage"/>
                     </p:inputText>
+                    <p:message id="emailMessage" for="email" display="text"/>
 
 
                     <p:outputLabel for="password"
@@ -55,7 +45,7 @@
 
                     <!-- Feedback Nachrichten -->
                     <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true"
-                                globalOnly="true"/>
+                                globalOnly="true" life="3000"/>
 
                 </div>
             </div>

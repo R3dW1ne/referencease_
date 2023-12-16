@@ -1,4 +1,4 @@
-package com.ffhs.referencease.annotations;
+package com.ffhs.referencease.valadators.annotations;
 
 import com.ffhs.referencease.valadators.UniqueEmployeeNumberValidator;
 import jakarta.validation.Constraint;

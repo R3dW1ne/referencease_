@@ -1,6 +1,6 @@
 package com.ffhs.referencease.valadators;
 
-import com.ffhs.referencease.annotations.UniqueEmail;
+import com.ffhs.referencease.valadators.annotations.UniqueEmail;
 import com.ffhs.referencease.services.interfaces.IUserAccountService;
 import jakarta.inject.Inject;
 import jakarta.validation.ConstraintValidator;

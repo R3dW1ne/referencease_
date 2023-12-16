@@ -1,6 +1,5 @@
 package com.ffhs.referencease.entities;
 
-import com.ffhs.referencease.annotations.UniqueEmployeeNumber;
 import com.ffhs.referencease.converters.jpa.UUIDConverter;
 import com.ffhs.referencease.dto.EmployeeDTO;
 import jakarta.persistence.Column;
@@ -50,7 +49,6 @@ public class Employee implements Serializable {
   @Convert(converter = UUIDConverter.class)
   private UUID employeeId;
 
-  @Column(unique = true)
   private String employeeNumber;
   @NotBlank(message = "First name is mandatory")
   private String firstName;

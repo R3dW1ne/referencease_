@@ -1,4 +1,4 @@
-package com.ffhs.referencease.annotations;
+package com.ffhs.referencease.valadators.annotations;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;

@@ -1,22 +1,13 @@
 package com.ffhs.referencease.dto;
 
-import com.ffhs.referencease.annotations.UniqueEmployeeNumber;
-import com.ffhs.referencease.converters.jpa.UUIDConverter;
 import com.ffhs.referencease.entities.Department;
 import com.ffhs.referencease.entities.Employee;
 import com.ffhs.referencease.entities.Gender;
 import com.ffhs.referencease.entities.Position;
-import jakarta.inject.Inject;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Converter;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.io.Serial;
 import java.time.LocalDate;
@@ -51,7 +42,6 @@ public class EmployeeDTO implements Serializable {
 
   private UUID employeeId;
 
-  @Column(unique = true)
   private String employeeNumber;
   @NotBlank(message = "First name is mandatory")
   private String firstName;

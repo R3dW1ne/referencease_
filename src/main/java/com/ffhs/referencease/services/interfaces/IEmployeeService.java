@@ -3,7 +3,6 @@ package com.ffhs.referencease.services.interfaces;
 import com.ffhs.referencease.dto.EmployeeDTO;
 import com.ffhs.referencease.entities.Employee;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 
@@ -22,9 +21,11 @@ public interface IEmployeeService {
 
   EmployeeDTO updateEmployee(EmployeeDTO employeeDTO);
 
-  boolean existsByEmployeeNumber(String employeeNumber);
+  boolean employeeNumberExists(String employeeNumber);
 
   // Hilfsmethode zur Konvertierung von Entity zu DTO
+
+  EmployeeDTO getEmployeeByEmployeeNumber(String employeeNumber);
 
   EmployeeDTO convertToDTO(Employee employee);
 

@@ -2,8 +2,11 @@ package com.ffhs.referencease.beans;
 
 import com.ffhs.referencease.dto.UserAccountDTO;
 import com.ffhs.referencease.exceptionhandling.PositionNotFoundException;
+import com.ffhs.referencease.services.interfaces.IAuthenticationService;
 import com.ffhs.referencease.services.interfaces.IUserAccountService;
 import com.ffhs.referencease.utils.PBKDF2Hash;
+import com.ffhs.referencease.valadators.annotations.ValidRegistrationUserDTO;
+import com.ffhs.referencease.valadators.group_interfaces.RegistrationGroup;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
@@ -13,6 +16,10 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.executable.ValidateOnExecution;
+import jakarta.validation.groups.ConvertGroup;
 import java.io.Serial;
 import java.io.Serializable;
 import lombok.Getter;
@@ -33,12 +40,15 @@ public class AuthenticationBean implements Serializable {
 
   private final transient IUserAccountService userAccountService;
 
-  private transient UserAccountDTO userAccountDTO;
+  private final transient IAuthenticationService authenticationService;
+
+  private UserAccountDTO userAccountDTO;
 
   private transient HttpSession session = null;
 
 
   private boolean authenticated = false;
+  @Email(message = "Bitte geben Sie eine gültige Email-Adresse ein. (@Email Validation)")
   private String email = null;
   private String password = null;
   private String firstName = null;
@@ -47,13 +57,15 @@ public class AuthenticationBean implements Serializable {
 
 
   @Inject
-  public AuthenticationBean(IUserAccountService userAccountService) {
+  public AuthenticationBean(IUserAccountService userAccountService,
+      IAuthenticationService authenticationService) {
     this.userAccountService = userAccountService;
+    this.authenticationService = authenticationService;
   }
 
   @PostConstruct
   public void init() {
-    userAccountDTO = new UserAccountDTO();
+    this.userAccountDTO = new UserAccountDTO();
   }
 
   public HttpSession getSession() {
@@ -64,31 +76,9 @@ public class AuthenticationBean implements Serializable {
     return session;
   }
 
-  public String register() {
-    if (userAccountService.emailExists(userAccountDTO.getEmail())) {
-      FacesContext.getCurrentInstance().addMessage("registerForm:messages",
-          new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "User already exists."));
-      return null; // Bleibt auf der Registrierungsseite
-    }
-    if (!userAccountDTO.getPassword().equals(userAccountDTO.getConfirmPassword())) {
-      FacesContext.getCurrentInstance().addMessage("registerForm:password",
-          new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-              "Password should match with Confirm Password."));
-      return null; // Bleibt auf der Registrierungsseite
-    }
-    // Passwort-Verschlüsselung und User-Persistierung im UserService
-    userAccountService.save(userAccountDTO);
 
-    // Passwort und confirmPassword zurücksetzen
-    userAccountDTO.setPassword("");
-    userAccountDTO.setConfirmPassword("");
-    userAccountDTO.setEmail("");
-
-    // Setzen einer Erfolgsmeldung im Flash Scope
-    FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Benutzeraccount erfolgreich erstellt.", "Viel Spass! \n :)"));
-
-    return "login?faces-redirect=true"; // Weiterleitung zur Login-Seite nach erfolgreicher Registrierung
+  public String loginWithValidRegistrationUserDTOValidator(UserAccountDTO userAccountDTO) throws PositionNotFoundException{
+    return login();
   }
 
   public String login() throws PositionNotFoundException {
@@ -96,33 +86,24 @@ public class AuthenticationBean implements Serializable {
     String hashedPasswordInput = PBKDF2Hash.createHash(getPassword());
     session = getSession();
 
-//        Optional<UserAccount> userAccountAccess = userAccountService.getUserByEmail(emailInput);
-//
-//        if (userAccountAccess.isEmpty()) return "/resources/components/sites/login.xhtml?error=true";
     try {
       userAccountDTO = userAccountService.getUserByEmail(emailInput);
     } catch (PositionNotFoundException e) {
-//      LOGGER.error("User with email " + emailInput + " not found.");
       FacesContext.getCurrentInstance().addMessage(null,
-          new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+          new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler",
               "Keinen Benutzer unter diese Email-Adresse gefunden! \n Bitte registrieren Sie sich zuerst."));
       return "/resources/components/sites/login.xhtml";
     }
 
-    UserAccountDTO userAccountDTO = userAccountService.getUserByEmail(emailInput);
-
-//        String hashedSavedPw = userAccountAccess.get().getPassword();
-//        String hashedSavedPw = userAccountDTO.getPassword();
-//        boolean pwMatch = userAccountService.passwordMatches(emailInput, hashedPasswordInput);
+    UserAccountDTO storedUserAccountDTO = userAccountService.getUserByEmail(emailInput);
 
     if (userAccountService.passwordMatches(emailInput, hashedPasswordInput)) {
       session.setAttribute("authenticated", true);
-      session.setAttribute("email", userAccountDTO.getEmail());
-      session.setAttribute("userId", userAccountDTO.getUserId());
-//            session.setAttribute("selectedTheme", userAccount.get().getSelectedTheme());
+      session.setAttribute("email", storedUserAccountDTO.getEmail());
+      session.setAttribute("userId", storedUserAccountDTO.getUserId());
       this.authenticated = true;
-      setUserAccountDTO(userAccountDTO);
-//            LOGGER.info("User " + userAccountDTO.getEmail() + " logged in.");
+      setUserAccountDTO(storedUserAccountDTO);
+
       // Setzen einer Erfolgsmeldung im Flash Scope
       FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
       FacesContext.getCurrentInstance().addMessage(null,
@@ -134,7 +115,7 @@ public class AuthenticationBean implements Serializable {
     this.authenticated = false;
     setUserAccountDTO(null);
     FacesContext.getCurrentInstance().addMessage(null,
-        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler",
             "Login aufgrund eines falschen Passworts fehlgeschlagen!"));
 
     return "/resources/components/sites/login.xhtml?error=true";
@@ -169,33 +150,11 @@ public class AuthenticationBean implements Serializable {
     return authenticated;
   }
 
-//    public String updateProfile() {
-//        try {
+//  public void validatePasswords() {
+//    if (userAccountDTO != null && (userAccountDTO.getPassword() != null && userAccountDTO.getConfirmPassword() != null && !userAccountDTO.getPassword().equals(userAccountDTO.getConfirmPassword()))) {
+//        FacesContext.getCurrentInstance().addMessage("registerForm:confirmPassword",
+//            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Passwords must match.", null));
 //
-//            Optional<UserAccount> updatedUser = userService.getUserById((UUID) session.getAttribute("userId"));
-//            if (updatedUser.isEmpty()) return "/resources/components/sites/login.xhtml?error=true";
-//
-//            if (getUpdatePassword() != null && !getUpdatePassword().isEmpty()) {
-//                updatedUser.get().setPassword(getUpdatePassword());
-//            }
-//
-////            String theme = updatedUser.get().getSelectedTheme();
-////            session.setAttribute("selectedTheme", theme);
-//
-//            // Check if username has been updated
-//            if (updatedUser.get().getEmail().equals(session.getAttribute("email"))) {
-//                userService.updateUser(updatedUser.get());
-//            } else {
-//                // Check if username has already been set.
-//                Optional<UserAccount> hasUser = userService.getUserByEmail(updatedUser.get().getEmail());
-//                // Update failed -> Navigate to...
-//                if (hasUser.isPresent()) return "/resources/components/sites/login.xhtml?error=true";
-//                userService.updateUser(updatedUser.get());
-//            }
-//
-//            return "/index.xhtml";
-//        } catch (Exception ex) {
-//            return "ERROR: " + ex.getMessage();
-//        }
 //    }
+//  }
 }
