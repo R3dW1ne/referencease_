@@ -1,7 +1,10 @@
 package com.ffhs.referencease.services.interfaces;
 
+import com.ffhs.referencease.beans.ReferenceLetterBean;
 import com.ffhs.referencease.dto.EmployeeDTO;
 import com.ffhs.referencease.entities.Employee;
+import com.ffhs.referencease.exceptionhandling.BusinessException;
+import com.ffhs.referencease.exceptionhandling.OperationResult;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,6 +17,10 @@ public interface IEmployeeService {
 //  Employee updateEmployee(Employee employee);
 
   void saveEmployee(EmployeeDTO employeeDTO);
+
+//  boolean saveOrUpdateEmployee(EmployeeDTO employeeDTO, ReferenceLetterBean referenceLetterBean);
+
+  OperationResult<EmployeeDTO> saveOrUpdateEmployee(EmployeeDTO employeeDTO) throws BusinessException;
 
   void deleteEmployee(EmployeeDTO employeeDTO);
 

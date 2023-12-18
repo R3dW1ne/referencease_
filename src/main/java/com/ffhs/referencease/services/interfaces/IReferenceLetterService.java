@@ -20,5 +20,7 @@ public interface IReferenceLetterService {
 
   Boolean checkReasonAndEmployeeSet(ReferenceLetter referenceLetter, Boolean needsEndDate);
 
-  String setIntroductionButtonMessage(ReferenceLetter referenceLetter, Boolean needsEndDate);
+  String setErrorMessage(ReferenceLetter referenceLetter, Boolean needsEndDate);
+
+  List<ReferenceLetter> findReferenceLettersByEmployeeId(UUID employeeId);
 }

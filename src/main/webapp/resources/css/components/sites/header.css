@@ -1,0 +1,13 @@
+/* CSS in einer separaten Datei oder im <style>-Tag */
+@media screen and (max-width: 697px) { /* oder eine andere Breite, die Sie für geeignet halten */
+  body .ui-menu .ui-menu-list .ui-menuitem .ui-menuitem-link .ui-menuitem-text{
+    display: none !important; /* Versteckt den Text der Submenü-Labels */
+  }
+  .ui-menu .ui-menu-parent .ui-menu-child {
+    width: auto;
+  }
+}
+
+body .ui-menu .ui-menu-list .ui-menuitem .always-visible .ui-menuitem-text{
+  display: inline-block !important; /* Versteckt den Text der Submenü-Labels */
+}

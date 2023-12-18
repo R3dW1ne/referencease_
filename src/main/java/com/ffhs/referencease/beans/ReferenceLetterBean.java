@@ -8,13 +8,9 @@ import com.ffhs.referencease.services.interfaces.IEmployeeService;
 import com.ffhs.referencease.services.interfaces.IReferenceLetterService;
 import com.ffhs.referencease.services.interfaces.IReferenceReasonService;
 import jakarta.annotation.PostConstruct;
-import jakarta.el.MethodExpression;
-import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
-import jakarta.faces.flow.FlowScoped;
-import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serial;
@@ -23,7 +19,6 @@ import java.time.LocalDate;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
-import org.primefaces.PrimeFaces;
 
 @Named
 @Setter
@@ -97,7 +92,7 @@ public class ReferenceLetterBean implements Serializable {
     } else {
       FacesContext.getCurrentInstance().addMessage("referenceLetterForm:generateIntroductionButton",
           new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-              referenceLetterService.setIntroductionButtonMessage(referenceLetter, needsEndDate)));
+              referenceLetterService.setErrorMessage(referenceLetter, needsEndDate)));
     }
   }
 
@@ -108,8 +103,6 @@ public class ReferenceLetterBean implements Serializable {
         referenceLetter.getReferenceReason().getName() + " von " + referenceLetter.getEmployee().getFirstName() + " wurde erfolgreich gespeichert.";
     FacesContext.getCurrentInstance().addMessage(null,
         new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
-//    PrimeFaces.current().ajax()
-//        .update("employeeListForm:messages", "employeeListForm:employeeTable");
   }
 
   public void resetReferenceLetter() {

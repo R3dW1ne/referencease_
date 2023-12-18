@@ -2,6 +2,7 @@ package com.ffhs.referencease.entities;
 
 import com.ffhs.referencease.converters.jpa.UUIDConverter;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Set;
@@ -28,14 +29,13 @@ public class UserAccount implements Serializable {
   private UUID userId;
 
   @Column(unique = true)
-//  @Email(message = "Invalid email format.")
+  @Pattern(regexp = "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$",
+      message = "Bitte geben Sie eine gültige Email-Adresse ein. (@Pattern Validation)")
   private String email;
 
-  @Column(length = 60)
+  @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$",
+      message = "Das Passwort muss mindestens 8 Zeichen lang sein und mindestens einen Grossbuchstaben, einen Kleinbuchstaben und eine Zahl enthalten. (@Pattern Validation in UserAccount)")
   private String password;
-
-  @Transient // Diese Annotation sorgt dafür, dass das Feld nicht persistent gespeichert wird
-  private String confirmPassword;
 
   @ManyToMany
   @JoinTable(

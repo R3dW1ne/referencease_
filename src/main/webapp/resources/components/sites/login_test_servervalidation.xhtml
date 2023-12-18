@@ -6,6 +6,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:define name="content">
+        <h:outputStylesheet name="css/components/sites/userAccountForms.css"/>
         <!-- Inhalt der Login-Seite -->
         <h:form id="LoginForm">
             <div class="flex align-items-center justify-content-center">
@@ -34,7 +35,8 @@
                     <p:outputLabel for="password"
                                    class="block text-900 font-medium mb-2" value="Password"/>
                     <p:password id="password" styleClass="w-full mb-3"
-                                placeholder="Password" value="#{authenticationBean.password}"/>
+                                placeholder="Password" value="#{authenticationBean.password}"
+                                toggleMask="true"/>
 
                     <p:commandButton type="submit-button" value="Login" icon="pi pi-user"
                                      styleClass="w-full" id="login"

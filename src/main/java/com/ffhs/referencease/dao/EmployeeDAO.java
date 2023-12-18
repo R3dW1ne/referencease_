@@ -29,11 +29,7 @@ public class EmployeeDAO implements IEmployeeDAO {
   @Override
   @Transactional
   public void save(Employee employee) {
-    if (employee.getEmployeeId() == null) {
       em.persist(employee);
-    } else {
-      em.merge(employee);
-    }
   }
   @Override
   @Transactional

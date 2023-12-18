@@ -3,10 +3,11 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:outputStylesheet name="css/components/sites/header.css"/>
     <h:form>
         <p:menubar>
             <p:menuitem value="ReferencEase" style="font-family: 'Dancing Script', cursive; font-size: 40px;"
-                        outcome="/resources/components/sites/secured/home"/>
+                        outcome="/resources/components/sites/secured/home" styleClass="always-visible"/>
 
             <p:divider layout="vertical"/>
 

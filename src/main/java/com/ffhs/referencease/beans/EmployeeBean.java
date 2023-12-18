@@ -5,21 +5,23 @@ import com.ffhs.referencease.entities.Department;
 import com.ffhs.referencease.entities.Employee;
 import com.ffhs.referencease.entities.Gender;
 import com.ffhs.referencease.entities.Position;
+import com.ffhs.referencease.exceptionhandling.BusinessException;
+import com.ffhs.referencease.exceptionhandling.OperationResult;
 import com.ffhs.referencease.services.interfaces.IDepartmentService;
 import com.ffhs.referencease.services.interfaces.IEmployeeService;
 import com.ffhs.referencease.services.interfaces.IGenderService;
 import com.ffhs.referencease.services.interfaces.IPositionService;
+import com.ffhs.referencease.services.interfaces.IReferenceLetterService;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
-import jakarta.faces.annotation.ManagedProperty;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.logging.Logger;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,13 +38,12 @@ public class EmployeeBean implements Serializable {
 
   private static final Logger LOG = Logger.getLogger(EmployeeBean.class.getName());
 
-  @ManagedProperty(value = "#{referenceLetterBean}")
-  private ReferenceLetterBean referenceLetterBean;
 
   private final transient IEmployeeService employeeService;
   private final transient IPositionService positionService;
   private final transient IDepartmentService departmentService;
   private final transient IGenderService genderService;
+  private final transient IReferenceLetterService referenceLetterService;
 
   private EmployeeDTO employee;
   private EmployeeDTO selectedEmployee;
@@ -57,11 +58,13 @@ public class EmployeeBean implements Serializable {
 
   @Inject
   public EmployeeBean(IEmployeeService employeeService, IPositionService positionService,
-      IDepartmentService departmentService, IGenderService genderService) {
+      IDepartmentService departmentService, IGenderService genderService,
+      IReferenceLetterService referenceLetterService) {
     this.employeeService = employeeService;
     this.positionService = positionService;
     this.departmentService = departmentService;
     this.genderService = genderService;
+    this.referenceLetterService = referenceLetterService;
   }
 
   @PostConstruct
@@ -75,94 +78,77 @@ public class EmployeeBean implements Serializable {
     genders = genderService.getAllGenders();
   }
 
-//  public String loadSelectedEmployeeDetails(UUID employeeId) {
-//    selectedEmployeeId = employeeId;
-//    return "/resources/components/sites/secured/employeeDetails.xhtml?faces-redirect=true";
-//  }
-
-  public void onEmployeeSelect() {
-
-  }
-
-  // Methode, um den ausgewählten Employee in ReferenceLetterBean zu setzen
-  public void selectEmployeeForReferenceLetter(EmployeeDTO employeeDTO) {
-    referenceLetterBean.setEmployee(employeeDTO);
-  }
-
-  public void loadSelectedEmployeeDetails(UUID employeeId) {
-    employee = employeeService.getEmployee(employeeId);
-    editMode = true;
-  }
-
-  public String loadSelectedEmployeeDetailsAndNavigate(UUID employeeId) {
-    loadSelectedEmployeeDetails(employeeId);
-    return "/resources/components/sites/secured/employeeMod.xhtml?faces-redirect=true";
-  }
-
-//  public void loadSelectedEmployeeDetails() {
-//    LOG.info("Selected Employee ID: " + selectedEmployeeId);
-//    if (selectedEmployeeId != null) {
-//      selectedEmployee = employeeService.getEmployee(selectedEmployeeId);
-//      // Weitere Aktionen, falls erforderlich
+//  /**
+//   * Speichert oder aktualisiert einen Mitarbeiter basierend auf dem Vorhandensein einer ID.
+//   *
+//   * @param referenceLetterBean Referenz zum ReferenceLetterBean für den aktuellen Kontext.
+//   */
+//  public void saveOrUpdateEmployee(ReferenceLetterBean referenceLetterBean) {
+//    boolean isSaved = employeeService.saveOrUpdateEmployee(selectedEmployee, referenceLetterBean);
+//    if (Boolean.TRUE.equals(listSelectionNeeded)) {
+//      Employee employeeToSaveOrUpdate = employeeService.convertToEntity(selectedEmployee);
+//      referenceLetterBean.getReferenceLetter().setEmployee(employeeToSaveOrUpdate);
+//    }
+//    if (isSaved) {
+//      refreshEmployeeList();
+//      sendInfoToFrontend("Mitarbeiter erfolgreich gespeichert/aktualisiert.");
+//      editMode = true;
 //    }
 //  }
 
-//  public String navigateToCreateEmployee() {
-//    editMode = false;
-//    employeeDTO = new EmployeeDTO();
-//    return "/resources/components/sites/secured/createEmployeeImpl.xhtml?faces-redirect=true";
-//  }
 
-  public String setEditModeToFalseAndNavigate() {
-    editMode = false;
-    employee = new EmployeeDTO();
-    return "/resources/components/sites/secured/employeeMod.xhtml?faces-redirect=true";
-  }
+  public void saveOrUpdateEmployee(ReferenceLetterBean referenceLetterBean) {
+    boolean isNewEmployee = selectedEmployee.getEmployeeId() == null;
+    OperationResult<EmployeeDTO> result = employeeService.saveOrUpdateEmployee(selectedEmployee);
 
-//  public void setSelectedEmployeeById(UUID employeeId) {
-//    selectedEmployee = employeeService.getEmployee(employeeId);
-//  }
+    if (result.isSuccess()) {
+      EmployeeDTO savedEmployee = result.getData();
 
-  public void loadEmployee(UUID id) {
-    employee = employeeService.getEmployee(id);
-  }
+      if (Boolean.TRUE.equals(listSelectionNeeded)) {
+        referenceLetterBean.getReferenceLetter().setEmployee(employeeService.convertToEntity(savedEmployee));
+      }
 
-//  public Employee loadEmployee(EmployeeDTO employeeDTO) {
-//    Employee employee = employeeService.
-//  }
+      selectedEmployee = savedEmployee;
+      editMode = true;
 
-  public void saveEmployee(ReferenceLetterBean referenceLetterBean) {
-    String message = "";
-//    String currentEmployeeNumber = selectedEmployee.getEmployeeNumber();
-//    if (employeeService.getEmployeeByEmployeeNumber(currentEmployeeNumber) != null) {
-//      UUID uuid = employeeService.getEmployeeByEmployeeNumber(currentEmployeeNumber)
-//          .getEmployeeId();
-//      UUID selectedEmployeeId = selectedEmployee.getEmployeeId();
-//      if (!(selectedEmployeeId != null && !selectedEmployeeId.equals(uuid)) {
-//
-//        message = "Mitarbeiternummer bereits vergeben";
-//        sendInfoToFrontend(message);
-//        return;
-//      }
-//    }
+      employees = employeeService.getAllEmployees();
+      filteredEmployees = employeeService.getAllEmployees();
 
-    if (Boolean.TRUE.equals(listSelectionNeeded)) {
-      Employee employee1 = employeeService.convertToEntity(selectedEmployee);
-      referenceLetterBean.getReferenceLetter().setEmployee(employee1);
+      String message = isNewEmployee ? "erfolgreich gespeichert" : "erfolgreich aktualisiert";
+      sendInfoToFrontend("Mitarbeiter " + savedEmployee.getFirstName() + " " + savedEmployee.getLastName() + " " + message);
+    } else {
+      sendInfoToFrontend(result.getErrorMessage());
     }
-    employee = employeeService.updateEmployee(selectedEmployee);
-    selectedEmployee = employee;
-    editMode = true;
-//    -- Only needed if session scoped --
-    employees = employeeService.getAllEmployees();
-    filteredEmployees = employeeService.getAllEmployees();
-//    -- Only needed if session scoped --
-    message =
-        "Mitarbeiter " + selectedEmployee.getFirstName() + " " + selectedEmployee.getLastName()
-            + " erfolgreich gespeichert";
-    sendInfoToFrontend(message);
-
   }
+
+
+//  public void saveOrUpdateEmployee(ReferenceLetterBean referenceLetterBean) {
+//    EmployeeDTO existingEmployee = employeeService.getEmployeeByEmployeeNumber(selectedEmployee.getEmployeeNumber());
+//
+//    // Überprüfen, ob der Employee neu ist oder aktualisiert werden soll
+//    boolean isNewEmployee = selectedEmployee.getEmployeeId() == null;
+//
+//    // Überprüfen für neuen Employee: EmployeeNumber darf nicht bereits verwendet werden
+//    // Überprüfen für bestehenden Employee: EmployeeNumber darf nur verwendet werden, wenn sie zum aktuellen Employee gehört
+//    if (existingEmployee != null && (isNewEmployee || !existingEmployee.getEmployeeId().equals(selectedEmployee.getEmployeeId()))) {
+//      sendInfoToFrontend("Mitarbeiternummer bereits von einem anderen Mitarbeiter vergeben.");
+//      return;
+//    }
+//
+//    if (Boolean.TRUE.equals(listSelectionNeeded)) {
+//      Employee employeeToSaveOrUpdate = employeeService.convertToEntity(selectedEmployee);
+//      referenceLetterBean.getReferenceLetter().setEmployee(employeeToSaveOrUpdate);
+//    }
+//    employee = employeeService.updateEmployee(selectedEmployee);
+//    selectedEmployee = employee;
+//    editMode = true;
+////    -- Only needed if session scoped --
+//    employees = employeeService.getAllEmployees();
+//    filteredEmployees = employeeService.getAllEmployees();
+////    -- Only needed if session scoped --
+//    String message = isNewEmployee ? "erfolgreich gespeichert" : "erfolgreich aktualisiert";
+//    sendInfoToFrontend("Mitarbeiter " + selectedEmployee.getFirstName() + " " + selectedEmployee.getLastName() + " " + message);
+//  }
 
 
   public void sendInfoToFrontend(String message) {
@@ -176,22 +162,35 @@ public class EmployeeBean implements Serializable {
     return this.selectedEmployee != null;
   }
 
+
+  /**
+   * Löscht einen Mitarbeiter und alle zugehörigen Referenzbriefe.
+   */
   public void deleteEmployee() {
-    employees.removeIf(
-        employeeDTO -> employeeDTO.getEmployeeId().equals(selectedEmployee.getEmployeeId()));
-    filteredEmployees.remove(selectedEmployee);
     employeeService.deleteEmployee(selectedEmployee);
-    String message =
-        "Mitarbeiter " + selectedEmployee.getFirstName() + " " + selectedEmployee.getLastName()
-            + " erfolgreich gelöscht";
-    selectedEmployee = null;
-    FacesContext.getCurrentInstance()
-        .addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, message, null));
-    PrimeFaces.current().ajax()
-        .update("employeeListForm:messages", "employeeListForm:employeeTable");
+    refreshEmployeeList();
+    sendInfoToFrontend("Mitarbeiter erfolgreich gelöscht.");
   }
 
-//  public void deleteEmployee(EmployeeDTO employee) {
+  private void refreshEmployeeList() {
+    employees = employeeService.getAllEmployees();
+    filteredEmployees = new ArrayList<>(employees);
+    selectedEmployee = null;
+  }
+//  public void deleteEmployee() {
+//    List<ReferenceLetter> referenceLetters = referenceLetterService.findReferenceLettersByEmployeeId(selectedEmployee.getEmployeeId());
+//////    zukünftige implementation für das behalten der Arbeitszeugnisse
+////    for (ReferenceLetter letter : referenceLetters) {
+////      letter.setEmployeeName(selectedEmployee.getFirstName() + " " + selectedEmployee.getLastName());
+////      letter.setEmployeePosition(selectedEmployee.getPosition().getPositionName()); // Annahme: Position hat ein Feld 'positionName'
+////      letter.setEmployeeDepartment(selectedEmployee.getDepartment().getDepartmentName()); // Annahme: Department hat ein Feld 'departmentName'
+////      letter.setEmployee(null); // Entfernen der Verbindung zum Employee
+////      referenceLetterService.updateReferenceLetter(letter); // Speichern der Änderungen
+////    }
+//    for (ReferenceLetter letter : referenceLetters) {
+//      referenceLetterService.deleteReferenceLetter(letter.getReferenceId()); // Speichern der Änderungen
+//    }
+//
 //    employees.removeIf(
 //        employeeDTO -> employeeDTO.getEmployeeId().equals(selectedEmployee.getEmployeeId()));
 //    filteredEmployees.remove(selectedEmployee);
@@ -200,30 +199,10 @@ public class EmployeeBean implements Serializable {
 //        "Mitarbeiter " + selectedEmployee.getFirstName() + " " + selectedEmployee.getLastName()
 //            + " erfolgreich gelöscht";
 //    selectedEmployee = null;
-//    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, message, null));
+//    FacesContext.getCurrentInstance()
+//        .addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, message, null));
 //    PrimeFaces.current().ajax()
 //        .update("employeeListForm:messages", "employeeListForm:employeeTable");
-//  }
-
-//  public void deleteEmployeeById(UUID id) {
-//    employeeService.deleteEmployeeById(id);
-//    employees = employeeService.getAllEmployees();
-//    filteredEmployees = employeeService.getAllEmployees();
-//    FacesContext.getCurrentInstance().addMessage(null,
-//        new FacesMessage(FacesMessage.SEVERITY_INFO, "Mitarbeiter erfolgreich gelöscht", null));
-//  }
-
-  public void updateEmployee() {
-    employee = employeeService.updateEmployee(employee);
-  }
-
-//  public EmployeeDTO getSelectedEmployeeByIdString(String employeeId) {
-//    UUID uuid = UUID.fromString(employeeId);
-//    if (selectedEmployee != null && selectedEmployee.getEmployeeId().equals(uuid)) {
-//      return selectedEmployee;
-//    }
-//    selectedEmployee = employeeService.getEmployee(uuid);
-//    return selectedEmployee;
 //  }
 
   public void resetEmployee() {
@@ -252,12 +231,4 @@ public class EmployeeBean implements Serializable {
     this.selectedEmployee = employee;
     this.editMode = true;
   }
-
-//  public EmployeeDTO getSelectedEmployee() {
-//    if (selectedEmployee != null && selectedEmployee.getEmployeeId().equals(selectedEmployeeId)) {
-//      return selectedEmployee;
-//    }
-//    selectedEmployee = employeeService.getEmployee(selectedEmployeeId);
-//    return selectedEmployee;
-//  }
 }

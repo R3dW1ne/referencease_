@@ -56,9 +56,6 @@ public class Employee implements Serializable {
   private String lastName;
   @NotNull(message = "Date of birth is mandatory")
   private LocalDate dateOfBirth;
-//  private String placeOfOrigin;
-
-
   private String phone;
   @NotNull(message = "Start date is mandatory")
   private LocalDate startDate;

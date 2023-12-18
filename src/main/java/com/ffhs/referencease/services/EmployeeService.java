@@ -3,7 +3,11 @@ package com.ffhs.referencease.services;
 import com.ffhs.referencease.dao.interfaces.IEmployeeDAO;
 import com.ffhs.referencease.dto.EmployeeDTO;
 import com.ffhs.referencease.entities.Employee;
+import com.ffhs.referencease.entities.ReferenceLetter;
+import com.ffhs.referencease.exceptionhandling.BusinessException;
+import com.ffhs.referencease.exceptionhandling.OperationResult;
 import com.ffhs.referencease.services.interfaces.IEmployeeService;
+import com.ffhs.referencease.services.interfaces.IReferenceLetterService;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import java.util.List;
@@ -17,12 +21,14 @@ import org.modelmapper.ModelMapper;
 public class EmployeeService implements IEmployeeService {
 
   private final IEmployeeDAO employeeDao;
+  private final IReferenceLetterService referenceLetterService;
 
   private final ModelMapper modelMapper;
 
   @Inject
-  public EmployeeService(IEmployeeDAO employeeDao, ModelMapper modelMapper) {
+  public EmployeeService(IEmployeeDAO employeeDao, IReferenceLetterService referenceLetterService, ModelMapper modelMapper) {
     this.employeeDao = employeeDao;
+    this.referenceLetterService = referenceLetterService;
     this.modelMapper = modelMapper;
   }
 
@@ -52,14 +58,85 @@ public class EmployeeService implements IEmployeeService {
   @Override
   public void saveEmployee(EmployeeDTO employeeDTO) {
     Employee employee = modelMapper.map(employeeDTO, Employee.class);
-//    employeeDao.save(convertToEntity(employeeDTO));
     employeeDao.save(employee);
   }
 
   @Override
-  public void deleteEmployee(EmployeeDTO employeeDTO) {
-    employeeDao.delete(convertToEntity(employeeDTO));
+  public OperationResult<EmployeeDTO> saveOrUpdateEmployee(EmployeeDTO employeeDTO) throws BusinessException{
+    EmployeeDTO existingEmployee = getEmployeeByEmployeeNumber(employeeDTO.getEmployeeNumber());
+    boolean isNewEmployee = employeeDTO.getEmployeeId() == null;
+
+    if (existingEmployee != null && (isNewEmployee || !existingEmployee.getEmployeeId().equals(employeeDTO.getEmployeeId()))) {
+      return OperationResult.failure("Mitarbeiternummer bereits von einem anderen Mitarbeiter vergeben.");
+    }
+
+    Employee employeeEntity = convertToEntity(employeeDTO);
+    Employee savedEmployee = isNewEmployee ? saveEmployeeInternal(employeeEntity) : updateEmployeeInternal(employeeEntity);
+    return OperationResult.success(convertToDTO(savedEmployee));
   }
+
+  private Employee saveEmployeeInternal(Employee employee) {
+    employeeDao.save(employee);
+    return employee;
+  }
+
+  private Employee updateEmployeeInternal(Employee employee) {
+    return employeeDao.update(employee);
+  }
+
+//  @Override
+//  public boolean saveOrUpdateEmployee(EmployeeDTO employeeDTO,
+//      ReferenceLetterBean referenceLetterBean) {
+//    Employee employee = modelMapper.map(employeeDTO, Employee.class);
+//
+//    // Überprüfen, ob der Employee neu ist oder aktualisiert werden soll
+//    boolean isNewEmployee = employee.getEmployeeId() == null;
+//
+//    // Überprüfen, ob ein anderer Employee mit derselben EmployeeNumber existiert
+//    EmployeeDTO existingEmployee = getEmployeeByEmployeeNumber(employeeDTO.getEmployeeNumber());
+//    if (existingEmployee != null && (!isNewEmployee && !existingEmployee.getEmployeeId().equals(employee.getEmployeeId()))) {
+//      return false; // EmployeeNumber ist bereits vergeben
+//    }
+//
+////    if (Boolean.TRUE.equals(referenceLetterBean.getListSelectionNeeded())) {
+////      Employee employeeForReferenceLetter = convertToEntity(referenceLetterBean.getEmployeeAsDTO());
+////      referenceLetterBean.getReferenceLetter().setEmployee(employeeForReferenceLetter);
+////    }
+//
+//    if (isNewEmployee) {
+//      employeeDao.save(employee);
+//    } else {
+//      employeeDao.update(employee);
+//    }
+//    return true; // Operation erfolgreich
+//  }
+
+  @Override
+  public void deleteEmployee(EmployeeDTO employeeDTO) {
+    UUID employeeId = employeeDTO.getEmployeeId();
+
+    // Referenzbriefe des Mitarbeiters abrufen und löschen
+    List<ReferenceLetter> referenceLetters = referenceLetterService.findReferenceLettersByEmployeeId(employeeId);
+    for (ReferenceLetter letter : referenceLetters) {
+      // Optional: Informationen des Mitarbeiters im Referenzbrief speichern, bevor der Mitarbeiter gelöscht wird
+      // Beispiel:
+      // letter.setEmployeeName(employeeDTO.getFirstName() + " " + employeeDTO.getLastName());
+      // letter.setEmployeePosition(employeeDTO.getPosition().getPositionName());
+      // letter.setEmployeeDepartment(employeeDTO.getDepartment().getDepartmentName());
+      // letter.setEmployee(null); // Entfernen der Verbindung zum Mitarbeiter
+      // referenceLetterService.updateReferenceLetter(letter); // Speichern der Änderungen
+      referenceLetterService.deleteReferenceLetter(letter.getReferenceId());
+    }
+
+    // Mitarbeiter löschen
+    employeeDao.deleteById(employeeId);
+}
+
+
+//  @Override
+//  public void deleteEmployee(EmployeeDTO employeeDTO) {
+//    employeeDao.delete(convertToEntity(employeeDTO));
+//  }
 
   @Override
   public void deleteEmployeeById(UUID id) {

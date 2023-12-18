@@ -1,6 +1,0 @@
-/* CSS in einer separaten Datei oder im <style>-Tag */
-@media screen and (max-width: 768px) { /* oder eine andere Breite, die Sie für geeignet halten */
-  .submenu-text {
-    display: none; /* Versteckt den Text in Submenüs */
-  }
-}
