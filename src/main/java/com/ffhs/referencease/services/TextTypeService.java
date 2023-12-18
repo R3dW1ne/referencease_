@@ -33,5 +33,14 @@ public class TextTypeService implements ITextTypeService {
     return textTypeDAO.findAll();
   }
 
+  @Override
+  public void createTextTypeIfNotExists(String displayName) {
+    if (textTypeDAO.findByName(displayName).isEmpty()) {
+      TextType textType = new TextType();
+      textType.setTextTypeName(displayName);
+      textTypeDAO.create(textType);
+    }
+  }
+
   // Weitere Methoden nach Bedarf (z.B. speichern, aktualisieren, löschen)
 }

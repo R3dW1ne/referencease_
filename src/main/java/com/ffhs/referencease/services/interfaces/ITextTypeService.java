@@ -11,4 +11,6 @@ public interface ITextTypeService {
   TextType getTextTypeById(UUID id);
 
   List<TextType> getAllTextTypes();
+
+  void createTextTypeIfNotExists(String displayName);
 }

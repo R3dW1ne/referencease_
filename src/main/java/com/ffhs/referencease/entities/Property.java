@@ -21,5 +21,5 @@ public class Property implements Serializable {
   @Convert(converter = UUIDConverter.class)
   private UUID propertyId;
 
-  private String name;
+  private String propertyName;
 }

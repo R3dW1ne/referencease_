@@ -68,7 +68,7 @@ public class ReferenceLetterBean implements Serializable {
 
   public void updateSelectedReferenceReason() {
     if (selectedReferenceReason != null) {
-      needsEndDate = !selectedReferenceReason.getName().equals("Zwischenzeugnis");
+      needsEndDate = !selectedReferenceReason.getReasonName().equals("Zwischenzeugnis");
       referenceLetter.setReferenceReason(selectedReferenceReason);
     }
   }
@@ -100,7 +100,7 @@ public class ReferenceLetterBean implements Serializable {
     referenceLetterService.updateReferenceLetter(referenceLetter);
     editMode = true;
     String message =
-        referenceLetter.getReferenceReason().getName() + " von " + referenceLetter.getEmployee().getFirstName() + " wurde erfolgreich gespeichert.";
+        referenceLetter.getReferenceReason().getReasonName() + " von " + referenceLetter.getEmployee().getFirstName() + " wurde erfolgreich gespeichert.";
     FacesContext.getCurrentInstance().addMessage(null,
         new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
   }

@@ -2,7 +2,9 @@ package com.ffhs.referencease.dao;
 
 import com.ffhs.referencease.dao.interfaces.ITextTypeDAO;
 import com.ffhs.referencease.entities.TextType;
+import com.ffhs.referencease.producers.qualifiers.ProdPU;
 import jakarta.ejb.Stateless;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.List;
@@ -12,21 +14,31 @@ import java.util.UUID;
 @Stateless
 public class TextTypeDAO implements ITextTypeDAO {
 
-  @PersistenceContext
-  private EntityManager entityManager;
+  @PersistenceContext(unitName = "default")
+  private EntityManager em;
 
   @Override
-  public Optional<TextType> findByName(String name) {
-    return entityManager.createQuery("SELECT tt FROM TextType tt WHERE tt.textTypeName = :name", TextType.class)
-        .setParameter("name", name)
-        .getResultList().stream().findFirst();
+  public Optional<TextType> findByName(String textTypeName) {
+    List<TextType> results = em.createQuery("SELECT tt FROM TextType tt WHERE tt.textTypeName = :textTypeName",
+            TextType.class)
+        .setParameter("textTypeName", textTypeName)
+        .getResultList();
+    return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
   }
+
+
   @Override
   public Optional<TextType> findById(UUID id) {
-    return Optional.ofNullable(entityManager.find(TextType.class, id));
+    return Optional.ofNullable(em.find(TextType.class, id));
   }
+
   @Override
   public List<TextType> findAll() {
-    return entityManager.createQuery("SELECT tt FROM TextType tt", TextType.class).getResultList();
+    return em.createQuery("SELECT tt FROM TextType tt", TextType.class).getResultList();
+  }
+
+  @Override
+  public void create(TextType textType) {
+    em.persist(textType);
   }
 }

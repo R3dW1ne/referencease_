@@ -21,9 +21,24 @@ public class ReferenceReasonService implements IReferenceReasonService {
     return referenceReasonDAO.findById(id)
         .orElseThrow(() -> new IllegalArgumentException("ReferenceReason mit ID " + id + " nicht gefunden"));
   }
+
+  @Override
+  public ReferenceReason getReferenceReasonByReasonName(String name) {
+    return referenceReasonDAO.findByReasonName(name)
+        .orElseThrow(() -> new IllegalArgumentException("ReferenceReason mit Name " + name + " nicht gefunden"));
+  }
   @Override
   public List<ReferenceReason> getAllReferenceReasons() {
     return referenceReasonDAO.findAll();
+  }
+
+  @Override
+  public void createReferenceReasonIfNotExists(String displayName) {
+    if (referenceReasonDAO.findByReasonName(displayName).isEmpty()) {
+      ReferenceReason referenceReason = new ReferenceReason();
+      referenceReason.setReasonName(displayName);
+      referenceReasonDAO.save(referenceReason);
+    }
   }
 
   // Weitere Methoden nach Bedarf (z.B. speichern, aktualisieren, löschen)

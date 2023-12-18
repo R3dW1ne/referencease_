@@ -2,7 +2,9 @@ package com.ffhs.referencease.dao;
 
 import com.ffhs.referencease.dao.interfaces.IEmployeeDAO;
 import com.ffhs.referencease.entities.Employee;
+import com.ffhs.referencease.producers.qualifiers.ProdPU;
 import jakarta.ejb.Stateless;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
@@ -15,7 +17,7 @@ import java.util.UUID;
 @Stateless
 public class EmployeeDAO implements IEmployeeDAO {
 
-  @PersistenceContext
+  @PersistenceContext(unitName = "default")
   private EntityManager em;
 
   @Override
@@ -26,6 +28,7 @@ public class EmployeeDAO implements IEmployeeDAO {
   public List<Employee> findAll() {
     return em.createQuery("SELECT e FROM Employee e", Employee.class).getResultList();
   }
+
   @Override
   @Transactional
   public void save(Employee employee) {
@@ -77,5 +80,11 @@ public class EmployeeDAO implements IEmployeeDAO {
     } catch (NoResultException e) {
       return Optional.empty();
     }
+  }
+
+  @Override
+  public Long countEmployees() {
+    return em.createQuery("SELECT COUNT(e) FROM Employee e", Long.class)
+        .getSingleResult();
   }
 }

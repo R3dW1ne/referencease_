@@ -12,4 +12,6 @@ public interface ITextTypeDAO {
   Optional<TextType> findById(UUID id);
 
   List<TextType> findAll();
+
+  void create(TextType textType);
 }

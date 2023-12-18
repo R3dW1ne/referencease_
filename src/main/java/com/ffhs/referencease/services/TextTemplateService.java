@@ -61,4 +61,11 @@ public class TextTemplateService implements ITextTemplateService {
       TextType textType, Gender gender) {
     return textTemplateDAO.getTextTemplatesForReasonTypeAndGender(reason,textType,gender);
   }
+
+  @Override
+  public void createTextTemplateIfNotExists(String key, String value,
+      List<ReferenceReason> associatedReferenceReasons, List<Gender> associatedGenders,
+      TextType textType) {
+    textTemplateDAO.createTextTemplateIfNotExists(key,value,associatedReferenceReasons,associatedGenders,textType);
+  }
 }

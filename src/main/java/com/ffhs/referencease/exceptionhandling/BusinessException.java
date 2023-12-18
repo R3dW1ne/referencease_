@@ -8,10 +8,6 @@ public class BusinessException extends RuntimeException {
 
   public BusinessException(String message) {
     super(message);
-    FacesContext.getCurrentInstance().addMessage(null,
-        new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
-    PrimeFaces.current().ajax()
-        .update("employeeListForm:messages", "employeeListForm:employeeTable");
   }
 
   public BusinessException(String message, Throwable cause) {

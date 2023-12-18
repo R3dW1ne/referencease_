@@ -21,4 +21,6 @@ public interface ITextTemplateService {
 
   List<TextTemplate> getTextTemplatesForReasonTypeAndGender(ReferenceReason reason,
       TextType textType, Gender gender);
+
+  void createTextTemplateIfNotExists(String key, String value, List<ReferenceReason> associatedReferenceReasons, List<Gender> associatedGenders, TextType textType);
 }

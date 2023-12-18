@@ -10,4 +10,8 @@ public interface IReferenceReasonDAO {
   Optional<ReferenceReason> findById(UUID id);
 
   List<ReferenceReason> findAll();
+
+  Optional<ReferenceReason> findByReasonName(String reasonName);
+
+  void save(ReferenceReason referenceReason);
 }

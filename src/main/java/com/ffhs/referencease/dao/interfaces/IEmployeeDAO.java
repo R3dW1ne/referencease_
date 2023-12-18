@@ -16,5 +16,7 @@ public interface IEmployeeDAO {
   boolean employeeNumberExists(String employeeNumber);
 
   Optional<Employee> findByEmployeeNumber(String employeeNumber);
+
+  Long countEmployees();
 }
 

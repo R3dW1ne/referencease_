@@ -27,5 +27,14 @@ public class DepartmentService implements IDepartmentService {
   public List<Department> getAllDepartments() {
     return departmentDao.findAll();
   }
+
+  @Override
+  public void createDepartmentIfNotExists(String departmentName) {
+    if (departmentDao.findByName(departmentName).isEmpty()) {
+      Department department = new Department();
+      department.setDepartmentName(departmentName);
+      departmentDao.create(department);
+    }
+  }
 }
 

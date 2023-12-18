@@ -22,5 +22,5 @@ public class ReferenceReason implements Serializable {
   @Convert(converter = UUIDConverter.class)
   private UUID referenceReasonId;
 
-  private String name;
+  private String reasonName;
 }

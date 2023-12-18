@@ -1,7 +1,5 @@
 package com.ffhs.referencease;
 
-import com.ffhs.referencease.dao.interfaces.IEmployeeDAO;
-import com.ffhs.referencease.dto.EmployeeDTO;
 import com.ffhs.referencease.entities.Department;
 import com.ffhs.referencease.entities.Employee;
 import com.ffhs.referencease.entities.Gender;
@@ -16,14 +14,22 @@ import com.ffhs.referencease.entities.enums.EProperty;
 import com.ffhs.referencease.entities.enums.EReferenceReason;
 import com.ffhs.referencease.entities.enums.ERole;
 import com.ffhs.referencease.entities.enums.ETextType;
+import com.ffhs.referencease.producers.qualifiers.ProdPU;
+import com.ffhs.referencease.services.interfaces.IDepartmentService;
 import com.ffhs.referencease.services.interfaces.IEmployeeService;
+import com.ffhs.referencease.services.interfaces.IGenderService;
+import com.ffhs.referencease.services.interfaces.IPositionService;
+import com.ffhs.referencease.services.interfaces.IPropertyService;
+import com.ffhs.referencease.services.interfaces.IReferenceReasonService;
+import com.ffhs.referencease.services.interfaces.IRoleService;
+import com.ffhs.referencease.services.interfaces.ITextTemplateService;
+import com.ffhs.referencease.services.interfaces.ITextTypeService;
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
-import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
@@ -39,230 +45,237 @@ import java.util.UUID;
 @Singleton
 public class AppInitSingleton {
 
-  @PersistenceContext
-  private EntityManager entityManager;
-
-  private final IEmployeeDAO employeeDao;
-
   private final IEmployeeService employeeService;
+  private final IGenderService genderService;
+  private final IReferenceReasonService referenceReasonService;
+  private final ITextTypeService textTypeService;
+  private final IPropertyService propertyService;
+  private  final IDepartmentService departmentService;
+  private final IRoleService roleService;
+  private final IPositionService positionService;
+  private final ITextTemplateService textTemplateService;
 
   Random random = new Random();
 
   @Inject
-  public AppInitSingleton(IEmployeeDAO employeeDao, IEmployeeService employeeService) {
-    this.employeeDao = employeeDao;
+  public AppInitSingleton(IEmployeeService employeeService,
+      IGenderService genderService, IReferenceReasonService referenceReasonService,
+      ITextTypeService textTypeService, IPropertyService propertyService,
+      IDepartmentService departmentService, IRoleService roleService,
+      IPositionService positionService, ITextTemplateService textTemplateService) {
     this.employeeService = employeeService;
+    this.genderService = genderService;
+    this.referenceReasonService = referenceReasonService;
+    this.textTypeService = textTypeService;
+    this.propertyService = propertyService;
+    this.departmentService = departmentService;
+    this.roleService = roleService;
+    this.positionService = positionService;
+    this.textTemplateService = textTemplateService;
   }
 
   @PostConstruct
   public void init() {
     for (ERole roleEnum : ERole.values()) {
-      createRoleIfNotExists(roleEnum.getDisplayName());
+      roleService.createRoleIfNotExists(roleEnum.getDisplayName());
     }
     for (EGender genderEnum : EGender.values()) {
-      createGenderIfNotExists(genderEnum.getDisplayName());
+      genderService.createGenderIfNotExists(genderEnum.getDisplayName());
     }
     for (EReferenceReason reasonEnum : EReferenceReason.values()) {
-      createReferenceReasonIfNotExists(reasonEnum.getDisplayName());
+      referenceReasonService.createReferenceReasonIfNotExists(reasonEnum.getDisplayName());
     }
     for (ETextType textTypeEnum : ETextType.values()) {
-      createTextTypeIfNotExists(textTypeEnum.getDisplayName());
+      textTypeService.createTextTypeIfNotExists(textTypeEnum.getDisplayName());
     }
     for (EProperty propertyEnum : EProperty.values()) {
-      createPropertyIfNotExists(propertyEnum.getDisplayName());
+      propertyService.createPropertyIfNotExists(propertyEnum.getDisplayName());
     }
-    createDepartmentIfNotExists("Human Resources");
-    createDepartmentIfNotExists("Finance");
-    createDepartmentIfNotExists("Shared IT");
-    createPositionIfNotExists("Projektleiter");
-    createPositionIfNotExists("Lernender");
-    createPositionIfNotExists("System Engineer");
-    createPositionIfNotExists("Application Engineer");
-    createPositionIfNotExists("Elektroinstallateur");
+    departmentService.createDepartmentIfNotExists("Human Resources");
+    departmentService.createDepartmentIfNotExists("Finance");
+    departmentService.createDepartmentIfNotExists("Shared IT");
+    positionService.createPositionIfNotExists("Projektleiter");
+    positionService.createPositionIfNotExists("Lernender");
+    positionService.createPositionIfNotExists("System Engineer");
+    positionService.createPositionIfNotExists("Application Engineer");
+    positionService.createPositionIfNotExists("Elektroinstallateur");
     initializeTextTemplates();
     createRandomEmployees(20);
   }
 
   private void initializeTextTemplates() {
-    ReferenceReason abschlusszeugnis = getReferenceReason(
+    ReferenceReason abschlusszeugnis = referenceReasonService.getReferenceReasonByReasonName(
         EReferenceReason.ABSCHLUSSZEUGNIS.getDisplayName());
-    ReferenceReason zwischenzeugnis = getReferenceReason(
+    ReferenceReason zwischenzeugnis = referenceReasonService.getReferenceReasonByReasonName(
         EReferenceReason.ZWISCHENZEUGNIS.getDisplayName());
-    ReferenceReason positionswechsel = getReferenceReason(
+    ReferenceReason positionswechsel = referenceReasonService.getReferenceReasonByReasonName(
         EReferenceReason.POSITIONSWECHSEL.getDisplayName());
     List<ReferenceReason> alleReferenceReasons = Arrays.asList(abschlusszeugnis, zwischenzeugnis,
         positionswechsel);
-    List<Gender> allGenders = getAllGenders();
-    TextType textType = getTextType(ETextType.EINLEITUNG.getDisplayName());
+    List<Gender> allGenders = genderService.getAllGenders();
+    TextType textType = textTypeService.getTextTypeByName(ETextType.EINLEITUNG.getDisplayName());
 
     // Gemeinsame TextTemplates für alle ReferenceReasons
-    createTextTemplateIfNotExists("afterName", ", geboren am ", alleReferenceReasons, allGenders,
+    textTemplateService.createTextTemplateIfNotExists("afterName", ", geboren am ", alleReferenceReasons, allGenders,
         textType);
-    createTextTemplateIfNotExists("afterPosition", " in der Abteilung ", alleReferenceReasons,
+    textTemplateService.createTextTemplateIfNotExists("afterPosition", " in der Abteilung ", alleReferenceReasons,
         allGenders, textType);
-    createTextTemplateIfNotExists("afterDepartment", " in unserem Unternehmen beschäftigt.",
+    textTemplateService.createTextTemplateIfNotExists("afterDepartment", " in unserem Unternehmen beschäftigt.",
         alleReferenceReasons, allGenders, textType);
 
     // Spezifische TextTemplates für Abschlusszeugnis und Positionswechsel
     List<ReferenceReason> abschlussUndPositionswechsel = Arrays.asList(abschlusszeugnis,
         positionswechsel);
-    createTextTemplateIfNotExists("afterDateOfBirth", ", war vom ", abschlussUndPositionswechsel,
+    textTemplateService.createTextTemplateIfNotExists("afterDateOfBirth", ", war vom ", abschlussUndPositionswechsel,
         allGenders, textType);
-    createTextTemplateIfNotExists("afterStartDate", " bis ", abschlussUndPositionswechsel,
+    textTemplateService.createTextTemplateIfNotExists("afterStartDate", " bis ", abschlussUndPositionswechsel,
         allGenders, textType);
-    createTextTemplateIfNotExists("afterEndDate", ", als ", abschlussUndPositionswechsel,
+    textTemplateService.createTextTemplateIfNotExists("afterEndDate", ", als ", abschlussUndPositionswechsel,
         allGenders, textType);
 
     // Spezifisches TextTemplate für Zwischenzeugnis
     List<ReferenceReason> nurZwischenzeugnis = Collections.singletonList(zwischenzeugnis);
-    createTextTemplateIfNotExists("afterDateOfBirth", ", ist seit ", nurZwischenzeugnis, allGenders,
+    textTemplateService.createTextTemplateIfNotExists("afterDateOfBirth", ", ist seit ", nurZwischenzeugnis, allGenders,
         textType);
-    createTextTemplateIfNotExists("afterStartDate", ", als ", nurZwischenzeugnis, allGenders,
+    textTemplateService.createTextTemplateIfNotExists("afterStartDate", ", als ", nurZwischenzeugnis, allGenders,
         textType);
   }
 
+//  private ReferenceReason getReferenceReasonByReasonName(String name) {
+//    try {
+//      return em.createQuery("SELECT r FROM ReferenceReason r WHERE r.reasonName = :name",
+//              ReferenceReason.class)
+//          .setParameter("name", name)
+//          .getSingleResult();
+//    } catch (NoResultException e) {
+//      // ReferenceReason mit diesem Namen wurde nicht gefunden, Sie können ihn erstellen oder eine Ausnahme werfen
+//      ReferenceReason referenceReason = new ReferenceReason();
+//      referenceReason.setReasonName(name);
+//      em.persist(referenceReason);
+//      return referenceReason;
+//    }
+//  }
 
-  private List<Gender> getAllGenders() {
-    return entityManager.createQuery("SELECT g FROM Gender g", Gender.class)
-        .getResultList();
-  }
+//  private TextType getTextType(String typeName) {
+//    try {
+//      return em.createQuery("SELECT t FROM TextType t WHERE t.textTypeName = :typeName",
+//              TextType.class)
+//          .setParameter("typeName", typeName)
+//          .getSingleResult();
+//    } catch (NoResultException e) {
+//      // TextType mit diesem typeName wurde nicht gefunden, Sie können ihn erstellen oder eine Ausnahme werfen
+//      TextType textType = new TextType();
+//      textType.setTextTypeName(typeName);
+//      em.persist(textType);
+//      return textType;
+//    }
+//  }
 
-  private ReferenceReason getReferenceReason(String name) {
-    try {
-      return entityManager.createQuery("SELECT r FROM ReferenceReason r WHERE r.name = :name",
-              ReferenceReason.class)
-          .setParameter("name", name)
-          .getSingleResult();
-    } catch (NoResultException e) {
-      // ReferenceReason mit diesem Namen wurde nicht gefunden, Sie können ihn erstellen oder eine Ausnahme werfen
-      ReferenceReason referenceReason = new ReferenceReason();
-      referenceReason.setName(name);
-      entityManager.persist(referenceReason);
-      return referenceReason;
-    }
-  }
-
-  private TextType getTextType(String typeName) {
-    try {
-      return entityManager.createQuery("SELECT t FROM TextType t WHERE t.textTypeName = :typeName",
-              TextType.class)
-          .setParameter("typeName", typeName)
-          .getSingleResult();
-    } catch (NoResultException e) {
-      // TextType mit diesem typeName wurde nicht gefunden, Sie können ihn erstellen oder eine Ausnahme werfen
-      TextType textType = new TextType();
-      textType.setTextTypeName(typeName);
-      entityManager.persist(textType);
-      return textType;
-    }
-  }
-
-  @Transactional
-  private void createTextTemplateIfNotExists(String key, String template,
-      List<ReferenceReason> referenceReasons, List<Gender> genders, TextType textType) {
-    // Erstellt eine Query, die alle Bedingungen überprüft
-    String queryStr = "SELECT t FROM TextTemplate t WHERE t.key = :key AND t.template = :template AND t.textType = :textType";
-    TypedQuery<TextTemplate> query = entityManager.createQuery(queryStr, TextTemplate.class)
-        .setParameter("key", key)
-        .setParameter("template", template)
-        .setParameter("textType", textType);
-
-    // Prüft, ob ein TextTemplate mit den gegebenen Kriterien existiert
-    boolean exists = query.getResultList().stream().anyMatch(textTemplate ->
-        new HashSet<>(textTemplate.getReferenceReasons()).containsAll(referenceReasons) &&
-            new HashSet<>(textTemplate.getGenders()).containsAll(genders));
-
-    if (!exists) {
-      TextTemplate newTextTemplate = new TextTemplate();
-      newTextTemplate.setKey(key);
-      newTextTemplate.setTemplate(template);
-      newTextTemplate.setReferenceReasons(referenceReasons);
-      newTextTemplate.setGenders(genders);
-      newTextTemplate.setTextType(textType);
-
-      entityManager.persist(newTextTemplate);
-    }
-  }
-  @Transactional
-  private void createReferenceReasonIfNotExists(String reasonName) {
-    if (entityManager.createQuery("SELECT r FROM ReferenceReason r WHERE r.name = :reasonName",
-            ReferenceReason.class)
-        .setParameter("reasonName", reasonName)
-        .getResultList().isEmpty()) {
-      ReferenceReason referenceReason = new ReferenceReason();
-      referenceReason.setName(reasonName);
-      entityManager.persist(referenceReason);
-    }
-  }
-  @Transactional
-  private void createTextTypeIfNotExists(String typeName) {
-    if (entityManager.createQuery("SELECT t FROM TextType t WHERE t.textTypeName = :typeName",
-            TextType.class)
-        .setParameter("typeName", typeName)
-        .getResultList().isEmpty()) {
-      TextType textType = new TextType();
-      textType.setTextTypeName(typeName);
-      entityManager.persist(textType);
-    }
-  }
-  @Transactional
-  private void createPropertyIfNotExists(String propertyName) {
-    if (entityManager.createQuery("SELECT p FROM Property p WHERE p.name = :propertyName",
-            Property.class)
-        .setParameter("propertyName", propertyName)
-        .getResultList().isEmpty()) {
-      Property property = new Property();
-      property.setName(propertyName);
-      entityManager.persist(property);
-    }
-  }
-  @Transactional
-  private void createGenderIfNotExists(String genderName) {
-    if (entityManager.createQuery("SELECT g FROM Gender g WHERE g.genderName = :genderName",
-            Gender.class)
-        .setParameter("genderName", genderName)
-        .getResultList().isEmpty()) {
-      Gender gender = new Gender();
-      gender.setGenderName(genderName);
-      entityManager.persist(gender);
-    }
-  }
-  @Transactional
-  private void createRoleIfNotExists(String roleName) {
-    if (entityManager.createQuery("SELECT r FROM Role r WHERE r.roleName = :roleName", Role.class)
-        .setParameter("roleName", roleName)
-        .getResultList().isEmpty()) {
-      Role role = new Role(roleName);
-      entityManager.persist(role);
-    }
-  }
-  @Transactional
-  private void createDepartmentIfNotExists(String departmentName) {
-    if (entityManager.createQuery(
-            "SELECT d FROM Department d WHERE d.departmentName = :departmentName", Department.class)
-        .setParameter("departmentName", departmentName)
-        .getResultList().isEmpty()) {
-      Department department = new Department();
-      department.setDepartmentName(departmentName);
-      entityManager.persist(department);
-    }
-  }
-  @Transactional
-  private void createPositionIfNotExists(String positionName) {
-    if (entityManager.createQuery("SELECT p FROM Position p WHERE p.positionName = :positionName",
-            Position.class)
-        .setParameter("positionName", positionName)
-        .getResultList().isEmpty()) {
-      Position position = new Position();
-      position.setPositionName(positionName);
-      entityManager.persist(position);
-    }
-  }
+//  @Transactional
+//  private void createTextTemplateIfNotExists(String key, String template,
+//      List<ReferenceReason> referenceReasons, List<Gender> genders, TextType textType) {
+//    // Erstellt eine Query, die alle Bedingungen überprüft
+//    String queryStr = "SELECT t FROM TextTemplate t WHERE t.key = :key AND t.template = :template AND t.textType = :textType";
+//    TypedQuery<TextTemplate> query = em.createQuery(queryStr, TextTemplate.class)
+//        .setParameter("key", key)
+//        .setParameter("template", template)
+//        .setParameter("textType", textType);
+//
+//    // Prüft, ob ein TextTemplate mit den gegebenen Kriterien existiert
+//    boolean exists = query.getResultList().stream().anyMatch(textTemplate ->
+//        new HashSet<>(textTemplate.getReferenceReasons()).containsAll(referenceReasons) &&
+//            new HashSet<>(textTemplate.getGenders()).containsAll(genders));
+//
+//    if (!exists) {
+//      TextTemplate newTextTemplate = new TextTemplate();
+//      newTextTemplate.setKey(key);
+//      newTextTemplate.setTemplate(template);
+//      newTextTemplate.setReferenceReasons(referenceReasons);
+//      newTextTemplate.setGenders(genders);
+//      newTextTemplate.setTextType(textType);
+//
+//      em.persist(newTextTemplate);
+//    }
+//  }
+//  @Transactional
+//  private void createReferenceReasonIfNotExists(String reasonName) {
+//    if (em.createQuery("SELECT r FROM ReferenceReason r WHERE r.reasonName = :reasonName",
+//            ReferenceReason.class)
+//        .setParameter("reasonName", reasonName)
+//        .getResultList().isEmpty()) {
+//      ReferenceReason referenceReason = new ReferenceReason();
+//      referenceReason.setReasonName(reasonName);
+//      em.persist(referenceReason);
+//    }
+//  }
+//  @Transactional
+//  private void createTextTypeIfNotExists(String typeName) {
+//    if (em.createQuery("SELECT t FROM TextType t WHERE t.textTypeName = :typeName",
+//            TextType.class)
+//        .setParameter("typeName", typeName)
+//        .getResultList().isEmpty()) {
+//      TextType textType = new TextType();
+//      textType.setTextTypeName(typeName);
+//      em.persist(textType);
+//    }
+//  }
+//  @Transactional
+//  private void createPropertyIfNotExists(String propertyName) {
+//    if (em.createQuery("SELECT p FROM Property p WHERE p.propertyName = :propertyName",
+//            Property.class)
+//        .setParameter("propertyName", propertyName)
+//        .getResultList().isEmpty()) {
+//      Property property = new Property();
+//      property.setPropertyName(propertyName);
+//      em.persist(property);
+//    }
+//  }
+//  @Transactional
+//  private void createGenderIfNotExists(String genderName) {
+//    if (em.createQuery("SELECT g FROM Gender g WHERE g.genderName = :genderName",
+//            Gender.class)
+//        .setParameter("genderName", genderName)
+//        .getResultList().isEmpty()) {
+//      Gender gender = new Gender();
+//      gender.setGenderName(genderName);
+//      em.persist(gender);
+//    }
+//  }
+//  @Transactional
+//  private void createRoleIfNotExists(String roleName) {
+//    if (em.createQuery("SELECT r FROM Role r WHERE r.roleName = :roleName", Role.class)
+//        .setParameter("roleName", roleName)
+//        .getResultList().isEmpty()) {
+//      Role role = new Role(roleName);
+//      em.persist(role);
+//    }
+//  }
+//  @Transactional
+//  private void createDepartmentIfNotExists(String departmentName) {
+//    if (em.createQuery(
+//            "SELECT d FROM Department d WHERE d.departmentName = :departmentName", Department.class)
+//        .setParameter("departmentName", departmentName)
+//        .getResultList().isEmpty()) {
+//      Department department = new Department();
+//      department.setDepartmentName(departmentName);
+//      em.persist(department);
+//    }
+//  }
+//  @Transactional
+//  private void createPositionIfNotExists(String positionName) {
+//    if (em.createQuery("SELECT p FROM Position p WHERE p.positionName = :positionName",
+//            Position.class)
+//        .setParameter("positionName", positionName)
+//        .getResultList().isEmpty()) {
+//      Position position = new Position();
+//      position.setPositionName(positionName);
+//      em.persist(position);
+//    }
+//  }
   @Transactional
   private void createRandomEmployees(int count) {
     // Überprüfen, ob bereits Mitarbeiter in der Datenbank existieren
-    long employeeCount = (long) entityManager.createQuery("SELECT COUNT(e) FROM Employee e")
-        .getSingleResult();
+    long employeeCount = employeeService.countEmployees();
     if (employeeCount > 0) {
       // Es gibt bereits Mitarbeiter, also keine neuen hinzufügen
       return;
@@ -296,15 +309,13 @@ public class AppInitSingleton {
       if (randomGender != null) {
         employee.setGender(randomGender);
       }
-      employeeDao.save(employee);
-//      entityManager.persist(employee);
+      employeeService.saveEmployee(employee);
     }
   }
 
   private Gender getRandomGender() {
     // Annahme: Alle vorhandenen Geschlechter abrufen
-    List<Gender> genders = entityManager.createQuery("SELECT g FROM Gender g", Gender.class)
-        .getResultList();
+    List<Gender> genders = genderService.getAllGenders();
 
     if (!genders.isEmpty()) {
       return genders.get(random.nextInt(genders.size()));
@@ -317,9 +328,7 @@ public class AppInitSingleton {
   // Methode zum Abrufen einer zufälligen Abteilung aus der Datenbank
   private Department getRandomDepartment() {
     // Annahme: Alle vorhandenen Abteilungen abrufen
-    List<Department> departments = entityManager.createQuery("SELECT d FROM Department d",
-            Department.class)
-        .getResultList();
+    List<Department> departments = departmentService.getAllDepartments();
 
     if (!departments.isEmpty()) {
       return departments.get(random.nextInt(departments.size()));
@@ -331,8 +340,7 @@ public class AppInitSingleton {
   // Methode zum Abrufen einer zufälligen Position aus der Datenbank
   private Position getRandomPosition() {
     // Annahme: Alle vorhandenen Positionen abrufen
-    List<Position> positions = entityManager.createQuery("SELECT p FROM Position p", Position.class)
-        .getResultList();
+    List<Position> positions = positionService.getAllPositions();
 
     if (!positions.isEmpty()) {
       return positions.get(random.nextInt(positions.size()));

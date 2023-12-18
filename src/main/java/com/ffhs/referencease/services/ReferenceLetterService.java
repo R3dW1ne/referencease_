@@ -116,7 +116,7 @@ public class ReferenceLetterService implements IReferenceLetterService {
   }
 
   private String generateIntroductionText(EmployeeData data, List<TextTemplate> templates, ReferenceReason reason) {
-    boolean isZwischenzeugnis = reason.getName().equals("Zwischenzeugnis");
+    boolean isZwischenzeugnis = reason.getReasonName().equals("Zwischenzeugnis");
 
     StringBuilder introduction = new StringBuilder();
     introduction.append(data.firstName).append(" ").append(data.lastName);

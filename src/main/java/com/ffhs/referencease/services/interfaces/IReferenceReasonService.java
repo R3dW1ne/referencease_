@@ -8,5 +8,9 @@ public interface IReferenceReasonService {
 
   ReferenceReason getReferenceReasonById(UUID id);
 
+  ReferenceReason getReferenceReasonByReasonName(String name);
+
   List<ReferenceReason> getAllReferenceReasons();
+
+  void createReferenceReasonIfNotExists(String displayName);
 }

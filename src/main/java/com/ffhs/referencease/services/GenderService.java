@@ -43,6 +43,15 @@ public class GenderService implements IGenderService {
     return genderDAO.getAllGenders();
   }
 
+  @Override
+  public void createGenderIfNotExists(String displayName) {
+    if (genderDAO.findByName(displayName).isEmpty()){
+      Gender gender = new Gender();
+      gender.setGenderName(displayName);
+      genderDAO.create(gender);
+    }
+  }
+
 //  @Override
 //  public List<GenderDTO> getAllGenders() {
 //    // Hier rufen Sie alle Geschlechter aus der Datenbank ab und konvertieren sie in DTOs

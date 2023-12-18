@@ -53,4 +53,13 @@ public class RoleService implements IRoleService {
   public Role toRole(RoleDTO roleDTO) {
     return new Role(roleDTO.getRoleId(), roleDTO.getRoleName());
   }
+
+  @Override
+  public void createRoleIfNotExists(String roleName) {
+    if (roleDAO.findByRoleName(roleName).isEmpty()){
+      Role role = new Role();
+      role.setRoleName(roleName);
+      roleDAO.create(role);
+    }
+  }
 }

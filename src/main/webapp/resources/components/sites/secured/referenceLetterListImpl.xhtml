@@ -19,8 +19,8 @@
                     <h:outputText
                             value="#{referenceLetter.employee.firstName} #{referenceLetter.employee.lastName}"/>
                 </p:column>
-                <p:column headerText="Grund" sortBy="#{referenceLetter.referenceReason.name}">
-                    <h:outputText value="#{referenceLetter.referenceReason.name}"/>
+                <p:column headerText="Grund" sortBy="#{referenceLetter.referenceReason.reasonName}">
+                    <h:outputText value="#{referenceLetter.referenceReason.reasonName}"/>
                 </p:column>
                 <p:column headerText="Ausstellungsdatum" sortBy="#{referenceLetter.deliveryDate}">
                     <h:outputText value="#{referenceLetter.deliveryDate.toString()}">

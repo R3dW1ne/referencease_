@@ -31,5 +31,14 @@ public class PositionService implements IPositionService {
     return positionDao.findAll();
   }
 
+  @Override
+  public void createPositionIfNotExists(String positionName) {
+    if (positionDao.findByName(positionName).isEmpty()) {
+      Position position = new Position();
+      position.setPositionName(positionName);
+      positionDao.create(position);
+    }
+  }
+
 
 }

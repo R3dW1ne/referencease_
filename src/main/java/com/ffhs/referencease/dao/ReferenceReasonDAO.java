@@ -2,10 +2,11 @@ package com.ffhs.referencease.dao;
 
 import com.ffhs.referencease.dao.interfaces.IReferenceReasonDAO;
 import com.ffhs.referencease.entities.ReferenceReason;
+import com.ffhs.referencease.producers.qualifiers.ProdPU;
 import jakarta.ejb.Stateless;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -13,16 +14,37 @@ import java.util.UUID;
 @Stateless
 public class ReferenceReasonDAO implements IReferenceReasonDAO {
 
-  @PersistenceContext
-  private EntityManager entityManager;
+  @PersistenceContext(unitName = "default")
+  private EntityManager em;
 
   @Override
   public Optional<ReferenceReason> findById(UUID id) {
-    return Optional.ofNullable(entityManager.find(ReferenceReason.class, id));
+    return Optional.ofNullable(em.find(ReferenceReason.class, id));
   }
 
   @Override
   public List<ReferenceReason> findAll() {
-    return entityManager.createQuery("SELECT r FROM ReferenceReason r", ReferenceReason.class).getResultList();
+    return em.createQuery("SELECT r FROM ReferenceReason r", ReferenceReason.class).getResultList();
+  }
+
+  @Override
+  public Optional<ReferenceReason> findByReasonName(String reasonName) {
+    try {
+      ReferenceReason referenceReason = em.createQuery("SELECT r FROM ReferenceReason r WHERE r.reasonName = :reasonName", ReferenceReason.class)
+          .setParameter("reasonName", reasonName)
+          .getSingleResult();
+      return Optional.of(referenceReason);
+    } catch (Exception e) {
+      return Optional.empty();
+    }
+  }
+
+  @Override
+  public void save(ReferenceReason referenceReason) {
+    if (referenceReason.getReferenceReasonId() == null) {
+      em.persist(referenceReason);
+    } else {
+      em.merge(referenceReason);
+    }
   }
 }

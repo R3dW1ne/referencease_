@@ -22,56 +22,52 @@ public class EmployeeService implements IEmployeeService {
 
   private final IEmployeeDAO employeeDao;
   private final IReferenceLetterService referenceLetterService;
-
   private final ModelMapper modelMapper;
 
   @Inject
-  public EmployeeService(IEmployeeDAO employeeDao, IReferenceLetterService referenceLetterService, ModelMapper modelMapper) {
+  public EmployeeService(IEmployeeDAO employeeDao, IReferenceLetterService referenceLetterService,
+      ModelMapper modelMapper) {
     this.employeeDao = employeeDao;
     this.referenceLetterService = referenceLetterService;
     this.modelMapper = modelMapper;
   }
 
-
-//  @Override
-//  public Optional<EmployeeDTO> getEmployee(UUID id) {
-//    return employeeDao.find(id).map(this::convertToDTO);
-//  }
-
   @Override
   public EmployeeDTO getEmployee(UUID id) {
-    Optional<Employee> employee = employeeDao.find(id);
-    if (employee.isPresent()) {
-      return convertToDTO(employee.get());
-    } else {
-      return null;
-    }
+    return employeeDao.find(id).map(this::convertToDTO).orElse(null);
   }
 
   @Override
   public List<EmployeeDTO> getAllEmployees() {
-    return employeeDao.findAll().stream()
-        .map(this::convertToDTO)
-        .collect(Collectors.toList());
+    return employeeDao.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
   }
 
   @Override
-  public void saveEmployee(EmployeeDTO employeeDTO) {
-    Employee employee = modelMapper.map(employeeDTO, Employee.class);
+  public long countEmployees() {
+    return employeeDao.countEmployees();
+  }
+
+
+  @Override
+  public void saveEmployee(Employee employee) {
     employeeDao.save(employee);
   }
 
   @Override
-  public OperationResult<EmployeeDTO> saveOrUpdateEmployee(EmployeeDTO employeeDTO) throws BusinessException{
+  public OperationResult<EmployeeDTO> saveOrUpdateEmployee(EmployeeDTO employeeDTO)
+      throws BusinessException {
     EmployeeDTO existingEmployee = getEmployeeByEmployeeNumber(employeeDTO.getEmployeeNumber());
     boolean isNewEmployee = employeeDTO.getEmployeeId() == null;
 
-    if (existingEmployee != null && (isNewEmployee || !existingEmployee.getEmployeeId().equals(employeeDTO.getEmployeeId()))) {
-      return OperationResult.failure("Mitarbeiternummer bereits von einem anderen Mitarbeiter vergeben.");
+    if (existingEmployee != null && (isNewEmployee || !existingEmployee.getEmployeeId()
+        .equals(employeeDTO.getEmployeeId()))) {
+      return OperationResult.failure(
+          "Mitarbeiternummer bereits von einem anderen Mitarbeiter vergeben.");
     }
 
     Employee employeeEntity = convertToEntity(employeeDTO);
-    Employee savedEmployee = isNewEmployee ? saveEmployeeInternal(employeeEntity) : updateEmployeeInternal(employeeEntity);
+    Employee savedEmployee = isNewEmployee ? saveEmployeeInternal(employeeEntity)
+        : updateEmployeeInternal(employeeEntity);
     return OperationResult.success(convertToDTO(savedEmployee));
   }
 
@@ -84,68 +80,11 @@ public class EmployeeService implements IEmployeeService {
     return employeeDao.update(employee);
   }
 
-//  @Override
-//  public boolean saveOrUpdateEmployee(EmployeeDTO employeeDTO,
-//      ReferenceLetterBean referenceLetterBean) {
-//    Employee employee = modelMapper.map(employeeDTO, Employee.class);
-//
-//    // Überprüfen, ob der Employee neu ist oder aktualisiert werden soll
-//    boolean isNewEmployee = employee.getEmployeeId() == null;
-//
-//    // Überprüfen, ob ein anderer Employee mit derselben EmployeeNumber existiert
-//    EmployeeDTO existingEmployee = getEmployeeByEmployeeNumber(employeeDTO.getEmployeeNumber());
-//    if (existingEmployee != null && (!isNewEmployee && !existingEmployee.getEmployeeId().equals(employee.getEmployeeId()))) {
-//      return false; // EmployeeNumber ist bereits vergeben
-//    }
-//
-////    if (Boolean.TRUE.equals(referenceLetterBean.getListSelectionNeeded())) {
-////      Employee employeeForReferenceLetter = convertToEntity(referenceLetterBean.getEmployeeAsDTO());
-////      referenceLetterBean.getReferenceLetter().setEmployee(employeeForReferenceLetter);
-////    }
-//
-//    if (isNewEmployee) {
-//      employeeDao.save(employee);
-//    } else {
-//      employeeDao.update(employee);
-//    }
-//    return true; // Operation erfolgreich
-//  }
-
   @Override
   public void deleteEmployee(EmployeeDTO employeeDTO) {
     UUID employeeId = employeeDTO.getEmployeeId();
-
-    // Referenzbriefe des Mitarbeiters abrufen und löschen
-    List<ReferenceLetter> referenceLetters = referenceLetterService.findReferenceLettersByEmployeeId(employeeId);
-    for (ReferenceLetter letter : referenceLetters) {
-      // Optional: Informationen des Mitarbeiters im Referenzbrief speichern, bevor der Mitarbeiter gelöscht wird
-      // Beispiel:
-      // letter.setEmployeeName(employeeDTO.getFirstName() + " " + employeeDTO.getLastName());
-      // letter.setEmployeePosition(employeeDTO.getPosition().getPositionName());
-      // letter.setEmployeeDepartment(employeeDTO.getDepartment().getDepartmentName());
-      // letter.setEmployee(null); // Entfernen der Verbindung zum Mitarbeiter
-      // referenceLetterService.updateReferenceLetter(letter); // Speichern der Änderungen
-      referenceLetterService.deleteReferenceLetter(letter.getReferenceId());
-    }
-
-    // Mitarbeiter löschen
+    referenceLetterService.findReferenceLettersByEmployeeId(employeeId).forEach(letter -> referenceLetterService.deleteReferenceLetter(letter.getReferenceId()));
     employeeDao.deleteById(employeeId);
-}
-
-
-//  @Override
-//  public void deleteEmployee(EmployeeDTO employeeDTO) {
-//    employeeDao.delete(convertToEntity(employeeDTO));
-//  }
-
-  @Override
-  public void deleteEmployeeById(UUID id) {
-    employeeDao.deleteById(id);
-  }
-
-  @Override
-  public EmployeeDTO updateEmployee(EmployeeDTO employeeDTO) {
-    return convertToDTO(employeeDao.update(convertToEntity(employeeDTO)));
   }
 
   @Override
@@ -155,19 +94,16 @@ public class EmployeeService implements IEmployeeService {
 
   @Override
   public EmployeeDTO getEmployeeByEmployeeNumber(String employeeNumber) {
-    Optional<Employee> employee = employeeDao.findByEmployeeNumber(employeeNumber);
-    return employee.map(this::convertToDTO).orElse(null);
+    return employeeDao.findByEmployeeNumber(employeeNumber).map(this::convertToDTO).orElse(null);
   }
 
   @Override
-  // Hilfsmethode zur Konvertierung von Entity zu DTO
   public EmployeeDTO convertToDTO(Employee employee) {
-    return new EmployeeDTO(employee);
+    return modelMapper.map(employee, EmployeeDTO.class);
   }
 
   @Override
-  // Hilfsmethode zur Konvertierung von DTO zu Entity
   public Employee convertToEntity(EmployeeDTO dto) {
-    return new Employee(dto);
+    return modelMapper.map(dto, Employee.class);
   }
 }

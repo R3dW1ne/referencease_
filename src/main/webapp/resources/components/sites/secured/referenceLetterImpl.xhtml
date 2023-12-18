@@ -19,7 +19,7 @@
                         <f:selectItems id="reason" value="#{referenceLetterBean.referenceReasons}"
                                        var="reason"
                                        itemValue="#{reason}"
-                                       itemLabel="#{reason.name}"/>
+                                       itemLabel="#{reason.reasonName}"/>
                         <p:ajax event="change"
                                 listener="#{referenceLetterBean.updateSelectedReferenceReason}"
                                 update="endDateWrapper"/>

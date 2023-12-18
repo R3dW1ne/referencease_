@@ -10,8 +10,7 @@ import java.util.UUID;
 public interface IRoleService {
   Role findById(UUID roleId) throws PositionNotFoundException;
   Set<Role> findByRoleName(String roleName) throws PositionNotFoundException;
-
   RoleDTO toDTO(Role role);
-
   Role toRole(RoleDTO roleDTO);
+  void createRoleIfNotExists(String roleName);
 }

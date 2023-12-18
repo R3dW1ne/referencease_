@@ -8,4 +8,6 @@ import java.util.UUID;
 public interface IRoleDAO {
   Optional<Role> findById(UUID roleId);
   Set<Role> findByRoleName(String roleName);
+
+  void create(Role role);
 }

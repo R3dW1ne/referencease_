@@ -12,5 +12,7 @@ public interface IGenderService {
   GenderDTO getGenderDTO(UUID id);
 
   List<Gender> getAllGenders();
+
+  void createGenderIfNotExists(String displayName);
   // Weitere Methoden nach Bedarf
 }

@@ -2,7 +2,9 @@ package com.ffhs.referencease.dao;
 
 import com.ffhs.referencease.dao.interfaces.IRoleDAO;
 import com.ffhs.referencease.entities.Role;
+import com.ffhs.referencease.producers.qualifiers.ProdPU;
 import jakarta.ejb.Stateless;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
@@ -14,7 +16,7 @@ import java.util.UUID;
 @Stateless
 public class RoleDAO implements IRoleDAO {
 
-  @PersistenceContext
+  @PersistenceContext(unitName = "default")
   private EntityManager em;
 
   @Override
@@ -27,5 +29,10 @@ public class RoleDAO implements IRoleDAO {
     return new HashSet<>(em.createQuery("SELECT r FROM Role r WHERE r.roleName = :roleName", Role.class)
         .setParameter("roleName", roleName)
         .getResultList());
+  }
+
+  @Override
+  public void create(Role role) {
+    em.persist(role);
   }
 }
