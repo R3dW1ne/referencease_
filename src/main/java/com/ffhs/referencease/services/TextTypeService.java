@@ -13,6 +13,7 @@ public class TextTypeService implements ITextTypeService {
 
 
   private final ITextTypeDAO textTypeDAO;
+
   @Inject
   public TextTypeService(ITextTypeDAO textTypeDAO) {
     this.textTypeDAO = textTypeDAO;
@@ -20,14 +21,16 @@ public class TextTypeService implements ITextTypeService {
 
   @Override
   public TextType getTextTypeByName(String name) {
-    return textTypeDAO.findByName(name)
-        .orElseThrow(() -> new IllegalArgumentException("TextType mit dem Namen " + name + " nicht gefunden"));
+    return textTypeDAO.findByName(name).orElseThrow(
+        () -> new IllegalArgumentException("TextType mit dem Namen " + name + " nicht gefunden"));
   }
+
   @Override
   public TextType getTextTypeById(UUID id) {
-    return textTypeDAO.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("TextType mit ID " + id + " nicht gefunden"));
+    return textTypeDAO.findById(id).orElseThrow(
+        () -> new IllegalArgumentException("TextType mit ID " + id + " nicht gefunden"));
   }
+
   @Override
   public List<TextType> getAllTextTypes() {
     return textTypeDAO.findAll();

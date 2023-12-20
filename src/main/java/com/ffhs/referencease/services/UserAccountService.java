@@ -15,7 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Stateless
-public class UserAccountService implements IUserAccountService{
+public class UserAccountService implements IUserAccountService {
+
   private static final Logger LOGGER = LoggerFactory.getLogger(UserAccountService.class);
 
   private final IRoleService roleService;
@@ -60,11 +61,7 @@ public class UserAccountService implements IUserAccountService{
     UserAccount userAccount = new UserAccount();
     userAccount.setEmail(dto.getEmail());
     userAccount.setPassword(PBKDF2Hash.createHash(dto.getPassword()));
-    try {
-      userAccount.setRoles(roleService.findByRoleName("User"));
-    } catch (PositionNotFoundException e) {
-      LOGGER.info(e.getMessage());
-    }
+    userAccount.setRoles(roleService.findByRoleName("User"));
     userAccountDAO.save(userAccount);
   }
 

@@ -7,10 +7,12 @@ import jakarta.validation.ConstraintValidatorContext;
 
 public class ValidRegistrationUserDTOValidator implements
     ConstraintValidator<ValidRegistrationUserDTO, UserAccountDTO> {
+
   @Override
   public void initialize(ValidRegistrationUserDTO constraintAnnotation) {
     ConstraintValidator.super.initialize(constraintAnnotation);
   }
+
   @Override
   public boolean isValid(UserAccountDTO value, ConstraintValidatorContext context) {
     if (value == null) {

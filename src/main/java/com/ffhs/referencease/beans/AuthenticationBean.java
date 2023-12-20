@@ -5,8 +5,6 @@ import com.ffhs.referencease.exceptionhandling.PositionNotFoundException;
 import com.ffhs.referencease.services.interfaces.IAuthenticationService;
 import com.ffhs.referencease.services.interfaces.IUserAccountService;
 import com.ffhs.referencease.utils.PBKDF2Hash;
-import com.ffhs.referencease.valadators.annotations.ValidRegistrationUserDTO;
-import com.ffhs.referencease.valadators.group_interfaces.RegistrationGroup;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
@@ -16,10 +14,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.executable.ValidateOnExecution;
-import jakarta.validation.groups.ConvertGroup;
 import java.io.Serial;
 import java.io.Serializable;
 import lombok.Getter;
@@ -34,9 +29,6 @@ public class AuthenticationBean implements Serializable {
 
   @Serial
   private static final long serialVersionUID = 1L;
-
-//  @Inject
-//  private Logger LOGGER = LoggerFactory.getLogger(AuthenticationBean.class);
 
   private final transient IUserAccountService userAccountService;
 
@@ -77,7 +69,8 @@ public class AuthenticationBean implements Serializable {
   }
 
 
-  public String loginWithValidRegistrationUserDTOValidator(UserAccountDTO userAccountDTO) throws PositionNotFoundException{
+  public String loginWithValidRegistrationUserDTOValidator(UserAccountDTO userAccountDTO)
+      throws PositionNotFoundException {
     return login();
   }
 
@@ -90,8 +83,9 @@ public class AuthenticationBean implements Serializable {
       userAccountDTO = userAccountService.getUserByEmail(emailInput);
     } catch (PositionNotFoundException e) {
       FacesContext.getCurrentInstance().addMessage(null,
-          new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler",
-              "Keinen Benutzer unter diese Email-Adresse gefunden! \n Bitte registrieren Sie sich zuerst."));
+                                                   new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                                                    "Fehler",
+                                                                    "Keinen Benutzer unter diese Email-Adresse gefunden! \n Bitte registrieren Sie sich zuerst."));
       return "/resources/components/sites/login.xhtml";
     }
 
@@ -107,16 +101,17 @@ public class AuthenticationBean implements Serializable {
       // Setzen einer Erfolgsmeldung im Flash Scope
       FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
       FacesContext.getCurrentInstance().addMessage(null,
-          new FacesMessage(FacesMessage.SEVERITY_INFO, "Sie sind angemeldet.", null));
+                                                   new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                                                    "Sie sind angemeldet.", null));
 
       // Navigate to landing page
       return "/resources/components/sites/secured/home.xhtml?faces-redirect=true";
     }
     this.authenticated = false;
     setUserAccountDTO(null);
-    FacesContext.getCurrentInstance().addMessage(null,
-        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler",
-            "Login aufgrund eines falschen Passworts fehlgeschlagen!"));
+    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                                                        "Fehler",
+                                                                        "Login aufgrund eines falschen Passworts fehlgeschlagen!"));
 
     return "/resources/components/sites/login.xhtml?error=true";
   }
@@ -131,9 +126,9 @@ public class AuthenticationBean implements Serializable {
     externalContext.invalidateSession();
     // Setzen einer Erfolgsmeldung im Flash Scope
     FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-    FacesContext.getCurrentInstance().addMessage(null,
-        new FacesMessage(FacesMessage.SEVERITY_INFO, "Erfolgreich abgemeldet",
-            "Wir wünschen Ihnen einen sonnigen Tag!"));
+    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                                                        "Erfolgreich abgemeldet",
+                                                                        "Wir wünschen Ihnen einen sonnigen Tag!"));
 
     // Navigate back to main-page
     return "/resources/components/sites/login.xhtml?faces-redirect=true";
@@ -150,11 +145,4 @@ public class AuthenticationBean implements Serializable {
     return authenticated;
   }
 
-//  public void validatePasswords() {
-//    if (userAccountDTO != null && (userAccountDTO.getPassword() != null && userAccountDTO.getConfirmPassword() != null && !userAccountDTO.getPassword().equals(userAccountDTO.getConfirmPassword()))) {
-//        FacesContext.getCurrentInstance().addMessage("registerForm:confirmPassword",
-//            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Passwords must match.", null));
-//
-//    }
-//  }
 }

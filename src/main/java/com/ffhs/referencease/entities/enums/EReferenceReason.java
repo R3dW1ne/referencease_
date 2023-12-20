@@ -4,9 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum EReferenceReason {
-  ABSCHLUSSZEUGNIS("Abschlusszeugnis"),
-  ZWISCHENZEUGNIS("Zwischenzeugnis"),
-  POSITIONSWECHSEL("Positionswechsel");
+  ABSCHLUSSZEUGNIS("Abschlusszeugnis"), ZWISCHENZEUGNIS("Zwischenzeugnis"), POSITIONSWECHSEL(
+      "Positionswechsel");
 
   private final String displayName;
 

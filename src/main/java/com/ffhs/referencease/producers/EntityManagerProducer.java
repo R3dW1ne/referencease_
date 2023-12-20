@@ -11,6 +11,7 @@ import jakarta.persistence.Persistence;
 
 @ApplicationScoped
 public class EntityManagerProducer {
+
   private EntityManagerFactory emf;
 
   @PostConstruct

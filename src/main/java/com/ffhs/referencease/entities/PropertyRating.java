@@ -31,7 +31,7 @@ public class PropertyRating implements Serializable {
   private Property property;
 
   @ManyToOne
-  @JoinColumn(name="referenceId", nullable=false)
+  @JoinColumn(name = "referenceId", nullable = false)
   private ReferenceLetter referenceLetter;
 
   @ManyToOne

@@ -1,8 +1,6 @@
 package com.ffhs.referencease.entities;
 
 import com.ffhs.referencease.converters.jpa.UUIDConverter;
-import com.ffhs.referencease.dto.EmployeeDTO;
-import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,20 +27,6 @@ public class Employee implements Serializable {
 
   @Serial
   private static final long serialVersionUID = 1L;
-
-  public Employee(EmployeeDTO dto) {
-    this.employeeId = dto.getEmployeeId();
-    this.employeeNumber = dto.getEmployeeNumber();
-    this.firstName = dto.getFirstName();
-    this.lastName = dto.getLastName();
-    this.dateOfBirth = dto.getDateOfBirth();
-//    this.placeOfOrigin = dto.getPlaceOfOrigin();
-    this.phone = dto.getPhone();
-    this.startDate = dto.getStartDate();
-    this.gender = dto.getGender();
-    this.position = dto.getPosition();
-    this.department = dto.getDepartment();
-  }
 
   @Id
   @GeneratedValue

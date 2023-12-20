@@ -1,19 +1,26 @@
 package com.ffhs.referencease.entities;
 
 import com.ffhs.referencease.converters.jpa.UUIDConverter;
-import jakarta.persistence.*;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.UUID;
 import lombok.Data;
-import org.hibernate.annotations.Cascade;
 
 
 @Entity
 @Data
 @Table(name = "ReferenceLetter")
 public class ReferenceLetter implements Serializable {
+
   @Serial
   private static final long serialVersionUID = 1L;
 

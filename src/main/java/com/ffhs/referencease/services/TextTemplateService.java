@@ -21,6 +21,7 @@ public class TextTemplateService implements ITextTemplateService {
 
 
   private final ITextTemplateDAO textTemplateDAO;
+
   @Inject
   public TextTemplateService(ITextTemplateDAO textTemplateDAO) {
     this.textTemplateDAO = textTemplateDAO;
@@ -59,13 +60,14 @@ public class TextTemplateService implements ITextTemplateService {
   @Override
   public List<TextTemplate> getTextTemplatesForReasonTypeAndGender(ReferenceReason reason,
       TextType textType, Gender gender) {
-    return textTemplateDAO.getTextTemplatesForReasonTypeAndGender(reason,textType,gender);
+    return textTemplateDAO.getTextTemplatesForReasonTypeAndGender(reason, textType, gender);
   }
 
   @Override
   public void createTextTemplateIfNotExists(String key, String value,
       List<ReferenceReason> associatedReferenceReasons, List<Gender> associatedGenders,
       TextType textType) {
-    textTemplateDAO.createTextTemplateIfNotExists(key,value,associatedReferenceReasons,associatedGenders,textType);
+    textTemplateDAO.createTextTemplateIfNotExists(key, value, associatedReferenceReasons,
+                                                  associatedGenders, textType);
   }
 }

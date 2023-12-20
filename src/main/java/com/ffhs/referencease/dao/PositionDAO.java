@@ -2,9 +2,7 @@ package com.ffhs.referencease.dao;
 
 import com.ffhs.referencease.dao.interfaces.IPositionDAO;
 import com.ffhs.referencease.entities.Position;
-import com.ffhs.referencease.producers.qualifiers.ProdPU;
 import jakarta.ejb.Stateless;
-import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.List;
@@ -28,10 +26,9 @@ public class PositionDAO implements IPositionDAO {
 
   @Override
   public Optional<Position> findByName(String positionName) {
-    List<Position> results = em.createQuery("SELECT p FROM Position p WHERE p.positionName = :positionName",
-            Position.class)
-        .setParameter("positionName", positionName)
-        .getResultList();
+    List<Position> results = em.createQuery(
+            "SELECT p FROM Position p WHERE p.positionName = :positionName", Position.class)
+        .setParameter("positionName", positionName).getResultList();
     return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
   }
 

@@ -2,9 +2,7 @@ package com.ffhs.referencease.dao;
 
 import com.ffhs.referencease.dao.interfaces.IReferenceReasonDAO;
 import com.ffhs.referencease.entities.ReferenceReason;
-import com.ffhs.referencease.producers.qualifiers.ProdPU;
 import jakarta.ejb.Stateless;
-import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.List;
@@ -30,9 +28,9 @@ public class ReferenceReasonDAO implements IReferenceReasonDAO {
   @Override
   public Optional<ReferenceReason> findByReasonName(String reasonName) {
     try {
-      ReferenceReason referenceReason = em.createQuery("SELECT r FROM ReferenceReason r WHERE r.reasonName = :reasonName", ReferenceReason.class)
-          .setParameter("reasonName", reasonName)
-          .getSingleResult();
+      ReferenceReason referenceReason = em.createQuery(
+              "SELECT r FROM ReferenceReason r WHERE r.reasonName = :reasonName", ReferenceReason.class)
+          .setParameter("reasonName", reasonName).getSingleResult();
       return Optional.of(referenceReason);
     } catch (Exception e) {
       return Optional.empty();

@@ -2,8 +2,8 @@ package com.ffhs.referencease.dto;
 
 import java.io.Serial;
 import java.io.Serializable;
-import lombok.Data;
 import java.util.UUID;
+import lombok.Data;
 
 @Data
 public class GenderDTO implements Serializable {

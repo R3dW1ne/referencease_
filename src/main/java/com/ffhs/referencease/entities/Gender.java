@@ -18,6 +18,7 @@ import lombok.Data;
 @Data
 @Table(name = "Gender")
 public class Gender implements Serializable {
+
   @Serial
   private static final long serialVersionUID = 1L;
 

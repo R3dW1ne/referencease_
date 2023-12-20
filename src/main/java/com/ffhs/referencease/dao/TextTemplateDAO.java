@@ -5,10 +5,8 @@ import com.ffhs.referencease.entities.Gender;
 import com.ffhs.referencease.entities.ReferenceReason;
 import com.ffhs.referencease.entities.TextTemplate;
 import com.ffhs.referencease.entities.TextType;
-import com.ffhs.referencease.producers.qualifiers.ProdPU;
-import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
 import jakarta.ejb.Stateless;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
@@ -53,14 +51,14 @@ public class TextTemplateDAO implements ITextTemplateDAO {
   public void delete(TextTemplate textTemplate) {
     em.remove(textTemplate);
   }
+
   @Override
   public List<TextTemplate> getTextTemplatesForReasonTypeAndGender(ReferenceReason reason,
       TextType textType, Gender gender) {
-    return em.createQuery("SELECT tt FROM TextTemplate tt JOIN tt.referenceReasons rr JOIN tt.genders g WHERE rr = :reason AND tt.textType = :textType AND g = :gender", TextTemplate.class)
-        .setParameter("reason", reason)
-        .setParameter("textType", textType)
-        .setParameter("gender", gender)
-        .getResultList();
+    return em.createQuery(
+            "SELECT tt FROM TextTemplate tt JOIN tt.referenceReasons rr JOIN tt.genders g WHERE rr = :reason AND tt.textType = :textType AND g = :gender",
+            TextTemplate.class).setParameter("reason", reason).setParameter("textType", textType)
+        .setParameter("gender", gender).getResultList();
   }
 
   @Override
@@ -70,14 +68,13 @@ public class TextTemplateDAO implements ITextTemplateDAO {
     // Erstellt eine Query, die alle Bedingungen überprüft
     String queryStr = "SELECT t FROM TextTemplate t WHERE t.key = :key AND t.template = :template AND t.textType = :textType";
     TypedQuery<TextTemplate> query = em.createQuery(queryStr, TextTemplate.class)
-        .setParameter("key", key)
-        .setParameter("template", template)
+        .setParameter("key", key).setParameter("template", template)
         .setParameter("textType", textType);
 
     // Prüft, ob ein TextTemplate mit den gegebenen Kriterien existiert
-    boolean exists = query.getResultList().stream().anyMatch(textTemplate ->
-        new HashSet<>(textTemplate.getReferenceReasons()).containsAll(referenceReasons) &&
-            new HashSet<>(textTemplate.getGenders()).containsAll(genders));
+    boolean exists = query.getResultList().stream().anyMatch(textTemplate -> new HashSet<>(
+        textTemplate.getReferenceReasons()).containsAll(referenceReasons) && new HashSet<>(
+        textTemplate.getGenders()).containsAll(genders));
 
     if (!exists) {
       TextTemplate newTextTemplate = new TextTemplate();

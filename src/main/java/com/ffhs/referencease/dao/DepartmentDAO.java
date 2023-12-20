@@ -2,15 +2,12 @@ package com.ffhs.referencease.dao;
 
 import com.ffhs.referencease.dao.interfaces.IDepartmentDAO;
 import com.ffhs.referencease.entities.Department;
-import com.ffhs.referencease.producers.qualifiers.ProdPU;
 import com.ffhs.referencease.utils.PU_Name;
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.Stateless;
-import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import jakarta.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,10 +34,9 @@ public class DepartmentDAO implements IDepartmentDAO {
 
   @Override
   public Optional<Department> findByName(String departmentName) {
-    List<Department> results = em.createQuery("SELECT d FROM Department d WHERE d.departmentName = :departmentName",
-            Department.class)
-        .setParameter("departmentName", departmentName)
-        .getResultList();
+    List<Department> results = em.createQuery(
+            "SELECT d FROM Department d WHERE d.departmentName = :departmentName", Department.class)
+        .setParameter("departmentName", departmentName).getResultList();
     return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
   }
 

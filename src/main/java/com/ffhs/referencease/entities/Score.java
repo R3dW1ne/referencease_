@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 public class Score implements Serializable {
+
   @Serial
   private static final long serialVersionUID = 1L;
 

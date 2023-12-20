@@ -13,6 +13,7 @@ import lombok.Data;
 @Data
 @Entity
 public class Property implements Serializable {
+
   @Serial
   private static final long serialVersionUID = 1L;
 

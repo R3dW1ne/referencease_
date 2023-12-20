@@ -2,11 +2,9 @@ package com.ffhs.referencease.dao;
 
 import com.ffhs.referencease.dao.interfaces.IReferenceLetterDAO;
 import com.ffhs.referencease.entities.ReferenceLetter;
-import com.ffhs.referencease.producers.qualifiers.ProdPU;
-import jakarta.inject.Inject;
+import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.ejb.Stateless;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -26,7 +24,8 @@ public class ReferenceLetterDAO implements IReferenceLetterDAO {
 
   @Override
   public List<ReferenceLetter> findAll() {
-    return em.createQuery("SELECT rl FROM ReferenceLetter rl", ReferenceLetter.class).getResultList();
+    return em.createQuery("SELECT rl FROM ReferenceLetter rl", ReferenceLetter.class)
+        .getResultList();
   }
 
   @Override
@@ -64,7 +63,8 @@ public class ReferenceLetterDAO implements IReferenceLetterDAO {
   @Override
   public List<ReferenceLetter> findReferenceLettersByEmployeeId(UUID employeeId) {
     TypedQuery<ReferenceLetter> query = em.createQuery(
-        "SELECT rl FROM ReferenceLetter rl WHERE rl.employee.employeeId = :employeeId", ReferenceLetter.class);
+        "SELECT rl FROM ReferenceLetter rl WHERE rl.employee.employeeId = :employeeId",
+        ReferenceLetter.class);
     query.setParameter("employeeId", employeeId);
     return query.getResultList();
   }

@@ -3,10 +3,8 @@ package com.ffhs.referencease.dao;
 import com.ffhs.referencease.dao.interfaces.IUserAccountDAO;
 import com.ffhs.referencease.entities.Role;
 import com.ffhs.referencease.entities.UserAccount;
-import com.ffhs.referencease.producers.qualifiers.ProdPU;
 import com.ffhs.referencease.utils.PBKDF2Hash;
 import jakarta.ejb.Stateless;
-import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
@@ -76,15 +74,14 @@ public class UserAccountDAO implements IUserAccountDAO {
   }
 
   public void assignRolesToUser(String userEmail, Set<String> roleNames) {
-    UserAccount user = em.createQuery("SELECT u FROM UserAccount u WHERE u.email = :email", UserAccount.class)
-        .setParameter("email", userEmail)
+    UserAccount user = em.createQuery("SELECT u FROM UserAccount u WHERE u.email = :email",
+                                      UserAccount.class).setParameter("email", userEmail)
         .getSingleResult();
 
     Set<Role> roles = user.getRoles();
     for (String roleName : roleNames) {
       Role role = em.createQuery("SELECT r FROM Role r WHERE r.roleName = :name", Role.class)
-          .setParameter("name", roleName)
-          .getSingleResult();
+          .setParameter("name", roleName).getSingleResult();
       roles.add(role);
     }
 

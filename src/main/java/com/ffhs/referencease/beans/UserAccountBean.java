@@ -39,7 +39,9 @@ public class UserAccountBean implements Serializable {
   public String register() {
     if (userAccountService.emailExists(userAccountDTO.getEmail())) {
       FacesContext.getCurrentInstance().addMessage("registerForm:messages",
-          new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler", "Es gibt bereits einen Benutzer mit dieser Email Adresse (Methoden-Validierung)."));
+                                                   new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                                                    "Fehler",
+                                                                    "Es gibt bereits einen Benutzer mit dieser Email Adresse (Methoden-Validierung)."));
       return null; // Bleibt auf der Registrierungsseite
     }
     // Erstellen einer Instanz des benutzerdefinierten Validators
@@ -49,7 +51,9 @@ public class UserAccountBean implements Serializable {
     if (!validator.isValid(userAccountDTO, null)) {
       // Validierung fehlgeschlagen
       FacesContext.getCurrentInstance().addMessage(null,
-          new FacesMessage(FacesMessage.SEVERITY_ERROR, "Das Passwort und die Passwortbestätigung stimmen nicht überein. (Custom-Validator)", null));
+                                                   new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                                                    "Das Passwort und die Passwortbestätigung stimmen nicht überein. (Custom-Validator)",
+                                                                    null));
       return null; // Bleibt auf der Registrierungsseite
     }
     // Passwort-Verschlüsselung und User-Persistierung im UserService
@@ -61,7 +65,9 @@ public class UserAccountBean implements Serializable {
 
     // Setzen einer Erfolgsmeldung im Flash Scope
     FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Benutzeraccount erfolgreich erstellt.", "Viel Spass! \n :)"));
+    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                                                        "Benutzeraccount erfolgreich erstellt.",
+                                                                        "Viel Spass! \n :)"));
 
     return "login?faces-redirect=true"; // Weiterleitung zur Login-Seite nach erfolgreicher Registrierung
   }

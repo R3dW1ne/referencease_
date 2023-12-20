@@ -4,8 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum EGender {
-  MAENNLICH("Männlich"),
-  WEIBLICH("Weiblich");
+  MAENNLICH("Männlich"), WEIBLICH("Weiblich");
 
   private final String displayName;
 

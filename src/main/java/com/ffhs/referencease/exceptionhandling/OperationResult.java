@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class OperationResult<T> {
+
   private final boolean success;
   private final T data;
   private final String errorMessage;

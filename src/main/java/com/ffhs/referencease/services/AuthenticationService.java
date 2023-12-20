@@ -19,9 +19,9 @@ public class AuthenticationService implements IAuthenticationService {
 
 
   //  @Override
-//  public boolean authenticate(String email, String password) {
-//    return false;
-//  }
+  //  public boolean authenticate(String email, String password) {
+  //    return false;
+  //  }
   @Override
   public String encryptPassword(String password) {
     return BCrypt.hashpw(password, BCrypt.gensalt());

@@ -27,23 +27,15 @@ public class TextTemplate {
   private String template; // Die Textvorlage, z.B. ", geboren am ", ", war vom ", " bis ", usw.
 
   @ManyToMany
-  @JoinTable(
-      name = "TextTemplate_ReferenceReason",
-      joinColumns = @JoinColumn(name = "text_template_id"),
-      inverseJoinColumns = @JoinColumn(name = "reference_reason_id")
-  )
+  @JoinTable(name = "TextTemplate_ReferenceReason", joinColumns = @JoinColumn(name = "text_template_id"), inverseJoinColumns = @JoinColumn(name = "reference_reason_id"))
 
   private List<ReferenceReason> referenceReasons; // Liste von ReferenceReasons
 
   @ManyToMany
-  @JoinTable(
-      name = "TextTemplate_Gender",
-      joinColumns = @JoinColumn(name = "text_template_id"),
-      inverseJoinColumns = @JoinColumn(name = "gender_id")
-  )
+  @JoinTable(name = "TextTemplate_Gender", joinColumns = @JoinColumn(name = "text_template_id"), inverseJoinColumns = @JoinColumn(name = "gender_id"))
   private List<Gender> genders; // Liste von Genders
 
   @ManyToOne
-  @JoinColumn(name="textTypeId", nullable=false)
+  @JoinColumn(name = "textTypeId", nullable = false)
   private TextType textType; // Typ des Textes, z.B. "Einleitungstext" oder "Abschlusstext"
 }

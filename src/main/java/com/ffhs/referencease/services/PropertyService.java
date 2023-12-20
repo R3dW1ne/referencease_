@@ -20,14 +20,14 @@ public class PropertyService implements IPropertyService {
 
   @Override
   public Property getPropertyByName(String name) {
-    return propertyDAO.findByName(name)
-        .orElseThrow(() -> new IllegalArgumentException("Property mit dem Namen " + name + " nicht gefunden"));
+    return propertyDAO.findByName(name).orElseThrow(
+        () -> new IllegalArgumentException("Property mit dem Namen " + name + " nicht gefunden"));
   }
 
   @Override
   public Property getPropertyById(UUID id) {
-    return propertyDAO.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("Property mit ID " + id + " nicht gefunden"));
+    return propertyDAO.findById(id).orElseThrow(
+        () -> new IllegalArgumentException("Property mit ID " + id + " nicht gefunden"));
   }
 
   @Override

@@ -1,22 +1,19 @@
 package com.ffhs.referencease.dto;
 
 import com.ffhs.referencease.entities.Department;
-import com.ffhs.referencease.entities.Employee;
 import com.ffhs.referencease.entities.Gender;
 import com.ffhs.referencease.entities.Position;
-import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
-import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,20 +22,6 @@ public class EmployeeDTO implements Serializable {
 
   @Serial
   private static final long serialVersionUID = 1L;
-
-  public EmployeeDTO(Employee employee) {
-    this.employeeId = employee.getEmployeeId();
-    this.employeeNumber = employee.getEmployeeNumber();
-    this.firstName = employee.getFirstName();
-    this.lastName = employee.getLastName();
-    this.dateOfBirth = employee.getDateOfBirth();
-    this.phone = employee.getPhone();
-    this.startDate = employee.getStartDate();
-    this.gender = employee.getGender();
-    this.position = employee.getPosition();
-    this.department = employee.getDepartment();
-  }
-
 
   private UUID employeeId;
 
@@ -49,7 +32,7 @@ public class EmployeeDTO implements Serializable {
   private String lastName;
   @NotNull(message = "Date of birth is mandatory")
   private LocalDate dateOfBirth;
-//  private String placeOfOrigin;
+  //  private String placeOfOrigin;
 
 
   private String phone;

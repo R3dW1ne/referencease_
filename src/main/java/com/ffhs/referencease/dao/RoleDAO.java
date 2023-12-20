@@ -2,12 +2,9 @@ package com.ffhs.referencease.dao;
 
 import com.ffhs.referencease.dao.interfaces.IRoleDAO;
 import com.ffhs.referencease.entities.Role;
-import com.ffhs.referencease.producers.qualifiers.ProdPU;
 import jakarta.ejb.Stateless;
-import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -26,9 +23,9 @@ public class RoleDAO implements IRoleDAO {
 
   @Override
   public Set<Role> findByRoleName(String roleName) {
-    return new HashSet<>(em.createQuery("SELECT r FROM Role r WHERE r.roleName = :roleName", Role.class)
-        .setParameter("roleName", roleName)
-        .getResultList());
+    return new HashSet<>(
+        em.createQuery("SELECT r FROM Role r WHERE r.roleName = :roleName", Role.class)
+            .setParameter("roleName", roleName).getResultList());
   }
 
   @Override

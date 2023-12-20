@@ -1,7 +1,6 @@
 package com.ffhs.referencease.beans;
 
 import com.ffhs.referencease.dto.EmployeeDTO;
-import com.ffhs.referencease.entities.Employee;
 import com.ffhs.referencease.entities.ReferenceLetter;
 import com.ffhs.referencease.entities.ReferenceReason;
 import com.ffhs.referencease.services.interfaces.IEmployeeService;
@@ -15,7 +14,6 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -58,12 +56,7 @@ public class ReferenceLetterBean implements Serializable {
   }
 
   public void setEmployee(EmployeeDTO employeeDTO) {
-    Employee employee = new Employee(employeeDTO);
-    referenceLetter.setEmployee(employee);
-  }
-
-  public void setReferenceReason(ReferenceReason referenceReason) {
-    referenceLetter.setReferenceReason(referenceReason);
+    referenceLetter.setEmployee(employeeService.convertToEntity(employeeDTO));
   }
 
   public void updateSelectedReferenceReason() {
@@ -73,36 +66,31 @@ public class ReferenceLetterBean implements Serializable {
     }
   }
 
-
-  public void setEndDate(String endDate) {
-    referenceLetter.setEndDate(LocalDate.parse(endDate));
-  }
-
   public List<ReferenceLetter> getReferenceLetters() {
     return referenceLetterService.getAllReferenceLetters();
   }
 
-  public void setRLetterEmployee(Employee employee) {
-    referenceLetter.setEmployee(employee);
-  }
-
   public void generateIntroduction() {
-    if (Boolean.TRUE.equals(referenceLetterService.checkReasonAndEmployeeSet(referenceLetter, needsEndDate))) {
+    if (Boolean.TRUE.equals(
+        referenceLetterService.checkReasonAndEmployeeSet(referenceLetter, needsEndDate))) {
       referenceLetter.setIntroduction(referenceLetterService.generateIntroduction(referenceLetter));
     } else {
       FacesContext.getCurrentInstance().addMessage("referenceLetterForm:generateIntroductionButton",
-          new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-              referenceLetterService.setErrorMessage(referenceLetter, needsEndDate)));
+                                                   new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                                                    "Error",
+                                                                    referenceLetterService.setErrorMessage(
+                                                                        referenceLetter,
+                                                                        needsEndDate)));
     }
   }
 
   public void saveReferenceLetter() {
     referenceLetterService.updateReferenceLetter(referenceLetter);
     editMode = true;
-    String message =
-        referenceLetter.getReferenceReason().getReasonName() + " von " + referenceLetter.getEmployee().getFirstName() + " wurde erfolgreich gespeichert.";
-    FacesContext.getCurrentInstance().addMessage(null,
-        new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
+    String message = referenceLetter.getReferenceReason().getReasonName() + " von "
+        + referenceLetter.getEmployee().getFirstName() + " wurde erfolgreich gespeichert.";
+    FacesContext.getCurrentInstance()
+        .addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
   }
 
   public void resetReferenceLetter() {

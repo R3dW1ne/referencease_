@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface IUserAccountDAO {
+
   Optional<UserAccount> findById(UUID id);
 
   Optional<UserAccount> findByEmail(String email);

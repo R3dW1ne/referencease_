@@ -1,3 +1,5 @@
 package com.ffhs.referencease.valadators.group_interfaces;
 
-public interface UpdateGroup {}
+public interface UpdateGroup {
+
+}

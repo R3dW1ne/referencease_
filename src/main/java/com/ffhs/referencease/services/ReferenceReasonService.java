@@ -12,21 +12,24 @@ import java.util.UUID;
 public class ReferenceReasonService implements IReferenceReasonService {
 
   private final IReferenceReasonDAO referenceReasonDAO;
+
   @Inject
   public ReferenceReasonService(IReferenceReasonDAO referenceReasonDAO) {
     this.referenceReasonDAO = referenceReasonDAO;
   }
-@Override
+
+  @Override
   public ReferenceReason getReferenceReasonById(UUID id) {
-    return referenceReasonDAO.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("ReferenceReason mit ID " + id + " nicht gefunden"));
+    return referenceReasonDAO.findById(id).orElseThrow(
+        () -> new IllegalArgumentException("ReferenceReason mit ID " + id + " nicht gefunden"));
   }
 
   @Override
   public ReferenceReason getReferenceReasonByReasonName(String name) {
-    return referenceReasonDAO.findByReasonName(name)
-        .orElseThrow(() -> new IllegalArgumentException("ReferenceReason mit Name " + name + " nicht gefunden"));
+    return referenceReasonDAO.findByReasonName(name).orElseThrow(
+        () -> new IllegalArgumentException("ReferenceReason mit Name " + name + " nicht gefunden"));
   }
+
   @Override
   public List<ReferenceReason> getAllReferenceReasons() {
     return referenceReasonDAO.findAll();

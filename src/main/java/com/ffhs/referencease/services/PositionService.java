@@ -11,9 +11,6 @@ import java.util.Optional;
 @Stateless
 public class PositionService implements IPositionService {
 
-//  @Inject
-//  private IPositionDAO positionDao;
-
   private final IPositionDAO positionDao;
 
   @Inject

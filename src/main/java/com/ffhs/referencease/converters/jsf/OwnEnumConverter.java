@@ -30,7 +30,7 @@ public class OwnEnumConverter implements Converter {
     Class<?> enumType = component.getValueExpression("value").getType(context.getELContext());
     if (!enumType.isEnum()) {
       return new Gender();
-//      throw new IllegalArgumentException("Type is not an enum: " + enumType);
+      //      throw new IllegalArgumentException("Type is not an enum: " + enumType);
     }
 
     try {

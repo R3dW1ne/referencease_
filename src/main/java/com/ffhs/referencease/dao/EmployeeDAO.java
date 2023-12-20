@@ -2,9 +2,7 @@ package com.ffhs.referencease.dao;
 
 import com.ffhs.referencease.dao.interfaces.IEmployeeDAO;
 import com.ffhs.referencease.entities.Employee;
-import com.ffhs.referencease.producers.qualifiers.ProdPU;
 import jakarta.ejb.Stateless;
-import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
@@ -24,6 +22,7 @@ public class EmployeeDAO implements IEmployeeDAO {
   public Optional<Employee> find(UUID id) {
     return Optional.ofNullable(em.find(Employee.class, id));
   }
+
   @Override
   public List<Employee> findAll() {
     return em.createQuery("SELECT e FROM Employee e", Employee.class).getResultList();
@@ -32,8 +31,9 @@ public class EmployeeDAO implements IEmployeeDAO {
   @Override
   @Transactional
   public void save(Employee employee) {
-      em.persist(employee);
+    em.persist(employee);
   }
+
   @Override
   @Transactional
   public void delete(Employee employee) {
@@ -61,7 +61,8 @@ public class EmployeeDAO implements IEmployeeDAO {
   @Override
   public boolean employeeNumberExists(String employeeNumber) {
     try {
-      Query query = em.createQuery("SELECT COUNT(e) FROM Employee e WHERE e.employeeNumber = :employeeNumber");
+      Query query = em.createQuery(
+          "SELECT COUNT(e) FROM Employee e WHERE e.employeeNumber = :employeeNumber");
       query.setParameter("employeeNumber", employeeNumber);
       long count = (long) query.getSingleResult();
       return count == 0;
@@ -73,7 +74,8 @@ public class EmployeeDAO implements IEmployeeDAO {
   @Override
   public Optional<Employee> findByEmployeeNumber(String employeeNumber) {
     try {
-      Query query = em.createQuery("SELECT e FROM Employee e WHERE e.employeeNumber = :employeeNumber");
+      Query query = em.createQuery(
+          "SELECT e FROM Employee e WHERE e.employeeNumber = :employeeNumber");
       query.setParameter("employeeNumber", employeeNumber);
       Employee employee = (Employee) query.getSingleResult();
       return Optional.ofNullable(employee);
@@ -84,7 +86,6 @@ public class EmployeeDAO implements IEmployeeDAO {
 
   @Override
   public Long countEmployees() {
-    return em.createQuery("SELECT COUNT(e) FROM Employee e", Long.class)
-        .getSingleResult();
+    return em.createQuery("SELECT COUNT(e) FROM Employee e", Long.class).getSingleResult();
   }
 }

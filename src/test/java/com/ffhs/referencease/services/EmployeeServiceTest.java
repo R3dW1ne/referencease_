@@ -1,6 +1,8 @@
 package com.ffhs.referencease.services;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -46,11 +48,13 @@ class EmployeeServiceTest {
   @Test
   void testGetEmployee() {
     UUID employeeId = UUID.randomUUID();
+    EmployeeDTO mockEmployeeDTO = new EmployeeDTO();
+    mockEmployeeDTO.setEmployeeId(employeeId);
     Employee mockEmployee = new Employee();
     mockEmployee.setEmployeeId(employeeId);
 
     when(employeeDao.find(employeeId)).thenReturn(Optional.of(mockEmployee));
-
+    when(modelMapper.map(mockEmployee, EmployeeDTO.class)).thenReturn(mockEmployeeDTO);
     EmployeeDTO result = employeeService.getEmployee(employeeId);
 
     assertNotNull(result);

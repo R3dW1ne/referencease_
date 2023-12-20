@@ -21,20 +21,6 @@ public class RoleService implements IRoleService {
     this.roleDAO = roleDAO;
   }
 
-//  @Override
-//  public RoleDTO findById(UUID roleId) throws PositionNotFoundException {
-//    Role role = roleDAO.findById(roleId)
-//        .orElseThrow(() -> new PositionNotFoundException("Role not found with ID: " + roleId));
-//    return toDTO(role);
-//  }
-//
-//  @Override
-//  public RoleDTO findByRoleName(String roleName) throws PositionNotFoundException {
-//    Role role = roleDAO.findByRoleName(roleName)
-//        .orElseThrow(() -> new PositionNotFoundException("Role not found with name: " + roleName));
-//    return toDTO(role);
-//  }
-
   @Override
   public Role findById(UUID roleId) throws PositionNotFoundException {
     return roleDAO.findById(roleId)
@@ -45,10 +31,12 @@ public class RoleService implements IRoleService {
   public Set<Role> findByRoleName(String roleName) {
     return roleDAO.findByRoleName(roleName);
   }
+
   @Override
   public RoleDTO toDTO(Role role) {
     return new RoleDTO(role.getRoleId(), role.getRoleName());
   }
+
   @Override
   public Role toRole(RoleDTO roleDTO) {
     return new Role(roleDTO.getRoleId(), roleDTO.getRoleName());
@@ -56,7 +44,7 @@ public class RoleService implements IRoleService {
 
   @Override
   public void createRoleIfNotExists(String roleName) {
-    if (roleDAO.findByRoleName(roleName).isEmpty()){
+    if (roleDAO.findByRoleName(roleName).isEmpty()) {
       Role role = new Role();
       role.setRoleName(roleName);
       roleDAO.create(role);

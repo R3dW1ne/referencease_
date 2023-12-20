@@ -2,9 +2,7 @@ package com.ffhs.referencease.dao;
 
 import com.ffhs.referencease.dao.interfaces.ITextTypeDAO;
 import com.ffhs.referencease.entities.TextType;
-import com.ffhs.referencease.producers.qualifiers.ProdPU;
 import jakarta.ejb.Stateless;
-import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.List;
@@ -19,10 +17,9 @@ public class TextTypeDAO implements ITextTypeDAO {
 
   @Override
   public Optional<TextType> findByName(String textTypeName) {
-    List<TextType> results = em.createQuery("SELECT tt FROM TextType tt WHERE tt.textTypeName = :textTypeName",
-            TextType.class)
-        .setParameter("textTypeName", textTypeName)
-        .getResultList();
+    List<TextType> results = em.createQuery(
+            "SELECT tt FROM TextType tt WHERE tt.textTypeName = :textTypeName", TextType.class)
+        .setParameter("textTypeName", textTypeName).getResultList();
     return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
   }
 

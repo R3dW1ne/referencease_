@@ -9,14 +9,25 @@ import java.util.UUID;
 
 
 public interface IEmployeeService {
+
   EmployeeDTO getEmployee(UUID id);
+
   List<EmployeeDTO> getAllEmployees();
+
   long countEmployees();
+
   void saveEmployee(Employee employee);
-  OperationResult<EmployeeDTO> saveOrUpdateEmployee(EmployeeDTO employeeDTO) throws BusinessException;
+
+  OperationResult<EmployeeDTO> saveOrUpdateEmployee(EmployeeDTO employeeDTO)
+      throws BusinessException;
+
   void deleteEmployee(EmployeeDTO employeeDTO);
+
   boolean employeeNumberExists(String employeeNumber);
+
   EmployeeDTO getEmployeeByEmployeeNumber(String employeeNumber);
+
   EmployeeDTO convertToDTO(Employee employee);
+
   Employee convertToEntity(EmployeeDTO dto);
 }
