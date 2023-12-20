@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -21,7 +20,6 @@ import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
@@ -37,12 +35,13 @@ class EmployeeServiceTest {
   @Mock
   private ModelMapper modelMapper;
 
-  @InjectMocks
   private EmployeeService employeeService;
 
   @BeforeEach
   void setUp() {
     MockitoAnnotations.openMocks(this);
+    modelMapper = new ModelMapper();
+    employeeService = new EmployeeService(employeeDao, referenceLetterService, modelMapper);
   }
 
   @Test
@@ -54,7 +53,7 @@ class EmployeeServiceTest {
     mockEmployee.setEmployeeId(employeeId);
 
     when(employeeDao.find(employeeId)).thenReturn(Optional.of(mockEmployee));
-    when(modelMapper.map(mockEmployee, EmployeeDTO.class)).thenReturn(mockEmployeeDTO);
+    //    when(modelMapper.map(mockEmployee, EmployeeDTO.class)).thenReturn(mockEmployeeDTO);
     EmployeeDTO result = employeeService.getEmployee(employeeId);
 
     assertNotNull(result);
@@ -91,7 +90,7 @@ class EmployeeServiceTest {
 
     // Vorbereiten der Mocks
     when(employeeDao.findByEmployeeNumber(anyString())).thenReturn(Optional.empty());
-    when(modelMapper.map(any(EmployeeDTO.class), eq(Employee.class))).thenReturn(new Employee());
+    //    when(modelMapper.map(any(EmployeeDTO.class), eq(Employee.class))).thenReturn(new Employee());
 
     // Ausführen der zu testenden Methode
     OperationResult<EmployeeDTO> result = employeeService.saveOrUpdateEmployee(employeeDTO);
