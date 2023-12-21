@@ -4,6 +4,7 @@ import com.ffhs.referencease.dao.interfaces.IEmployeeDAO;
 import com.ffhs.referencease.dto.EmployeeDTO;
 import com.ffhs.referencease.entities.Employee;
 import com.ffhs.referencease.exceptionhandling.BusinessException;
+import com.ffhs.referencease.exceptionhandling.DatabaseException;
 import com.ffhs.referencease.exceptionhandling.OperationResult;
 import com.ffhs.referencease.services.interfaces.IEmployeeService;
 import com.ffhs.referencease.services.interfaces.IReferenceLetterService;
@@ -11,7 +12,6 @@ import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 
 /**
@@ -21,6 +21,7 @@ import org.modelmapper.ModelMapper;
  * <p>Die Klasse verwendet {@link IEmployeeDAO} für den Datenbankzugriff und {@link ModelMapper}
  * für die Objektkonvertierung.</p> $ Autor: Chris Wüthrich
  *
+ * @author Chris Wüthrich
  * @version 1.0.0
  */
 @Stateless
@@ -45,7 +46,7 @@ public class EmployeeService implements IEmployeeService {
    * @return Ein DTO des Mitarbeiters, falls gefunden, sonst {@code null}.
    */
   @Override
-  public EmployeeDTO getEmployee(UUID id) {
+  public EmployeeDTO getEmployee(UUID id) throws DatabaseException {
     return employeeDao.find(id).map(this::convertToDTO).orElse(null);
   }
 
@@ -55,8 +56,8 @@ public class EmployeeService implements IEmployeeService {
    * @return Eine Liste von EmployeeDTOs.
    */
   @Override
-  public List<EmployeeDTO> getAllEmployees() {
-    return employeeDao.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
+  public List<EmployeeDTO> getAllEmployees() throws DatabaseException {
+    return employeeDao.findAll().stream().map(this::convertToDTO).toList();
   }
 
   /**
@@ -65,7 +66,8 @@ public class EmployeeService implements IEmployeeService {
    * @return Die Anzahl der Mitarbeiter.
    */
   @Override
-  public long countEmployees() {
+  public long countEmployees() throws DatabaseException {
+
     return employeeDao.countEmployees();
   }
 
@@ -75,7 +77,8 @@ public class EmployeeService implements IEmployeeService {
    * @param employee Der zu speichernde Mitarbeiter.
    */
   @Override
-  public void saveEmployee(Employee employee) {
+  public void saveEmployee(Employee employee) throws DatabaseException {
+
     employeeDao.save(employee);
   }
 
@@ -88,7 +91,7 @@ public class EmployeeService implements IEmployeeService {
    */
   @Override
   public OperationResult<EmployeeDTO> saveOrUpdateEmployee(EmployeeDTO employeeDTO)
-      throws BusinessException {
+      throws BusinessException, DatabaseException {
     EmployeeDTO existingEmployee = getEmployeeByEmployeeNumber(employeeDTO.getEmployeeNumber());
     boolean isNewEmployee = employeeDTO.getEmployeeId() == null;
 
@@ -104,12 +107,12 @@ public class EmployeeService implements IEmployeeService {
     return OperationResult.success(convertToDTO(savedEmployee));
   }
 
-  private Employee saveEmployeeInternal(Employee employee) {
+  private Employee saveEmployeeInternal(Employee employee) throws DatabaseException {
     employeeDao.save(employee);
     return employee;
   }
 
-  private Employee updateEmployeeInternal(Employee employee) {
+  private Employee updateEmployeeInternal(Employee employee) throws DatabaseException {
     return employeeDao.update(employee);
   }
 
@@ -119,7 +122,7 @@ public class EmployeeService implements IEmployeeService {
    * @param employeeDTO Das DTO des zu löschenden Mitarbeiters.
    */
   @Override
-  public void deleteEmployee(EmployeeDTO employeeDTO) {
+  public void deleteEmployee(EmployeeDTO employeeDTO) throws DatabaseException {
     UUID employeeId = employeeDTO.getEmployeeId();
     referenceLetterService.findReferenceLettersByEmployeeId(employeeId)
         .forEach(letter -> referenceLetterService.deleteReferenceLetter(letter.getReferenceId()));
@@ -133,7 +136,7 @@ public class EmployeeService implements IEmployeeService {
    * @return {@code true}, wenn die Nummer existiert, sonst {@code false}.
    */
   @Override
-  public boolean employeeNumberExists(String employeeNumber) {
+  public boolean employeeNumberExists(String employeeNumber) throws DatabaseException {
     return employeeDao.employeeNumberExists(employeeNumber);
   }
 
@@ -144,7 +147,7 @@ public class EmployeeService implements IEmployeeService {
    * @return Ein DTO des Mitarbeiters, falls gefunden, sonst {@code null}.
    */
   @Override
-  public EmployeeDTO getEmployeeByEmployeeNumber(String employeeNumber) {
+  public EmployeeDTO getEmployeeByEmployeeNumber(String employeeNumber) throws DatabaseException {
     return employeeDao.findByEmployeeNumber(employeeNumber).map(this::convertToDTO).orElse(null);
   }
 

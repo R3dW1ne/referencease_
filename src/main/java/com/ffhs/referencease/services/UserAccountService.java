@@ -11,13 +11,9 @@ import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import java.util.Optional;
 import java.util.UUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Stateless
 public class UserAccountService implements IUserAccountService {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(UserAccountService.class);
 
   private final IRoleService roleService;
   private final IUserAccountDAO userAccountDAO;

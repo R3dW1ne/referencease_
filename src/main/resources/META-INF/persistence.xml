@@ -30,31 +30,31 @@
 
   </persistence-unit>
 
-  <persistence-unit name="default_test">
+  <!--  <persistence-unit name="default_test">-->
 
-    <jta-data-source>jdbc/myTestPostgresDS</jta-data-source>
-    <class>com.ffhs.referencease.entities.Company</class>
-    <class>com.ffhs.referencease.entities.Department</class>
-    <class>com.ffhs.referencease.entities.Employee</class>
-    <class>com.ffhs.referencease.entities.FieldOfActivity</class>
-    <class>com.ffhs.referencease.entities.Gender</class>
-    <class>com.ffhs.referencease.entities.ReferenceReason</class>
-    <class>com.ffhs.referencease.entities.Position</class>
-    <class>com.ffhs.referencease.entities.Property</class>
-    <class>com.ffhs.referencease.entities.PropertyRatingText</class>
-    <class>com.ffhs.referencease.entities.ReferenceLetter</class>
-    <class>com.ffhs.referencease.entities.Role</class>
-    <class>com.ffhs.referencease.entities.Score</class>
-    <class>com.ffhs.referencease.entities.UserAccount</class>
-    <class>com.ffhs.referencease.entities.TextTemplate</class>
-    <class>com.ffhs.referencease.entities.TextType</class>
-    <class>com.ffhs.referencease.entities.PropertyRating</class>
+  <!--    <jta-data-source>jdbc/myTestPostgresDS</jta-data-source>-->
+  <!--    <class>com.ffhs.referencease.entities.Company</class>-->
+  <!--    <class>com.ffhs.referencease.entities.Department</class>-->
+  <!--    <class>com.ffhs.referencease.entities.Employee</class>-->
+  <!--    <class>com.ffhs.referencease.entities.FieldOfActivity</class>-->
+  <!--    <class>com.ffhs.referencease.entities.Gender</class>-->
+  <!--    <class>com.ffhs.referencease.entities.ReferenceReason</class>-->
+  <!--    <class>com.ffhs.referencease.entities.Position</class>-->
+  <!--    <class>com.ffhs.referencease.entities.Property</class>-->
+  <!--    <class>com.ffhs.referencease.entities.PropertyRatingText</class>-->
+  <!--    <class>com.ffhs.referencease.entities.ReferenceLetter</class>-->
+  <!--    <class>com.ffhs.referencease.entities.Role</class>-->
+  <!--    <class>com.ffhs.referencease.entities.Score</class>-->
+  <!--    <class>com.ffhs.referencease.entities.UserAccount</class>-->
+  <!--    <class>com.ffhs.referencease.entities.TextTemplate</class>-->
+  <!--    <class>com.ffhs.referencease.entities.TextType</class>-->
+  <!--    <class>com.ffhs.referencease.entities.PropertyRating</class>-->
 
-    <properties>
-      <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>
-      <!--      <property name="jakarta.persistence.schema-generation.database.action" value="drop"/>-->
-    </properties>
+  <!--    <properties>-->
+  <!--      <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>-->
+  <!--      &lt;!&ndash;      <property name="jakarta.persistence.schema-generation.database.action" value="drop"/>&ndash;&gt;-->
+  <!--    </properties>-->
 
-  </persistence-unit>
+  <!--  </persistence-unit>-->
 
 </persistence>

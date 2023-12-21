@@ -63,6 +63,10 @@ class ReferenceLetterServiceTest {
   private Gender maennlich;
   @Mock
   private Gender weiblich;
+  @Mock
+  private Position position;
+  @Mock
+  private Department department;
 
   private List<TextTemplate> textTemplates;
 
@@ -78,6 +82,10 @@ class ReferenceLetterServiceTest {
         EReferenceReason.POSITIONSWECHSEL.getDisplayName());
     maennlich = createMockGender(EGender.MAENNLICH.getDisplayName());
     weiblich = createMockGender(EGender.WEIBLICH.getDisplayName());
+    position = new Position();
+    position.setPositionName("Projektleiter");
+    department = new Department();
+    department.setDepartmentName("Human Resources");
     referenceLetterService = new ReferenceLetterService(referenceLetterDAO, textTemplateService,
                                                         textTypeService);
     //    refLetter = createMockReferenceLetter();
@@ -104,9 +112,6 @@ class ReferenceLetterServiceTest {
 
   @Test
   void generateIntroductionZwischenzeugnisTest() {
-    Position position = new Position();
-    position.setPositionName("Projektleiter");
-    Department department = new Department();
     department.setDepartmentName("Human Resources");
     Employee employee = createMockEmployee("Max", "Muster", LocalDate.of(1990, 1, 1),
                                            LocalDate.of(2010, 1, 1), position, department,
@@ -124,12 +129,9 @@ class ReferenceLetterServiceTest {
     // Führen Sie hier weitere Überprüfungen durch, basierend auf dem erwarteten Ergebnis des generierten Textes
   }
 
+
   @Test
   void generateIntroductionForAbschlusszeugnisTest() {
-    Position position = new Position();
-    position.setPositionName("Projektleiter");
-    Department department = new Department();
-    department.setDepartmentName("Human Resources");
     Employee employee = createMockEmployee("Max", "Muster", LocalDate.of(1990, 1, 1),
                                            LocalDate.of(2010, 1, 1), position, department,
                                            maennlich);

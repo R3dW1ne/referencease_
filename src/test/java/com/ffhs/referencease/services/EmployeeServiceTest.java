@@ -43,9 +43,9 @@ class EmployeeServiceTest {
     modelMapper = new ModelMapper();
     employeeService = new EmployeeService(employeeDao, referenceLetterService, modelMapper);
   }
-
   @Test
   void testGetEmployee() {
+    // Arrange
     UUID employeeId = UUID.randomUUID();
     EmployeeDTO mockEmployeeDTO = new EmployeeDTO();
     mockEmployeeDTO.setEmployeeId(employeeId);
@@ -53,9 +53,11 @@ class EmployeeServiceTest {
     mockEmployee.setEmployeeId(employeeId);
 
     when(employeeDao.find(employeeId)).thenReturn(Optional.of(mockEmployee));
-    //    when(modelMapper.map(mockEmployee, EmployeeDTO.class)).thenReturn(mockEmployeeDTO);
+
+    // Act
     EmployeeDTO result = employeeService.getEmployee(employeeId);
 
+    // Assert
     assertNotNull(result);
     assertEquals(employeeId, result.getEmployeeId());
     verify(employeeDao).find(employeeId);
@@ -63,48 +65,50 @@ class EmployeeServiceTest {
 
   @Test
   void testGetAllEmployees() {
-    // Mocken des Verhaltens der DAO
+    // Arrange
     when(employeeDao.findAll()).thenReturn(Arrays.asList(new Employee(), new Employee()));
 
+    // Act
     List<EmployeeDTO> result = employeeService.getAllEmployees();
 
+    // Assert
     assertNotNull(result);
     assertEquals(2, result.size());
   }
 
   @Test
   void testCountEmployees() {
+    // Arrange
     when(employeeDao.countEmployees()).thenReturn(10L);
 
+    // Act
     long count = employeeService.countEmployees();
 
+    // Assert
     assertEquals(10, count);
     verify(employeeDao).countEmployees();
   }
 
-
   @Test
   void testSaveOrUpdateEmployee_NewEmployee() {
+    // Arrange
     EmployeeDTO employeeDTO = new EmployeeDTO();
     employeeDTO.setEmployeeNumber("123");
 
-    // Vorbereiten der Mocks
     when(employeeDao.findByEmployeeNumber(anyString())).thenReturn(Optional.empty());
-    //    when(modelMapper.map(any(EmployeeDTO.class), eq(Employee.class))).thenReturn(new Employee());
 
-    // Ausführen der zu testenden Methode
+    // Act
     OperationResult<EmployeeDTO> result = employeeService.saveOrUpdateEmployee(employeeDTO);
 
-    // Überprüfen der Ergebnisse
+    // Assert
     assertTrue(result.isSuccess());
     assertNotNull(result.getData());
-
-    // Verifizieren, dass die save-Methode des DAO aufgerufen wurde
     verify(employeeDao).save(any(Employee.class));
   }
 
   @Test
   void testDeleteEmployee() {
+    // Arrange
     UUID employeeId = UUID.randomUUID();
     EmployeeDTO employeeDTO = new EmployeeDTO();
     employeeDTO.setEmployeeId(employeeId);
@@ -112,18 +116,23 @@ class EmployeeServiceTest {
     doNothing().when(referenceLetterService).deleteReferenceLetter(any());
     doNothing().when(employeeDao).deleteById(any(UUID.class));
 
+    // Act
     employeeService.deleteEmployee(employeeDTO);
 
+    // Assert
     verify(employeeDao).deleteById(employeeId);
   }
 
   @Test
   void testEmployeeNumberExists() {
+    // Arrange
     String employeeNumber = "12345";
     when(employeeDao.employeeNumberExists(employeeNumber)).thenReturn(true);
 
+    // Act
     boolean exists = employeeService.employeeNumberExists(employeeNumber);
 
+    // Assert
     assertTrue(exists);
     verify(employeeDao).employeeNumberExists(employeeNumber);
   }

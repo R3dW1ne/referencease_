@@ -10,6 +10,7 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -21,6 +22,9 @@ public class UserAccountDAO implements IUserAccountDAO {
   @PersistenceContext(unitName = "default")
   private EntityManager em;
 
+  private static final String FIND_USER_BY_EMAIL_QUERY = "SELECT u FROM UserAccount u WHERE u.email = :email";
+  private static final String EMAIL = "email";
+
   @Override
   public Optional<UserAccount> findById(UUID id) {
     return Optional.ofNullable(em.find(UserAccount.class, id));
@@ -28,15 +32,10 @@ public class UserAccountDAO implements IUserAccountDAO {
 
   @Override
   public Optional<UserAccount> findByEmail(String email) {
-    TypedQuery<UserAccount> query = em.createQuery(
-        "SELECT u FROM UserAccount u WHERE u.email = :email", UserAccount.class);
-    query.setParameter("email", email);
-    try {
-      UserAccount userAccount = query.getSingleResult();
-      return Optional.of(userAccount);
-    } catch (NoResultException e) {
-      return Optional.empty();
-    }
+    TypedQuery<UserAccount> query = em.createQuery(FIND_USER_BY_EMAIL_QUERY, UserAccount.class);
+    query.setParameter(EMAIL, email);
+    List<UserAccount> results = query.getResultList();
+    return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
   }
 
 
@@ -52,9 +51,8 @@ public class UserAccountDAO implements IUserAccountDAO {
 
   @Override
   public boolean emailExists(String email) {
-    TypedQuery<Long> query = em.createQuery(
-        "SELECT COUNT(u) FROM UserAccount u WHERE u.email = :email", Long.class);
-    query.setParameter("email", email);
+    TypedQuery<Long> query = em.createQuery(FIND_USER_BY_EMAIL_QUERY, Long.class);
+    query.setParameter(EMAIL, email);
     Long count = query.getSingleResult();
     return count > 0;
   }
@@ -62,9 +60,8 @@ public class UserAccountDAO implements IUserAccountDAO {
   @Override
   @Transactional
   public boolean passwordMatches(String email, String password) {
-    TypedQuery<UserAccount> query = em.createQuery(
-        "SELECT u FROM UserAccount u WHERE u.email = :email", UserAccount.class);
-    query.setParameter("email", email);
+    TypedQuery<UserAccount> query = em.createQuery(FIND_USER_BY_EMAIL_QUERY, UserAccount.class);
+    query.setParameter(EMAIL, email);
     try {
       UserAccount userAccount = query.getSingleResult();
       return PBKDF2Hash.checkPassword(password, userAccount.getPassword());
@@ -74,8 +71,8 @@ public class UserAccountDAO implements IUserAccountDAO {
   }
 
   public void assignRolesToUser(String userEmail, Set<String> roleNames) {
-    UserAccount user = em.createQuery("SELECT u FROM UserAccount u WHERE u.email = :email",
-                                      UserAccount.class).setParameter("email", userEmail)
+    UserAccount user = em.createQuery(FIND_USER_BY_EMAIL_QUERY, UserAccount.class)
+        .setParameter(EMAIL, userEmail)
         .getSingleResult();
 
     Set<Role> roles = user.getRoles();

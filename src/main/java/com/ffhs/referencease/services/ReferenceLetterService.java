@@ -23,9 +23,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Bietet Dienste für die Verwaltung von Referenzschreiben. Diese Klasse bietet Methoden für das
- * Auffinden, Speichern, Aktualisieren und Löschen von Referenzschreiben sowie für die Generierung
- * von Einleitungstexten basierend auf spezifischen Mitarbeiterdaten und Referenzgründen.
+ * Bietet Dienste für die Verwaltung von Arbeitszeugnissen. Diese Klasse bietet Methoden für das
+ * Auffinden, Speichern, Aktualisieren und Löschen von Arbeitszeugnissen sowie für die Generierung
+ * von Texten basierend auf spezifischen Mitarbeiterdaten.
  *
  * @author Chris Wüthrich
  * @version 1.0.0
