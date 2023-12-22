@@ -5,6 +5,7 @@ import com.ffhs.referencease.entities.Employee;
 import com.ffhs.referencease.exceptionhandling.DatabaseException;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.Query;
@@ -23,9 +24,20 @@ public class EmployeeDAO implements IEmployeeDAO {
   @Override
   public Optional<Employee> find(UUID id) throws DatabaseException {
     try {
+
       return Optional.ofNullable(em.find(Employee.class, id));
     } catch (PersistenceException e) {
       throw new DatabaseException("Error finding Employee with id " + id, e);
+    }
+  }
+
+  @Override
+  public Employee findByEmployeeId(UUID id) {
+    try {
+      return em.createQuery("SELECT e FROM Employee e WHERE e.employeeId = :id", Employee.class)
+          .setParameter("id", id).getSingleResult();
+    } catch (NoResultException e) {
+      return null;
     }
   }
 
@@ -38,15 +50,7 @@ public class EmployeeDAO implements IEmployeeDAO {
     }
   }
 
-  @Override
-  @Transactional
-  public void save(Employee employee) throws DatabaseException {
-    try {
-      em.persist(employee);
-    } catch (PersistenceException e) {
-      throw new DatabaseException("Error saving Employee", e);
-    }
-  }
+
   @Override
   @Transactional
   public void delete(Employee employee) throws DatabaseException {
@@ -63,10 +67,35 @@ public class EmployeeDAO implements IEmployeeDAO {
 
   @Override
   @Transactional
+  public Employee saveOrUpdateEmployee(Employee employee) throws DatabaseException {
+    try {
+      if (employee.getEmployeeId() == null) {
+        save(employee);
+        return employee; // Persistierte Entität zurückgeben
+      } else {
+        return update(employee); // Aktualisierte Entität zurückgeben
+      }
+    } catch (PersistenceException | IllegalArgumentException e) {
+      throw new DatabaseException("Error saving or updating Employee", e);
+    }
+  }
+
+  @Override
+  @Transactional
+  public void save(Employee employee) throws DatabaseException {
+    try {
+      em.persist(employee);
+    } catch (PersistenceException | IllegalArgumentException e) {
+      throw new DatabaseException("Error saving Employee", e);
+    }
+  }
+
+  @Override
+  @Transactional
   public Employee update(Employee employee) throws DatabaseException {
     try {
       return em.merge(employee);
-    } catch (PersistenceException e) {
+    } catch (PersistenceException | IllegalArgumentException e) {
       throw new DatabaseException("Error updating Employee", e);
     }
   }
@@ -86,6 +115,9 @@ public class EmployeeDAO implements IEmployeeDAO {
 
   @Override
   public boolean employeeNumberExists(String employeeNumber) throws DatabaseException {
+    if (employeeNumber == null) {
+      return false;
+    }
     try {
       Query query = em.createQuery(
           "SELECT COUNT(e) FROM Employee e WHERE e.employeeNumber = :employeeNumber");
@@ -94,6 +126,22 @@ public class EmployeeDAO implements IEmployeeDAO {
       return count > 0;
     } catch (PersistenceException e) {
       throw new DatabaseException("Error checking if employee number exists", e);
+    }
+  }
+
+  @Override
+  public boolean employeeIdExists(UUID employeeId) throws DatabaseException {
+    if (employeeId == null) {
+      return false;
+    }
+    try {
+      TypedQuery<Long> query = em.createQuery(
+          "SELECT COUNT(e) FROM Employee e WHERE e.employeeId = :employeeId", Long.class);
+      query.setParameter("employeeId", employeeId);
+      long count = query.getSingleResult();
+      return count > 0;
+    } catch (PersistenceException e) {
+      throw new DatabaseException("Error checking if employeeId exists", e);
     }
   }
 

@@ -3,7 +3,6 @@ package com.ffhs.referencease.beans;
 import com.ffhs.referencease.dto.UserAccountDTO;
 import com.ffhs.referencease.services.interfaces.IUserAccountService;
 import com.ffhs.referencease.valadators.ValidRegistrationUserDTOValidator;
-import com.ffhs.referencease.valadators.annotations.ValidRegistrationUserDTO;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.application.FacesMessage;
@@ -23,7 +22,6 @@ public class UserAccountBean implements Serializable {
   private static final long serialVersionUID = 1L;
   private final transient IUserAccountService userAccountService;
 
-  @ValidRegistrationUserDTO
   private UserAccountDTO userAccountDTO;
 
   @Inject

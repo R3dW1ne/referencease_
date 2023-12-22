@@ -4,6 +4,7 @@ import com.ffhs.referencease.dto.EmployeeDTO;
 import com.ffhs.referencease.entities.Department;
 import com.ffhs.referencease.entities.Gender;
 import com.ffhs.referencease.entities.Position;
+import com.ffhs.referencease.exceptionhandling.BusinessException;
 import com.ffhs.referencease.exceptionhandling.DatabaseException;
 import com.ffhs.referencease.exceptionhandling.OperationResult;
 import com.ffhs.referencease.services.interfaces.IDepartmentService;
@@ -21,9 +22,10 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.primefaces.PrimeFaces;
 
 /**
@@ -43,7 +45,7 @@ public class EmployeeBean implements Serializable {
 
   @Serial
   private static final long serialVersionUID = 1L;
-  private static final Logger LOG = Logger.getLogger(EmployeeBean.class.getName());
+  private static final Logger LOGGER = LogManager.getLogger(EmployeeBean.class);
 
   private final transient IEmployeeService employeeService;
   private final transient IPositionService positionService;
@@ -76,8 +78,8 @@ public class EmployeeBean implements Serializable {
   @PostConstruct
   public void init() {
     employee = new EmployeeDTO();
-    employees = employeeService.getAllEmployees();
-    filteredEmployees = employeeService.getAllEmployees();
+    employees = new ArrayList<>(employeeService.getAllEmployees());
+    filteredEmployees = new ArrayList<>(employees);
     positions = positionService.getAllPositions();
     departments = departmentService.getAllDepartments();
     genders = genderService.getAllGenders();
@@ -94,8 +96,8 @@ public class EmployeeBean implements Serializable {
     OperationResult<EmployeeDTO> result;
     try {
       result = employeeService.saveOrUpdateEmployee(selectedEmployee);
-    } catch (DatabaseException e) {
-      LOG.severe(e.getMessage());
+    } catch (DatabaseException | BusinessException e) {
+      LOGGER.error(e.getMessage());
       sendInfoToFrontend("Fehler beim Speichern des Mitarbeiters.");
       return;
     }
@@ -111,17 +113,18 @@ public class EmployeeBean implements Serializable {
       selectedEmployee = savedEmployee;
       editMode = true;
 
-      employees = employeeService.getAllEmployees();
-      filteredEmployees = employeeService.getAllEmployees();
+      refreshEmployeeList();
 
-      message = isNewEmployee ? "erfolgreich gespeichert." : "erfolgreich aktualisiert.";
-      LOG.info(message);
-      sendInfoToFrontend(
+      String messageExtra =
+          isNewEmployee ? "erfolgreich gespeichert." : "erfolgreich aktualisiert.";
+      message =
           "Mitarbeiter " + savedEmployee.getFirstName() + " " + savedEmployee.getLastName() + " "
-              + message);
+              + messageExtra;
+      LOGGER.info(message);
+      sendInfoToFrontend(message);
     } else {
       message = result.getErrorMessage();
-      LOG.warning(message);
+      LOGGER.warn(message);
       sendInfoToFrontend(message);
     }
   }
@@ -145,18 +148,18 @@ public class EmployeeBean implements Serializable {
     try {
       employeeService.deleteEmployee(selectedEmployee);
     } catch (DatabaseException e) {
-      LOG.severe(e.getMessage());
+      LOGGER.error(e.getMessage());
       sendInfoToFrontend("Fehler beim löschen des Mitarbeiters.");
       return;
     }
     refreshEmployeeList();
+    selectedEmployee = null;
     sendInfoToFrontend("Mitarbeiter erfolgreich gelöscht.");
   }
 
   private void refreshEmployeeList() {
-    employees = employeeService.getAllEmployees();
+    employees = new ArrayList<>(employeeService.getAllEmployees());
     filteredEmployees = new ArrayList<>(employees);
-    selectedEmployee = null;
   }
 
   public void resetEmployee() {
@@ -165,14 +168,16 @@ public class EmployeeBean implements Serializable {
     editMode = false;
   }
 
-  public void resetEmployeeList() {
-    employees = employeeService.getAllEmployees();
-    filteredEmployees = employeeService.getAllEmployees();
-    listSelectionNeeded = false;
-  }
+  //  public void resetEmployeeList() {
+  //    employees = employeeService.getAllEmployees();
+  //    filteredEmployees = employeeService.getAllEmployees();
+  //    listSelectionNeeded = false;
+  //  }
 
   public String navigateToEmployeeList() {
-    resetEmployeeList();
+    refreshEmployeeList();
+    selectedEmployee = null;
+    listSelectionNeeded = false;
     return "/resources/components/sites/secured/employeeList.xhtml?faces-redirect=true";
   }
 

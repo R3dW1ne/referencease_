@@ -96,6 +96,8 @@ class EmployeeServiceTest {
     employeeDTO.setEmployeeNumber("123");
 
     when(employeeDao.findByEmployeeNumber(anyString())).thenReturn(Optional.empty());
+    when(employeeDao.update(any(Employee.class))).thenReturn(new Employee());
+
 
     // Act
     OperationResult<EmployeeDTO> result = employeeService.saveOrUpdateEmployee(employeeDTO);
@@ -103,7 +105,7 @@ class EmployeeServiceTest {
     // Assert
     assertTrue(result.isSuccess());
     assertNotNull(result.getData());
-    verify(employeeDao).save(any(Employee.class));
+    verify(employeeDao).update(any(Employee.class));
   }
 
   @Test

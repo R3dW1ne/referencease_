@@ -51,10 +51,16 @@ public class UserAccountDAO implements IUserAccountDAO {
 
   @Override
   public boolean emailExists(String email) {
-    TypedQuery<Long> query = em.createQuery(FIND_USER_BY_EMAIL_QUERY, Long.class);
-    query.setParameter(EMAIL, email);
-    Long count = query.getSingleResult();
-    return count > 0;
+    if (email == null) {
+      return false;
+    }
+    try {
+      UserAccount userAccount = em.createQuery(FIND_USER_BY_EMAIL_QUERY, UserAccount.class)
+          .setParameter(EMAIL, email).getSingleResult();
+      return userAccount != null;
+    } catch (NoResultException e) {
+      return false;
+    }
   }
 
   @Override

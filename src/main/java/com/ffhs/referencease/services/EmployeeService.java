@@ -12,6 +12,8 @@ import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import java.util.List;
 import java.util.UUID;
+import org.modelmapper.ConfigurationException;
+import org.modelmapper.MappingException;
 import org.modelmapper.ModelMapper;
 
 /**
@@ -89,31 +91,105 @@ public class EmployeeService implements IEmployeeService {
    * @return Ein OperationResult mit dem gespeicherten oder aktualisierten Mitarbeiter.
    * @throws BusinessException Bei einem Geschäftsfehler.
    */
+  //  @Override
+  //  public OperationResult<EmployeeDTO> saveOrUpdateEmployee(EmployeeDTO employeeDTO)
+  //      throws BusinessException, DatabaseException {
+  //    if (employeeDTO == null) {
+  //      throw new BusinessException("Mitarbeiter ist null.");
+  //    }
+  //    boolean isNewEmployee = employeeDTO.getEmployeeId() == null;
+  //    boolean employeeToUpdateIsStillInDB = employeeDao.employeeIdExists(employeeDTO.getEmployeeId());
+  //    if (!isNewEmployee && !employeeToUpdateIsStillInDB) {
+  //      return OperationResult.failure("Mitarbeiter existiert nicht mehr.");
+  //    }
+  //
+  //    String employeeNumberToSave = employeeDTO.getEmployeeNumber();
+  //    boolean employeeNumberExists = employeeDao.employeeNumberExists(employeeNumberToSave);
+  //    EmployeeDTO existingEmployee = getEmployeeByEmployeeNumber(employeeNumberToSave);
+  //
+  //    if (employeeNumberExists && (isNewEmployee || !existingEmployee.getEmployeeId()
+  //        .equals(employeeDTO.getEmployeeId()))) {
+  //      return OperationResult.failure(
+  //          "Mitarbeiternummer bereits von einem anderen Mitarbeiter vergeben.");
+  //    }
+  //
+  //    EmployeeDTO savedEmployeeDTO;
+  //    Employee savedEmployee;
+  //    try {
+  //      savedEmployee = convertToEntity(employeeDTO);
+  //      savedEmployee = employeeDao.update(savedEmployee);
+  //      savedEmployeeDTO = convertToDTO(savedEmployee);
+  //      return OperationResult.success(savedEmployeeDTO);
+  //    } catch (DatabaseException | BusinessException e) {
+  //      throw new BusinessException("Fehler beim Speichern des Mitarbeiters.", e);
+  //    }
+  //  }
   @Override
   public OperationResult<EmployeeDTO> saveOrUpdateEmployee(EmployeeDTO employeeDTO)
       throws BusinessException, DatabaseException {
-    EmployeeDTO existingEmployee = getEmployeeByEmployeeNumber(employeeDTO.getEmployeeNumber());
+    validateEmployeeDTO(employeeDTO);
     boolean isNewEmployee = employeeDTO.getEmployeeId() == null;
 
-    if (existingEmployee != null && (isNewEmployee || !existingEmployee.getEmployeeId()
-        .equals(employeeDTO.getEmployeeId()))) {
+    if (!isNewEmployee && !employeeExistsInDB(employeeDTO)) {
+      return OperationResult.failure("Mitarbeiter existiert nicht mehr.");
+    }
+
+    if (employeeNumberIsDuplicate(employeeDTO)) {
       return OperationResult.failure(
           "Mitarbeiternummer bereits von einem anderen Mitarbeiter vergeben.");
     }
 
-    Employee employeeEntity = convertToEntity(employeeDTO);
-    Employee savedEmployee = isNewEmployee ? saveEmployeeInternal(employeeEntity)
-        : updateEmployeeInternal(employeeEntity);
-    return OperationResult.success(convertToDTO(savedEmployee));
+    return trySaveOrUpdateEmployee(employeeDTO);
   }
 
-  private Employee saveEmployeeInternal(Employee employee) throws DatabaseException {
-    employeeDao.save(employee);
-    return employee;
+  private void validateEmployeeDTO(EmployeeDTO employeeDTO) throws BusinessException {
+    if (employeeDTO == null) {
+      throw new BusinessException("Mitarbeiter ist null.");
+    }
   }
 
-  private Employee updateEmployeeInternal(Employee employee) throws DatabaseException {
-    return employeeDao.update(employee);
+  private boolean employeeExistsInDB(EmployeeDTO employeeDTO) {
+    return employeeDao.employeeIdExists(employeeDTO.getEmployeeId());
+  }
+
+  private boolean employeeNumberIsDuplicate(EmployeeDTO employeeDTO) {
+    String employeeNumber = employeeDTO.getEmployeeNumber();
+    boolean employeeNumberExists = employeeDao.employeeNumberExists(employeeNumber);
+    EmployeeDTO existingEmployee = getEmployeeByEmployeeNumber(employeeNumber);
+
+    return employeeNumberExists && !existingEmployee.getEmployeeId()
+        .equals(employeeDTO.getEmployeeId());
+  }
+
+  private OperationResult<EmployeeDTO> trySaveOrUpdateEmployee(EmployeeDTO employeeDTO)
+      throws BusinessException, DatabaseException {
+    try {
+      Employee savedEmployee = convertToEntity(employeeDTO);
+      savedEmployee = employeeDao.update(savedEmployee);
+      EmployeeDTO savedEmployeeDTO = convertToDTO(savedEmployee);
+      return OperationResult.success(savedEmployeeDTO);
+    } catch (DatabaseException | BusinessException e) {
+      throw new BusinessException("Fehler beim Speichern des Mitarbeiters.", e);
+    }
+  }
+
+
+  private EmployeeDTO saveEmployeeInternal(Employee employee) throws DatabaseException {
+    try {
+      employeeDao.save(employee);
+    } catch (DatabaseException e) {
+      throw new DatabaseException("Fehler beim Speichern des Mitarbeiters.", e);
+    }
+    return convertToDTO(employee);
+  }
+
+  private EmployeeDTO updateEmployeeInternal(Employee employee) throws DatabaseException {
+    try {
+      employeeDao.update(employee);
+    } catch (DatabaseException e) {
+      throw new DatabaseException("Fehler beim Aktualisieren des Mitarbeiters.", e);
+    }
+    return convertToDTO(employee);
   }
 
   /**
@@ -147,7 +223,8 @@ public class EmployeeService implements IEmployeeService {
    * @return Ein DTO des Mitarbeiters, falls gefunden, sonst {@code null}.
    */
   @Override
-  public EmployeeDTO getEmployeeByEmployeeNumber(String employeeNumber) throws DatabaseException {
+  public EmployeeDTO getEmployeeByEmployeeNumber(String employeeNumber)
+      throws DatabaseException, BusinessException {
     return employeeDao.findByEmployeeNumber(employeeNumber).map(this::convertToDTO).orElse(null);
   }
 
@@ -158,8 +235,12 @@ public class EmployeeService implements IEmployeeService {
    * @return Das konvertierte EmployeeDTO.
    */
   @Override
-  public EmployeeDTO convertToDTO(Employee employee) {
-    return modelMapper.map(employee, EmployeeDTO.class);
+  public EmployeeDTO convertToDTO(Employee employee) throws BusinessException {
+    try {
+      return modelMapper.map(employee, EmployeeDTO.class);
+    } catch (IllegalArgumentException | ConfigurationException | MappingException e) {
+      throw new BusinessException("Problem beim Konvertieren zu einem DTO.", e);
+    }
   }
 
   /**
@@ -169,7 +250,11 @@ public class EmployeeService implements IEmployeeService {
    * @return Die konvertierte Employee-Entität.
    */
   @Override
-  public Employee convertToEntity(EmployeeDTO dto) {
-    return modelMapper.map(dto, Employee.class);
+  public Employee convertToEntity(EmployeeDTO dto) throws BusinessException {
+    try {
+      return modelMapper.map(dto, Employee.class);
+    } catch (IllegalArgumentException | ConfigurationException | MappingException e) {
+      throw new BusinessException("Problem beim Konvertieren zu einer Entität.", e);
+    }
   }
 }
