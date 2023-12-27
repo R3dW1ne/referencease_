@@ -6,10 +6,9 @@ import com.ffhs.referencease.entities.ReferenceReason;
 import com.ffhs.referencease.services.interfaces.IEmployeeService;
 import com.ffhs.referencease.services.interfaces.IReferenceLetterService;
 import com.ffhs.referencease.services.interfaces.IReferenceReasonService;
+import com.ffhs.referencease.utils.FrontendMessages;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
-import jakarta.faces.application.FacesMessage;
-import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serial;
@@ -17,6 +16,8 @@ import java.io.Serializable;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Named
 @Setter
@@ -26,6 +27,8 @@ public class ReferenceLetterBean implements Serializable {
 
   @Serial
   private static final long serialVersionUID = 1L;
+  private static final Logger LOGGER = LogManager.getLogger(ReferenceLetterBean.class);
+
   private final transient IReferenceLetterService referenceLetterService;
   private final transient IReferenceReasonService referenceReasonService;
   private final transient IEmployeeService employeeService;
@@ -75,22 +78,27 @@ public class ReferenceLetterBean implements Serializable {
         referenceLetterService.checkReasonAndEmployeeSet(referenceLetter, needsEndDate))) {
       referenceLetter.setIntroduction(referenceLetterService.generateIntroduction(referenceLetter));
     } else {
-      FacesContext.getCurrentInstance().addMessage("referenceLetterForm:generateIntroductionButton",
-                                                   new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                                                    "Error",
-                                                                    referenceLetterService.setErrorMessage(
-                                                                        referenceLetter,
-                                                                        needsEndDate)));
+      FrontendMessages.sendErrorMessageToFrontend("referenceLetterForm:generateIntroductionButton",
+                                                  referenceLetterService.setErrorMessage(
+                                                      referenceLetter, needsEndDate), null);
     }
   }
 
+
   public void saveReferenceLetter() {
-    referenceLetterService.updateReferenceLetter(referenceLetter);
-    editMode = true;
-    String message = referenceLetter.getReferenceReason().getReasonName() + " von "
-        + referenceLetter.getEmployee().getFirstName() + " wurde erfolgreich gespeichert.";
-    FacesContext.getCurrentInstance()
-        .addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, message, null));
+    String message;
+    if (referenceLetter.getEmployee() == null || referenceLetter.getReferenceReason() == null) {
+      message = "Bitte wählen Sie mindestens einen Mitarbeiter und einen Grund für das Arbeitszeugnis aus.";
+      FrontendMessages.sendErrorMessageToFrontend(null, "Error", message);
+    } else {
+      referenceLetter = referenceLetterService.updateReferenceLetter(referenceLetter);
+      editMode = true;
+      message = referenceLetter.getReferenceReason().getReasonName() + " von "
+          + referenceLetter.getEmployee().getFirstName() + " " + referenceLetter.getEmployee()
+          .getLastName() + " wurde erfolgreich gespeichert.";
+      LOGGER.info(message);
+      FrontendMessages.sendInfoMessageToFrontend(null, "Info", message);
+    }
   }
 
   public void resetReferenceLetter() {

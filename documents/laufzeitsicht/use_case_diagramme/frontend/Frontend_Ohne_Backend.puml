@@ -1,0 +1,35 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+left to right direction
+
+skinparam nodesep 10
+
+actor "      Benutzer\n(nicht registriert)" as UserOffline << Mensch >> #red
+actor "  Benutzer\n(registriert)" as UserOnline << Mensch >> #green
+
+actor "HR-Mitarbeiter" as HR << Mensch >> #green
+actor "Abteilungsleiter" as AL << Mensch >> #green
+
+HR -l-> UserOnline
+AL -l-> UserOnline
+
+
+rectangle "ReferencEase Frontend" {
+
+UserOffline -- (UC 1.1\nBenutzerkonto anlegen)
+UserOnline -u- (UC 1.2\nBenutzerkonto anmelden)
+
+HR -- (UC 1.3\nMitarbeiter anlegen)
+HR -- (UC 1.4\nArbeitszeugnis erzeugen)
+(UC 1.4\nArbeitszeugnis erzeugen) .l.> (Informationen bereitstellen) : <<uses>>
+(UC 1.4\nArbeitszeugnis erzeugen) .> (Bewertungen abgeben) : <<uses>>
+(Arbeitszeugnis überprüfen) .> (Arbeitszeugnis bearbeiten) : <<extends>>
+
+HR -- (Arbeitszeugnis bearbeiten)
+(UC 1.3\nMitarbeiter anlegen) <. (UC 1.4\nArbeitszeugnis erzeugen) : <<includes>>
+
+(Informationen bereitstellen) <-- AL
+(Bewertungen abgeben) <-- AL
+(Arbeitszeugnis überprüfen) <-- AL
+}
+@enduml

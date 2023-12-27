@@ -1,0 +1,23 @@
+@startuml
+actor "HR-Mitarbeiter" as HR
+participant Frontend as F
+participant Backend as B
+
+HR -> F : Klick auf "Arbeitszeugnis erstellen"
+activate F
+HR -> F : Wählt Mitarbeiter aus und gibt Daten ein
+HR -> F : Klick auf "Speichern"
+F -> B : Sendet Arbeitszeugnisdaten
+activate B
+B -> B : Erstellt Arbeitszeugnis
+alt Erfolgreiche Erstellung
+    B -> F : Bestätigung des Eintrags
+    deactivate B
+    F -> HR : Zeigt Bestätigungsnachricht
+else Fehler bei der Erstellung
+    B -> F : Fehlermeldung
+    deactivate B
+    F -> HR : Zeigt Fehlermeldung an
+end
+deactivate F
+@enduml

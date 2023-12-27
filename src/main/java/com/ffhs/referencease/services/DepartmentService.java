@@ -7,6 +7,7 @@ import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Stateless
 public class DepartmentService implements IDepartmentService {
@@ -34,6 +35,18 @@ public class DepartmentService implements IDepartmentService {
       Department department = new Department();
       department.setDepartmentName(departmentName);
       departmentDao.create(department);
+    }
+  }
+
+  @Override
+  public Department getRandomDepartment(Random random) {
+    // Annahme: Alle vorhandenen Abteilungen abrufen
+    List<Department> departments = getAllDepartments();
+
+    if (!departments.isEmpty()) {
+      return departments.get(random.nextInt(departments.size()));
+    } else {
+      return null;
     }
   }
 }

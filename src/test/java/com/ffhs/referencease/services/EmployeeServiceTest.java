@@ -13,6 +13,9 @@ import com.ffhs.referencease.dao.interfaces.IEmployeeDAO;
 import com.ffhs.referencease.dto.EmployeeDTO;
 import com.ffhs.referencease.entities.Employee;
 import com.ffhs.referencease.exceptionhandling.OperationResult;
+import com.ffhs.referencease.services.interfaces.IDepartmentService;
+import com.ffhs.referencease.services.interfaces.IGenderService;
+import com.ffhs.referencease.services.interfaces.IPositionService;
 import com.ffhs.referencease.services.interfaces.IReferenceLetterService;
 import java.util.Arrays;
 import java.util.List;
@@ -31,6 +34,12 @@ class EmployeeServiceTest {
 
   @Mock
   private IReferenceLetterService referenceLetterService;
+  @Mock
+  private IDepartmentService departmentService;
+  @Mock
+  private IPositionService positionService;
+  @Mock
+  private IGenderService genderService;
 
   @Mock
   private ModelMapper modelMapper;
@@ -41,8 +50,10 @@ class EmployeeServiceTest {
   void setUp() {
     MockitoAnnotations.openMocks(this);
     modelMapper = new ModelMapper();
-    employeeService = new EmployeeService(employeeDao, referenceLetterService, modelMapper);
+    employeeService = new EmployeeService(employeeDao, referenceLetterService, departmentService,
+                                          positionService, genderService, modelMapper);
   }
+
   @Test
   void testGetEmployee() {
     // Arrange

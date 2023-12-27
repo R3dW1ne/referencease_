@@ -1,0 +1,32 @@
+@startuml
+skinparam packageTitleAlignment left
+skinparam componentStyle rectangle
+
+actor "HR-Mitarbeitende" as HR
+actor "Abteilungsleiter" as Manager
+actor "Mitarbeiter" as Employee
+component "Benutzerdomäne" as UserDomain
+
+
+
+database "Datenbank" as DB
+[Server] as Server
+
+component "ReferencEase" as App{
+'   [Interne Logik]
+'  [Benutzeroberfläche] as UI
+'  [Geschäftslogik] as BL
+'  [Datenzugriffsschicht] as DAL
+}
+
+HR -r- App : Interaktion
+Manager -- App : Interaktion
+
+Employee -d- Manager : Interagieren
+UserDomain -d- Manager : Quaifikation
+
+App -- Server : CRUD-Operationen
+Server -r- DB : Datenabfragen und -manipulation
+
+
+@enduml

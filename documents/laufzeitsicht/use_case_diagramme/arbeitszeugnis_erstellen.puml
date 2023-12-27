@@ -1,0 +1,23 @@
+@startuml
+left to right direction
+actor "HR-Mitarbeiter" as HR
+actor "Abteilungsleiter" as AL
+
+rectangle "ReferencEase" {
+HR --> (Mitarbeiter anlegen)
+HR --> (Arbeitszeugnis erzeugen)
+HR --> (Arbeitszeugnis bearbeiten)
+
+
+(Informationen bereitstellen) <-- AL
+(Bewertungen abgeben) <-- AL
+(Arbeitszeugnis überprüfen) <-- AL
+
+
+(Mitarbeiter anlegen) <. (Arbeitszeugnis erzeugen) : <<includes>>
+(Arbeitszeugnis erzeugen) .> (Informationen bereitstellen) : <<uses>>
+(Arbeitszeugnis erzeugen) .> (Bewertungen abgeben) : <<uses>>
+(Arbeitszeugnis überprüfen) .> (Arbeitszeugnis bearbeiten) : <<extends>>
+}
+
+@enduml

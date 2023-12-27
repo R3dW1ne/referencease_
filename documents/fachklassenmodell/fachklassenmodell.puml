@@ -1,0 +1,57 @@
+@startuml
+
+package "ReferencEase System" {
+  class Employee {
+    +String employeeNumber
+    +String firstName
+    +String lastName
+    +Date dateOfBirth
+    +String phone
+    +Date startDate
+  }
+
+  class Department {
+    +String departmentName
+  }
+
+  class Position {
+    +String positionName
+  }
+
+  class Gender {
+    +String genderName
+  }
+
+  class ReferenceLetter {
+    +Date deliveryDate
+    +String companyDescription
+    +String responsibilities
+    +String conclusion
+    +String introduction
+    +String properties
+  }
+
+  class Company {
+    +String name
+    +String description
+  }
+
+  class UserAccount {
+    +String email
+    +String password
+  }
+
+  class Role {
+    +String roleName
+  }
+
+  Employee "1" -- "1..*" Department : belongs to >
+  Employee "1" -- "1..*" Position : has >
+  Employee "1" -- "0..1" Gender : identified by >
+  Employee "1" -- "0..*" ReferenceLetter : referenced in >
+  ReferenceLetter "1" -- "1" Company : references >
+  UserAccount "1" -- "1" Employee : represents >
+  UserAccount "1" -- "1..*" Role : has roles >
+}
+
+@enduml

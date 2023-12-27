@@ -5,6 +5,7 @@ import com.ffhs.referencease.entities.Employee;
 import com.ffhs.referencease.exceptionhandling.BusinessException;
 import com.ffhs.referencease.exceptionhandling.OperationResult;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 
@@ -30,4 +31,6 @@ public interface IEmployeeService {
   EmployeeDTO convertToDTO(Employee employee);
 
   Employee convertToEntity(EmployeeDTO dto);
+
+  void createRandomEmployeesIfNotExists(int count, Random random);
 }

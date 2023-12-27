@@ -1,0 +1,19 @@
+@startuml
+skinparam componentStyle rectangle
+skinparam componentTitleAlignment left
+
+package "ReferencEase" {
+  [Präsentationsschicht] as UI
+  [Geschäftslogikschicht] as Logic
+  [Datenzugriffsschicht] as DAL
+}
+
+'[Server] as Server
+'database "Datenbank" as DB
+
+UI -- Logic
+Logic -- DAL
+'DAL --> Server : Datenabfragen und -manipulation
+'Server --> DB : CRUD-Operationen
+
+@enduml

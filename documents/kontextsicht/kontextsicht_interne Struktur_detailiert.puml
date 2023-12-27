@@ -1,0 +1,54 @@
+@startuml
+
+skinparam packageStyle rect
+skinparam packageTitleAlignment left
+'skinparam componentStyle rectangle
+skinparam componentTitleAlignment left
+package Umsysteme {
+component "Server/Datenbank" as DB
+actor "Benutzer" as User
+
+
+
+package "ReferencEase" {
+  () "                 Entität zu Optional" as Entity
+  () "                Optional zu DTO \n                DTO zu Entität \n                Entität zu DTO" as DTO
+
+
+
+  package "Präsentationsschicht" {
+    [UI-Komponenten] as UI
+    [JSF-Beans] as Beans
+  }
+
+  package "Geschäftslogikschicht" {
+    interface "Service-Interface" as ServiceInterface
+    [Service-Implementierung] as ServiceImpl
+  }
+
+    package "Datenzugriffsschicht" {
+      interface "DAO-Interface" as DAOInterface
+      [DAO-Implementierung] as DAOImpl
+    }
+'
+
+'
+  User --> UI : Interagiert
+  UI -r-> Beans : Nutzereingaben
+  Beans -d-> ServiceInterface : Interagiert
+  ServiceInterface <.l. ServiceImpl : implementiert
+'  Beans <-- ServiceInterface : Datenbereitstellung
+  ServiceImpl .r.> DTO : Datenverarbeitung
+
+
+
+  ServiceImpl --> DAOInterface : Interagiert
+  DAOImpl .r.> DAOInterface : implementiert
+  DAOImpl .r.> Entity : Datenverarbeitung
+'  DAOImpl --> DB : CRUD-Operationen
+  DAOImpl <--> DB : CRUD-Operationen
+}
+}
+
+
+@enduml

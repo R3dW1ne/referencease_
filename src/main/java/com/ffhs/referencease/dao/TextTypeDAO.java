@@ -20,7 +20,7 @@ public class TextTypeDAO implements ITextTypeDAO {
     List<TextType> results = em.createQuery(
             "SELECT tt FROM TextType tt WHERE tt.textTypeName = :textTypeName", TextType.class)
         .setParameter("textTypeName", textTypeName).getResultList();
-    return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
+    return results.stream().findFirst();
   }
 
 

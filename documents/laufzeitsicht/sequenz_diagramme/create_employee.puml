@@ -1,0 +1,17 @@
+@startuml
+actor "HR-Mitarbeiter" as HR
+participant Frontend as F
+participant Backend as B
+
+HR -> F : Klick auf "Neuer Mitarbeiter"
+activate F
+HR -> F : Trägt Mitarbeiterinformationen ein
+HR -> F : Klick auf "Speichern"
+F -> B : Sendet Mitarbeiterdaten
+activate B
+B -> B : Erstellt neuen Mitarbeiter
+B -> F : Bestätigung der Erstellung
+deactivate B
+F -> HR : Zeigt Bestätigungsnachricht
+deactivate F
+@enduml

@@ -25,4 +25,6 @@ public interface ITextTemplateService {
   void createTextTemplateIfNotExists(String key, String value,
       List<ReferenceReason> associatedReferenceReasons, List<Gender> associatedGenders,
       TextType textType);
+
+  void initializeTextTemplates();
 }

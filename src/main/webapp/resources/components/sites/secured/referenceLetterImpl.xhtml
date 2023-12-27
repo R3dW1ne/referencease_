@@ -94,17 +94,9 @@
                             value="#{referenceLetterBean.referenceLetter.conclusion}"/>
                 </p:outputPanel>
             </p:outputPanel>
-            <!-- Speichern Button -->
-            <p:outputPanel styleClass="p-col-12 text-center">
-                <p:commandButton value="#{referenceLetterBean.editMode ? 'Aktualisieren' : 'Speichern'}"
-                                 icon="pi pi-save"
-                                 action="#{referenceLetterBean.saveReferenceLetter()}"
-                                 styleClass="ui-button-raised ui-button-primary"
-                                 update="referenceLetterForm"/>
-            </p:outputPanel>
 
-            <p:messages id="messages" autoUpdate="true" closable="true"
-                        globalOnly="true"/>
+            <p:messages id="messages" autoUpdate="true" life="3000" closable="true"
+                        showDetail="true" globalOnly="true"/>
         </h:form>
     </div>
 </ui:composition>

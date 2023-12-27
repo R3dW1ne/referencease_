@@ -1,0 +1,23 @@
+@startuml
+skinparam packageTitleAlignment left
+skinparam componentStyle rectangle
+
+component "ReferencEase" as App #ffcccc
+
+[Server] as Server
+[JakartaEE] as EE
+[Java] as Java
+[Datenbank] as DB
+[Internet Browser] as Browser
+[Xhtml] as Xhtml
+
+App -u-> Server : "Deployment"
+App <-- EE : Framework
+App <-- Java : Programmiersprache
+App .u.> DB : "Abbildung von\nEntitäten"
+App <.u.> Xhtml : "Darstellung\n&\nInteraktion"
+Server --> Xhtml : "Bereitstellung"
+Server <--> DB : "Verbindung\n&\nDatenzugriff"
+Xhtml <--> Browser : "Darstellung\n&\nInteraktion"
+
+@enduml

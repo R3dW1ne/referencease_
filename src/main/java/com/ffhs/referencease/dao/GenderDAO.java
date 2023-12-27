@@ -49,9 +49,10 @@ public class GenderDAO implements IGenderDAO {
   }
 
   @Override
-  public Optional<Gender> findByName(String name) {
+  public Optional<Gender> findByName(String genderName) {
     List<Gender> results = em.createQuery("SELECT p FROM Gender p WHERE p.genderName = :name",
-                                          Gender.class).setParameter("name", name).getResultList();
+                                          Gender.class).setParameter("name", genderName)
+        .getResultList();
     return results.stream().findFirst();
   }
 

@@ -37,7 +37,7 @@ public class DepartmentDAO implements IDepartmentDAO {
     List<Department> results = em.createQuery(
             "SELECT d FROM Department d WHERE d.departmentName = :departmentName", Department.class)
         .setParameter("departmentName", departmentName).getResultList();
-    return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
+    return results.stream().findFirst();
   }
 
 

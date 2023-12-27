@@ -1,0 +1,33 @@
+@startuml
+actor Benutzer as U
+participant "Frontend" as F
+participant "Backend" as B
+
+U -> F : Zugriff auf Registrierungsseite
+activate F
+
+U -> F : Füllt Registrierungsdaten aus
+U -> F : Klick auf "Registrieren"
+F -> F : Validiert Registrierungsdaten
+
+alt Validierung erfolgreich
+    F -> B : Sendet Registrierungsinformationen
+    activate B
+    B -> B : Legt Benutzerkonto an
+    alt Benutzerkonto erfolgreich angelegt
+        B -> F : Sendet Bestätigung
+        deactivate B
+        F -> U : Zeigt Registrierungsbestätigung
+        F -> U : Leitet auf Login-Seite weiter
+    else Benutzername bereits vorhanden
+        B -> F : Sendet Fehlermeldung "Benutzer existiert bereits"
+        deactivate B
+        F -> U : Zeigt Fehlermeldung an
+    end
+else Validierung fehlgeschlagen
+    F -> U : Zeigt Validierungsfehler an
+end
+
+deactivate F
+@enduml
+

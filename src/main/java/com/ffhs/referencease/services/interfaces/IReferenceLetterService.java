@@ -12,7 +12,7 @@ public interface IReferenceLetterService {
 
   void saveReferenceLetter(ReferenceLetter referenceLetter);
 
-  void updateReferenceLetter(ReferenceLetter referenceLetter);
+  ReferenceLetter updateReferenceLetter(ReferenceLetter referenceLetter);
 
   void deleteReferenceLetter(UUID id);
 

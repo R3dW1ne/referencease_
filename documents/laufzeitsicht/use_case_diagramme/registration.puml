@@ -1,0 +1,26 @@
+@startuml
+left to right direction
+actor "HR-Mitarbeiter" as HR
+actor "Abteilungsleiter" as AL
+
+rectangle ReferencEase {
+  HR --> (Registrieren)
+  HR --> (Anmelden)
+  HR --> (Mitarbeiter erstellen)
+  HR --> (Mitarbeiter speichern)
+  HR --> (Mitarbeiter bearbeiten)
+  HR --> (Arbeitszeugnis erstellen)
+  HR --> (Arbeitszeugnis speichern)
+  HR --> (Arbeitszeugnis bearbeiten)
+
+  AL --> (Informationen ergänzen)
+  AL --> (Bewertungen ergänzen)
+
+  (Mitarbeiter erstellen) .> (Mitarbeiter aus Liste auswählen) : <<extends>>
+  (Arbeitszeugnis erstellen) .> (Unternehmensdetails) : <<includes>>
+  (Arbeitszeugnis erstellen) .> (Tätigkeitsbereiche auswählen) : <<includes>>
+  (Arbeitszeugnis erstellen) .> (Eigenschaften bewerten) : <<includes>>
+  (Arbeitszeugnis erstellen) .> (Arbeitszeugnis Typ wählen) : <<includes>>
+}
+
+@enduml

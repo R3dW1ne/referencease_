@@ -35,6 +35,7 @@ public class ReferenceLetter implements Serializable {
   private UUID referenceId;
   private LocalDate endDate;
   private LocalDate deliveryDate;
+  private LocalDate creationDate;
 
   @Lob
   private String introduction;

@@ -76,6 +76,15 @@
                     <ui:include
                             src="/resources/components/sites/secured/referenceLetterImpl.xhtml"/>
                 </h:panelGroup>
+                <!-- Speichern Button -->
+                <p:outputPanel styleClass="p-col-12 text-center">
+                    <p:commandButton
+                      value="#{referenceLetterBean.editMode ? 'Arbeitszeugnis aktualisieren' : 'Arbeitszeugnis speichern'}"
+                      icon="pi pi-save"
+                      action="#{referenceLetterBean.saveReferenceLetter()}"
+                      styleClass="ui-button-raised ui-button-primary"
+                      update="createRLetterForm"/>
+                </p:outputPanel>
             </h:panelGroup>
         </div>
     </ui:define>

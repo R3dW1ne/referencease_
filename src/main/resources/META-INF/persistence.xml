@@ -24,7 +24,7 @@
     <class>com.ffhs.referencease.entities.PropertyRating</class>
 
     <properties>
-      <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>
+      <!--      <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>-->
 <!--      <property name="jakarta.persistence.schema-generation.database.action" value="drop"/>-->
     </properties>
 

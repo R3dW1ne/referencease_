@@ -6,6 +6,7 @@ import com.ffhs.referencease.services.interfaces.IReferenceReasonService;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Stateless
@@ -26,8 +27,17 @@ public class ReferenceReasonService implements IReferenceReasonService {
 
   @Override
   public ReferenceReason getReferenceReasonByReasonName(String name) {
-    return referenceReasonDAO.findByReasonName(name).orElseThrow(
-        () -> new IllegalArgumentException("ReferenceReason mit Name " + name + " nicht gefunden"));
+    Optional<ReferenceReason> referenceReason = referenceReasonDAO.findByReasonName(name);
+    ReferenceReason referenceReason1;
+    if (referenceReason.isPresent()) {
+      referenceReason1 = referenceReason.get();
+      return referenceReason1;
+    } else {
+      return null;
+    }
+    //    return referenceReason;
+    //    return referenceReasonDAO.findByReasonName(name).orElseThrow(
+    //        () -> new IllegalArgumentException("ReferenceReason mit Name " + name + " nicht gefunden"));
   }
 
   @Override

@@ -25,16 +25,24 @@ public class ReferenceReasonDAO implements IReferenceReasonDAO {
     return em.createQuery("SELECT r FROM ReferenceReason r", ReferenceReason.class).getResultList();
   }
 
+  //  @Override
+  //  public Optional<ReferenceReason> findByReasonName(String reasonName) {
+  //    try {
+  //      ReferenceReason referenceReason = em.createQuery(
+  //              "SELECT r FROM ReferenceReason r WHERE r.reasonName = :reasonName", ReferenceReason.class)
+  //          .setParameter("reasonName", reasonName).getSingleResult();
+  //      return Optional.of(referenceReason);
+  //    } catch (Exception e) {
+  //      return Optional.empty();
+  //    }
+  //  }
+
   @Override
   public Optional<ReferenceReason> findByReasonName(String reasonName) {
-    try {
-      ReferenceReason referenceReason = em.createQuery(
-              "SELECT r FROM ReferenceReason r WHERE r.reasonName = :reasonName", ReferenceReason.class)
-          .setParameter("reasonName", reasonName).getSingleResult();
-      return Optional.of(referenceReason);
-    } catch (Exception e) {
-      return Optional.empty();
-    }
+    List<ReferenceReason> results = em.createQuery(
+            "SELECT p FROM ReferenceReason p WHERE p.reasonName = :name", ReferenceReason.class)
+        .setParameter("name", reasonName).getResultList();
+    return results.stream().findFirst();
   }
 
   @Override

@@ -91,8 +91,8 @@ public class ReferenceLetterService implements IReferenceLetterService {
    * @param referenceLetter Das zu aktualisierende Referenzschreiben.
    */
   @Override
-  public void updateReferenceLetter(ReferenceLetter referenceLetter) {
-    referenceLetterDAO.update(referenceLetter);
+  public ReferenceLetter updateReferenceLetter(ReferenceLetter referenceLetter) {
+    return referenceLetterDAO.update(referenceLetter);
   }
 
   /**

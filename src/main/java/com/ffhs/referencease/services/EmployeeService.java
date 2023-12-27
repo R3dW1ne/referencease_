@@ -2,15 +2,23 @@ package com.ffhs.referencease.services;
 
 import com.ffhs.referencease.dao.interfaces.IEmployeeDAO;
 import com.ffhs.referencease.dto.EmployeeDTO;
+import com.ffhs.referencease.entities.Department;
 import com.ffhs.referencease.entities.Employee;
+import com.ffhs.referencease.entities.Gender;
+import com.ffhs.referencease.entities.Position;
 import com.ffhs.referencease.exceptionhandling.BusinessException;
 import com.ffhs.referencease.exceptionhandling.DatabaseException;
 import com.ffhs.referencease.exceptionhandling.OperationResult;
+import com.ffhs.referencease.services.interfaces.IDepartmentService;
 import com.ffhs.referencease.services.interfaces.IEmployeeService;
+import com.ffhs.referencease.services.interfaces.IGenderService;
+import com.ffhs.referencease.services.interfaces.IPositionService;
 import com.ffhs.referencease.services.interfaces.IReferenceLetterService;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 import org.modelmapper.ConfigurationException;
 import org.modelmapper.MappingException;
@@ -28,16 +36,23 @@ import org.modelmapper.ModelMapper;
  */
 @Stateless
 public class EmployeeService implements IEmployeeService {
-
   private final IEmployeeDAO employeeDao;
   private final IReferenceLetterService referenceLetterService;
+  private final IDepartmentService departmentService;
+  private final IPositionService positionService;
+  private final IGenderService genderService;
   private final ModelMapper modelMapper;
 
   @Inject
   public EmployeeService(IEmployeeDAO employeeDao, IReferenceLetterService referenceLetterService,
+      IDepartmentService departmentService, IPositionService positionService,
+      IGenderService genderService,
       ModelMapper modelMapper) {
     this.employeeDao = employeeDao;
     this.referenceLetterService = referenceLetterService;
+    this.departmentService = departmentService;
+    this.positionService = positionService;
+    this.genderService = genderService;
     this.modelMapper = modelMapper;
   }
 
@@ -91,39 +106,6 @@ public class EmployeeService implements IEmployeeService {
    * @return Ein OperationResult mit dem gespeicherten oder aktualisierten Mitarbeiter.
    * @throws BusinessException Bei einem Geschäftsfehler.
    */
-  //  @Override
-  //  public OperationResult<EmployeeDTO> saveOrUpdateEmployee(EmployeeDTO employeeDTO)
-  //      throws BusinessException, DatabaseException {
-  //    if (employeeDTO == null) {
-  //      throw new BusinessException("Mitarbeiter ist null.");
-  //    }
-  //    boolean isNewEmployee = employeeDTO.getEmployeeId() == null;
-  //    boolean employeeToUpdateIsStillInDB = employeeDao.employeeIdExists(employeeDTO.getEmployeeId());
-  //    if (!isNewEmployee && !employeeToUpdateIsStillInDB) {
-  //      return OperationResult.failure("Mitarbeiter existiert nicht mehr.");
-  //    }
-  //
-  //    String employeeNumberToSave = employeeDTO.getEmployeeNumber();
-  //    boolean employeeNumberExists = employeeDao.employeeNumberExists(employeeNumberToSave);
-  //    EmployeeDTO existingEmployee = getEmployeeByEmployeeNumber(employeeNumberToSave);
-  //
-  //    if (employeeNumberExists && (isNewEmployee || !existingEmployee.getEmployeeId()
-  //        .equals(employeeDTO.getEmployeeId()))) {
-  //      return OperationResult.failure(
-  //          "Mitarbeiternummer bereits von einem anderen Mitarbeiter vergeben.");
-  //    }
-  //
-  //    EmployeeDTO savedEmployeeDTO;
-  //    Employee savedEmployee;
-  //    try {
-  //      savedEmployee = convertToEntity(employeeDTO);
-  //      savedEmployee = employeeDao.update(savedEmployee);
-  //      savedEmployeeDTO = convertToDTO(savedEmployee);
-  //      return OperationResult.success(savedEmployeeDTO);
-  //    } catch (DatabaseException | BusinessException e) {
-  //      throw new BusinessException("Fehler beim Speichern des Mitarbeiters.", e);
-  //    }
-  //  }
   @Override
   public OperationResult<EmployeeDTO> saveOrUpdateEmployee(EmployeeDTO employeeDTO)
       throws BusinessException, DatabaseException {
@@ -136,7 +118,7 @@ public class EmployeeService implements IEmployeeService {
 
     if (employeeNumberIsDuplicate(employeeDTO)) {
       return OperationResult.failure(
-          "Mitarbeiternummer bereits von einem anderen Mitarbeiter vergeben.");
+          "Mitarbeiternummer bereits an einem anderen Mitarbeiter vergeben.");
     }
 
     return trySaveOrUpdateEmployee(employeeDTO);
@@ -173,24 +155,23 @@ public class EmployeeService implements IEmployeeService {
     }
   }
 
-
-  private EmployeeDTO saveEmployeeInternal(Employee employee) throws DatabaseException {
-    try {
-      employeeDao.save(employee);
-    } catch (DatabaseException e) {
-      throw new DatabaseException("Fehler beim Speichern des Mitarbeiters.", e);
-    }
-    return convertToDTO(employee);
-  }
-
-  private EmployeeDTO updateEmployeeInternal(Employee employee) throws DatabaseException {
-    try {
-      employeeDao.update(employee);
-    } catch (DatabaseException e) {
-      throw new DatabaseException("Fehler beim Aktualisieren des Mitarbeiters.", e);
-    }
-    return convertToDTO(employee);
-  }
+  //  private EmployeeDTO saveEmployeeInternal(Employee employee) throws DatabaseException {
+  //    try {
+  //      employeeDao.save(employee);
+  //    } catch (DatabaseException e) {
+  //      throw new DatabaseException("Fehler beim Speichern des Mitarbeiters.", e);
+  //    }
+  //    return convertToDTO(employee);
+  //  }
+  //
+  //  private EmployeeDTO updateEmployeeInternal(Employee employee) throws DatabaseException {
+  //    try {
+  //      employeeDao.update(employee);
+  //    } catch (DatabaseException e) {
+  //      throw new DatabaseException("Fehler beim Aktualisieren des Mitarbeiters.", e);
+  //    }
+  //    return convertToDTO(employee);
+  //  }
 
   /**
    * Löscht einen Mitarbeiter und alle zugehörigen Referenzbriefe.
@@ -255,6 +236,47 @@ public class EmployeeService implements IEmployeeService {
       return modelMapper.map(dto, Employee.class);
     } catch (IllegalArgumentException | ConfigurationException | MappingException e) {
       throw new BusinessException("Problem beim Konvertieren zu einer Entität.", e);
+    }
+  }
+
+  @Override
+  public void createRandomEmployeesIfNotExists(int count, Random random) {
+    // Überprüfen, ob bereits Mitarbeiter in der Datenbank existieren
+    long employeeCount = countEmployees();
+    if (employeeCount > 0) {
+      // Es gibt bereits Mitarbeiter, also keine neuen hinzufügen
+      return;
+    }
+
+    for (int i = 0; i < count; i++) {
+      Employee employee = new Employee();
+      employee.setEmployeeNumber(
+          UUID.randomUUID().toString().substring(0, 8)); // Zufällige Mitarbeiternummer
+      employee.setFirstName("Firstname" + i);
+      employee.setLastName("Lastname" + i);
+      employee.setDateOfBirth(LocalDate.now().minusYears(
+          random.nextInt(40) + 18)); // Zufälliges Geburtsdatum zwischen 18 und 58 Jahren
+      employee.setPhone("123-456-7890"); // Beispieltelefonnummer
+      employee.setStartDate(LocalDate.now().minusYears(random.nextInt(
+          10))); // Zufälliges Anfangsdatum der Beschäftigung in den letzten 10 Jahren
+      // Abteilung kann auch zufällig zugewiesen werden
+      Department randomDepartment = departmentService.getRandomDepartment(random);
+      if (randomDepartment != null) {
+        employee.setDepartment(randomDepartment);
+      }
+
+      // Zufällige Position auswählen
+      Position randomPosition = positionService.getRandomPosition(random);
+      if (randomPosition != null) {
+        employee.setPosition(randomPosition);
+      }
+
+      // Zufälliges Gender auswählen
+      Gender randomGender = genderService.getRandomGender(random);
+      if (randomGender != null) {
+        employee.setGender(randomGender);
+      }
+      saveEmployee(employee);
     }
   }
 }

@@ -1,0 +1,67 @@
+@startuml
+'skinparam linetype polyline
+skinparam linetype ortho
+
+'skinparam packageStyle rect
+skinparam packageTitleAlignment left
+skinparam componentStyle rectangle
+'component "Server/Datenbank" as DB
+'package "Benutzer" as User
+top to bottom direction
+
+package "<<System>> Umsysteme" as Umsysteme {
+
+package "User" as User {}
+package "Admin" as Admin {}
+
+
+
+package "<<System>> ReferencEase" as ReferencEase {
+
+Package "<<System>> Server" as Server {
+
+  package "<<System>> Frontend" as FE {
+package "<<Technologie>> Xhtml" as Xhtml {
+
+package "User Interface" as UI {}
+package "Präsentations-Logik" as PL {}
+
+  }
+}
+  package "<<System>> Backend" as BE{
+package "<<Technologie>> Jakarta EE" as JEE {
+
+  package "Data Access" as DA {}
+  package "Proxy" as PR {}
+  package "User Authentication" as UA {}
+  }
+
+
+'  end BE
+}
+
+
+'end JEE
+}
+'end Server
+  package "<<System>> Datenbank" as DB {
+package "<<Technologie>> PostgreSQL" as Postgres {
+
+  package "Data Source" as DS {}
+  package "Query Objects" as QR {}
+
+  }
+'  //end DB
+}
+'//end Postgres
+
+}
+'//end ReferencEase
+}
+'//end Umsysteme
+User .l.> FE
+Admin .l.> DB
+FE ..> BE
+Server .u.> DB
+
+@enduml

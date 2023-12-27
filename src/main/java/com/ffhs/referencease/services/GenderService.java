@@ -8,6 +8,7 @@ import com.ffhs.referencease.services.interfaces.IGenderService;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 import org.modelmapper.ModelMapper;
 
@@ -49,13 +50,14 @@ public class GenderService implements IGenderService {
     }
   }
 
-  //  @Override
-  //  public List<GenderDTO> getAllGenders() {
-  //    // Hier rufen Sie alle Geschlechter aus der Datenbank ab und konvertieren sie in DTOs
-  //    return genderDAO.getAllGenders().stream()
-  //        .map(gender -> modelMapper.map(gender, GenderDTO.class))
-  //        .collect(Collectors.toList());
-  //  }
+  @Override
+  public Gender getRandomGender(Random random) {
+    List<Gender> genders = getAllGenders();
 
-  // Implementierung weiterer Methoden
+    if (!genders.isEmpty()) {
+      return genders.get(random.nextInt(genders.size()));
+    } else {
+      return null;
+    }
+  }
 }

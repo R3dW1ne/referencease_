@@ -29,7 +29,7 @@ public class PositionDAO implements IPositionDAO {
     List<Position> results = em.createQuery(
             "SELECT p FROM Position p WHERE p.positionName = :positionName", Position.class)
         .setParameter("positionName", positionName).getResultList();
-    return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
+    return results.stream().findFirst();
   }
 
   @Override

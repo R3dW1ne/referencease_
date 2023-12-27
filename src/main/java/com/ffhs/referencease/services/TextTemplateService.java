@@ -5,9 +5,16 @@ import com.ffhs.referencease.entities.Gender;
 import com.ffhs.referencease.entities.ReferenceReason;
 import com.ffhs.referencease.entities.TextTemplate;
 import com.ffhs.referencease.entities.TextType;
+import com.ffhs.referencease.entities.enums.EReferenceReason;
+import com.ffhs.referencease.entities.enums.ETextType;
+import com.ffhs.referencease.services.interfaces.IGenderService;
+import com.ffhs.referencease.services.interfaces.IReferenceReasonService;
 import com.ffhs.referencease.services.interfaces.ITextTemplateService;
+import com.ffhs.referencease.services.interfaces.ITextTypeService;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -22,9 +29,20 @@ public class TextTemplateService implements ITextTemplateService {
 
   private final ITextTemplateDAO textTemplateDAO;
 
+  private final IReferenceReasonService referenceReasonService;
+
+  private final IGenderService genderService;
+
+  private final ITextTypeService textTypeService;
+
   @Inject
-  public TextTemplateService(ITextTemplateDAO textTemplateDAO) {
+  public TextTemplateService(ITextTemplateDAO textTemplateDAO,
+      IReferenceReasonService referenceReasonService, IGenderService genderService,
+      ITextTypeService textTypeService) {
     this.textTemplateDAO = textTemplateDAO;
+    this.referenceReasonService = referenceReasonService;
+    this.genderService = genderService;
+    this.textTypeService = textTypeService;
   }
 
   @Override
@@ -69,5 +87,44 @@ public class TextTemplateService implements ITextTemplateService {
       TextType textType) {
     textTemplateDAO.createTextTemplateIfNotExists(key, value, associatedReferenceReasons,
                                                   associatedGenders, textType);
+  }
+
+  @Override
+  public void initializeTextTemplates() {
+    ReferenceReason abschlusszeugnis = referenceReasonService.getReferenceReasonByReasonName(
+        EReferenceReason.ABSCHLUSSZEUGNIS.getDisplayName());
+    ReferenceReason zwischenzeugnis = referenceReasonService.getReferenceReasonByReasonName(
+        EReferenceReason.ZWISCHENZEUGNIS.getDisplayName());
+    ReferenceReason positionswechsel = referenceReasonService.getReferenceReasonByReasonName(
+        EReferenceReason.POSITIONSWECHSEL.getDisplayName());
+    List<ReferenceReason> alleReferenceReasons = Arrays.asList(abschlusszeugnis, zwischenzeugnis,
+                                                               positionswechsel);
+    List<Gender> allGenders = genderService.getAllGenders();
+    TextType textType = textTypeService.getTextTypeByName(ETextType.EINLEITUNG.getDisplayName());
+
+    // Gemeinsame TextTemplates für alle ReferenceReasons
+    createTextTemplateIfNotExists("afterName", ", geboren am ", alleReferenceReasons, allGenders,
+                                  textType);
+    createTextTemplateIfNotExists("afterPosition", " in der Abteilung ", alleReferenceReasons,
+                                  allGenders, textType);
+    createTextTemplateIfNotExists("afterDepartment", " in unserem Unternehmen beschäftigt.",
+                                  alleReferenceReasons, allGenders, textType);
+
+    // Spezifische TextTemplates für Abschlusszeugnis und Positionswechsel
+    List<ReferenceReason> abschlussUndPositionswechsel = Arrays.asList(abschlusszeugnis,
+                                                                       positionswechsel);
+    createTextTemplateIfNotExists("afterDateOfBirth", ", war vom ", abschlussUndPositionswechsel,
+                                  allGenders, textType);
+    createTextTemplateIfNotExists("afterStartDate", " bis ", abschlussUndPositionswechsel,
+                                  allGenders, textType);
+    createTextTemplateIfNotExists("afterEndDate", ", als ", abschlussUndPositionswechsel,
+                                  allGenders, textType);
+
+    // Spezifisches TextTemplate für Zwischenzeugnis
+    List<ReferenceReason> nurZwischenzeugnis = Collections.singletonList(zwischenzeugnis);
+    createTextTemplateIfNotExists("afterDateOfBirth", ", ist seit ", nurZwischenzeugnis, allGenders,
+                                  textType);
+    createTextTemplateIfNotExists("afterStartDate", ", als ", nurZwischenzeugnis, allGenders,
+                                  textType);
   }
 }

@@ -1,0 +1,22 @@
+@startuml
+actor Benutzer as U
+participant Frontend as F
+participant Backend as B
+
+U -> F : Zugriff auf Login-Seite
+activate F
+U -> F : Gibt E-Mail und Passwort ein
+F -> B : Sendet Anmeldedaten
+activate B
+B -> B : Überprüft Anmeldedaten
+alt Erfolgreiche Anmeldung
+    B -> F : Bestätigt Anmeldung
+    deactivate B
+    F -> U : Zeigt Home-Seite an
+else Fehlerhafte Anmeldung
+    B -> F : Sendet Fehlermeldung
+    deactivate B
+    F -> U : Zeigt Fehlermeldung an
+end
+deactivate F
+@enduml
