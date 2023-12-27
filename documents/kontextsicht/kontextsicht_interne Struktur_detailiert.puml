@@ -2,7 +2,6 @@
 
 skinparam packageStyle rect
 skinparam packageTitleAlignment left
-'skinparam componentStyle rectangle
 skinparam componentTitleAlignment left
 package Umsysteme {
 component "Server/Datenbank" as DB
@@ -37,7 +36,6 @@ package "ReferencEase" {
   UI -r-> Beans : Nutzereingaben
   Beans -d-> ServiceInterface : Interagiert
   ServiceInterface <.l. ServiceImpl : implementiert
-'  Beans <-- ServiceInterface : Datenbereitstellung
   ServiceImpl .r.> DTO : Datenverarbeitung
 
 
@@ -45,7 +43,6 @@ package "ReferencEase" {
   ServiceImpl --> DAOInterface : Interagiert
   DAOImpl .r.> DAOInterface : implementiert
   DAOImpl .r.> Entity : Datenverarbeitung
-'  DAOImpl --> DB : CRUD-Operationen
   DAOImpl <--> DB : CRUD-Operationen
 }
 }

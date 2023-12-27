@@ -12,12 +12,7 @@ component "Benutzerdomäne" as UserDomain
 
 
 component "ReferencEase" as App #ffcccc
-'{
-'   [Interne Logik]
-'  [Benutzeroberfläche] as UI
-'  [Geschäftslogik] as BL
-'  [Datenzugriffsschicht] as DAL
-'}
+
 
 HR -r-> App : Erzeugung\n&\nBearbeitung
 Manager <--> App : Informationen\n&\nBewertung
@@ -29,10 +24,5 @@ Employee -r-> UserDomain : Quaifikation
 Employee -r-> App : Informationen
 
 [Arbeitszeugnis] <-l- [Unternehmen] : Informationen
-'[Arbeitszeugnis] <-u- [Unternehmen] : Informationen
-'[Arbeitszeugnis] <-u- [Unternehmen] : Informationen
-'[Arbeitszeugnis] <-u- [Unternehmen] : Informationen
-'[Arbeitszeugnis] <-u- [Unternehmen] : Informationen
-
 
 @enduml

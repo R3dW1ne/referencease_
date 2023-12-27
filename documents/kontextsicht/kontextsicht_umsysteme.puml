@@ -13,10 +13,6 @@ database "Datenbank" as DB
 [Server] as Server
 
 component "ReferencEase" as App{
-'   [Interne Logik]
-'  [Benutzeroberfläche] as UI
-'  [Geschäftslogik] as BL
-'  [Datenzugriffsschicht] as DAL
 }
 
 HR -r- App : Interaktion
