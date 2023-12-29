@@ -66,7 +66,6 @@ public class AuthenticationBean implements Serializable {
     return session;
   }
 
-
   public String loginWithValidRegistrationUserDTOValidator(UserAccountDTO userAccountDTO)
       throws PositionNotFoundException {
     return login();

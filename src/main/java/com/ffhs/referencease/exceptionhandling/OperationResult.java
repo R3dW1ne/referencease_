@@ -22,6 +22,4 @@ public class OperationResult<T> {
   public static <T> OperationResult<T> failure(String errorMessage) {
     return new OperationResult<>(false, null, errorMessage);
   }
-
-  // Getter-Methoden für success, data und errorMessage
 }

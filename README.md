@@ -129,7 +129,15 @@ docker compose up
 ## Informationen zu den Datenbank-Tabellen
 
 Die Datenbank-Tabellen und einige initialen Daten, werden automatisch beim Starten der Anwendung
-erstellt. Dazu wird die Klasse java/com/ffhs/referencease/AppInitSingleton.java verwendet.
+erstellt.
+
+Für die Tabellen wird der Eintrag *
+*`<property name="jakarta.persistence.schema-generation.database.action"
+value="drop-and-create"/>`** im persistence.xml verwendet.
+
+Für die Abfüllung der initialen Daten wird die Klasse *
+*`java/com/ffhs/referencease/AppInitSingleton.java`** verwendet.
+
 Um die Applikation zu redeployen, muss die Klasse AppInitSingleton.java auskommentiert werden.
 Wird die Klasse nicht auskommentiert, ist nur ein Restart der Applikation möglich.
 Dies ist der Verwendung von Singleton und EJB geschuldet, da die Injections sonst nicht korrekt

@@ -59,6 +59,8 @@ public class UserAccountBean implements Serializable {
     }
     // Passwort-Verschlüsselung und User-Persistierung im UserService
     userAccountService.save(userAccountDTO);
+    message =
+        "Benutzeraccount " + userAccountDTO.getEmail() + " erfolgreich erstellt. Viel Spass! \n :)";
     // Passwort und confirmPassword zurücksetzen
     userAccountDTO.setPassword(null);
     userAccountDTO.setConfirmPassword(null);
@@ -66,7 +68,6 @@ public class UserAccountBean implements Serializable {
 
     // Setzen einer Erfolgsmeldung im Flash Scope
     FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-    message = "Benutzeraccount erfolgreich erstellt. Viel Spass! \n :)";
     LOGGER.info(message);
     FrontendMessages.sendInfoMessageToFrontend(null, "Erfolg", message);
     return "login?faces-redirect=true"; // Weiterleitung zur Login-Seite nach erfolgreicher Registrierung

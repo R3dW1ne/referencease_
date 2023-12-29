@@ -44,6 +44,4 @@ public class TextTypeService implements ITextTypeService {
       textTypeDAO.create(textType);
     }
   }
-
-  // Weitere Methoden nach Bedarf (z.B. speichern, aktualisieren, löschen)
 }

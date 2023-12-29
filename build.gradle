@@ -40,6 +40,7 @@ dependencies {
     implementation 'org.webjars.npm:primeflex:3.3.1'
 
 //    implementation 'org.mindrot:jbcrypt:0.4'
+    implementation 'commons-codec:commons-codec:1.16.0'
 
 
     implementation 'org.modelmapper:modelmapper:3.2.0'

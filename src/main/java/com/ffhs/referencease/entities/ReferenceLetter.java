@@ -23,8 +23,6 @@ public class ReferenceLetter implements Serializable {
 
   @Serial
   private static final long serialVersionUID = 1L;
-
-  // Zusätzliche Felder für Mitarbeiterinformationen
   private String employeeName;
   private String employeePosition;
   private String employeeDepartment;

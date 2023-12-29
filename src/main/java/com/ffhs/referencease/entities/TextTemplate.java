@@ -23,8 +23,8 @@ public class TextTemplate {
   @Convert(converter = UUIDConverter.class)
   private UUID id;
 
-  private String key; // Eindeutiger Schlüssel für die Vorlage, z.B. "birthDate", "startDate", "endDate", usw.
-  private String template; // Die Textvorlage, z.B. ", geboren am ", ", war vom ", " bis ", usw.
+  private String key;
+  private String template;
 
   @ManyToMany
   @JoinTable(name = "TextTemplate_ReferenceReason", joinColumns = @JoinColumn(name = "text_template_id"), inverseJoinColumns = @JoinColumn(name = "reference_reason_id"))

@@ -43,6 +43,4 @@ public class PropertyService implements IPropertyService {
       propertyDAO.create(property);
     }
   }
-
-  // Weitere Methoden nach Bedarf
 }

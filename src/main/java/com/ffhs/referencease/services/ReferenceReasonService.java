@@ -35,9 +35,6 @@ public class ReferenceReasonService implements IReferenceReasonService {
     } else {
       return null;
     }
-    //    return referenceReason;
-    //    return referenceReasonDAO.findByReasonName(name).orElseThrow(
-    //        () -> new IllegalArgumentException("ReferenceReason mit Name " + name + " nicht gefunden"));
   }
 
   @Override
@@ -53,6 +50,4 @@ public class ReferenceReasonService implements IReferenceReasonService {
       referenceReasonDAO.save(referenceReason);
     }
   }
-
-  // Weitere Methoden nach Bedarf (z.B. speichern, aktualisieren, löschen)
 }

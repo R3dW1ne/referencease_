@@ -168,12 +168,6 @@ public class EmployeeBean implements Serializable {
     editMode = false;
   }
 
-  //  public void resetEmployeeList() {
-  //    employees = employeeService.getAllEmployees();
-  //    filteredEmployees = employeeService.getAllEmployees();
-  //    listSelectionNeeded = false;
-  //  }
-
   public String navigateToEmployeeList() {
     refreshEmployeeList();
     selectedEmployee = null;

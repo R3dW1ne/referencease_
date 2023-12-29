@@ -155,24 +155,6 @@ public class EmployeeService implements IEmployeeService {
     }
   }
 
-  //  private EmployeeDTO saveEmployeeInternal(Employee employee) throws DatabaseException {
-  //    try {
-  //      employeeDao.save(employee);
-  //    } catch (DatabaseException e) {
-  //      throw new DatabaseException("Fehler beim Speichern des Mitarbeiters.", e);
-  //    }
-  //    return convertToDTO(employee);
-  //  }
-  //
-  //  private EmployeeDTO updateEmployeeInternal(Employee employee) throws DatabaseException {
-  //    try {
-  //      employeeDao.update(employee);
-  //    } catch (DatabaseException e) {
-  //      throw new DatabaseException("Fehler beim Aktualisieren des Mitarbeiters.", e);
-  //    }
-  //    return convertToDTO(employee);
-  //  }
-
   /**
    * Löscht einen Mitarbeiter und alle zugehörigen Referenzbriefe.
    *
