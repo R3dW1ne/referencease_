@@ -9,6 +9,7 @@ Einrichtung einer PostgreSQL-Datenbank mittels Docker, sowie der Verwendung des 
 
 ## Voraussetzungen
 
+- Java JDK 17 (on PATH)
 - IntelliJ IDEA
 - Docker
 - Gradle
@@ -46,24 +47,24 @@ git clone https://github.com/R3dW1ne/referencease_
 
 ### Schritt 1: Erstellen eines Docker-Containers für PostgreSQL
 
-1. Öffnen Sie das Terminal und navigieren Sie zum Projektordner.
-2. Führen Sie den Docker-Befehl aus, um die PostgreSQL-Datenbank zu erstellen und zu starten:
+1. Stellen Sie sicher, dass Docker auf Ihrem System installiert ist.
+2. Stellen Sie sicher, dass Docker auf Ihrem System ausgeführt wird.
+3. Öffnen Sie das Terminal und navigieren Sie zum Projektordner.
+4. Führen Sie den Docker-Befehl aus, um die PostgreSQL-Datenbank zu erstellen und zu starten:
 
 ```bash
-docker run --name referencEase-db -e POSTGRES_DB=referencEase -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -p 5432:5432 -d postgres
+docker compose up
 ```
-
-### Schritt 2: Verbinden der Datenbank mit der Anwendung
-
-1. Aktualisieren Sie die Datenbankkonfiguration im Projekt, um auf den Docker-Container zu
-   verweisen.
 
 ## Einrichten des Glassfish Servers 7.0.7
 
 1. Der Glassfish Server 7.0.7 ist bereits in der Projektstruktur enthalten. Stellen Sie sicher, dass
    er in IntelliJ korrekt konfiguriert ist.
 2. Unter "Run" > "Edit Configurations" wählen Sie den Glassfish Server und stellen Sie den Pfad zur
-   Installation und die erforderlichen Einstellungen ein.
+   Installation und die erforderlichen Einstellungen ein. Sie können dafür den absoluten Pfad zum
+   Glassfish-Server-Ordner verwenden, der sich im Projektordner befindet.
+
+Bspw.: "C:\Users\USER\IdeaProjects\referencease\Glassfish\glassfish-7.0.7\glassfish7"
 
 ## Ausführen der Anwendung
 
