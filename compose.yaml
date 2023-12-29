@@ -9,9 +9,3 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: mysecretpassword
       POSTGRES_DB: referencease
-#    volumes:
-#      - local_postgres_referencease:/var/lib/postgresql/data
-##      - ./db/init.sql:/docker-entrypoint-initdb.d/create_database.sql
-#
-#volumes:
-#  local_postgres_referencease:

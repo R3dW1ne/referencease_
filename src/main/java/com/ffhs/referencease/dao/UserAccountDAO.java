@@ -3,7 +3,7 @@ package com.ffhs.referencease.dao;
 import com.ffhs.referencease.dao.interfaces.IUserAccountDAO;
 import com.ffhs.referencease.entities.Role;
 import com.ffhs.referencease.entities.UserAccount;
-import com.ffhs.referencease.utils.PBKDF2Hash;
+import com.ffhs.referencease.utils.PWHash;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -70,7 +70,7 @@ public class UserAccountDAO implements IUserAccountDAO {
     query.setParameter(EMAIL, email);
     try {
       UserAccount userAccount = query.getSingleResult();
-      return PBKDF2Hash.checkPassword(password, userAccount.getPassword());
+      return PWHash.checkPassword(password, userAccount.getPassword());
     } catch (NoResultException e) {
       return false;
     }

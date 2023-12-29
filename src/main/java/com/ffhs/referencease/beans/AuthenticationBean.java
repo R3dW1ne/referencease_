@@ -4,7 +4,7 @@ import com.ffhs.referencease.dto.UserAccountDTO;
 import com.ffhs.referencease.exceptionhandling.PositionNotFoundException;
 import com.ffhs.referencease.services.interfaces.IUserAccountService;
 import com.ffhs.referencease.utils.FrontendMessages;
-import com.ffhs.referencease.utils.PBKDF2Hash;
+import com.ffhs.referencease.utils.PWHash;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.context.ExternalContext;
@@ -73,7 +73,7 @@ public class AuthenticationBean implements Serializable {
 
   public String login() throws PositionNotFoundException {
     String emailInput = getEmail();
-    String hashedPasswordInput = PBKDF2Hash.createHash(getPassword());
+    String hashedPasswordInput = PWHash.createHash(getPassword());
     session = getSession();
     String message = "";
 

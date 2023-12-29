@@ -2,21 +2,11 @@ package com.ffhs.referencease.utils;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
-public class PBKDF2Hash {
+public class PWHash {
 
-  //  public static String createHash(String password) {
-  //    byte[] salt = "12345678".getBytes();
-  //
-  //    try {
-  //      KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
-  //      SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-  //      byte[] hash = factory.generateSecret(spec).getEncoded();
-  //      return Base64.getEncoder().encodeToString(hash);
-  //    } catch (Exception ignored) {
-  //      // TODO: what happens if pw could not be encrypted?
-  //    }
-  //    throw new IllegalArgumentException();
-  //  }
+  private PWHash() {
+    throw new IllegalStateException("PWHash class");
+  }
 
   /**
    * Erstellt einen Hash eines Passworts.

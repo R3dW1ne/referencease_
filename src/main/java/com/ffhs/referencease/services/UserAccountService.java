@@ -6,7 +6,7 @@ import com.ffhs.referencease.entities.UserAccount;
 import com.ffhs.referencease.exceptionhandling.PositionNotFoundException;
 import com.ffhs.referencease.services.interfaces.IRoleService;
 import com.ffhs.referencease.services.interfaces.IUserAccountService;
-import com.ffhs.referencease.utils.PBKDF2Hash;
+import com.ffhs.referencease.utils.PWHash;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import java.util.Optional;
@@ -56,7 +56,7 @@ public class UserAccountService implements IUserAccountService {
   public void save(UserAccountDTO dto) {
     UserAccount userAccount = new UserAccount();
     userAccount.setEmail(dto.getEmail());
-    userAccount.setPassword(PBKDF2Hash.createHash(dto.getPassword()));
+    userAccount.setPassword(PWHash.createHash(dto.getPassword()));
     userAccount.setRoles(roleService.findByRoleName("User"));
     userAccountDAO.save(userAccount);
   }
