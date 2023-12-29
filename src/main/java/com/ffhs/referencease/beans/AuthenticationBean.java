@@ -2,7 +2,6 @@ package com.ffhs.referencease.beans;
 
 import com.ffhs.referencease.dto.UserAccountDTO;
 import com.ffhs.referencease.exceptionhandling.PositionNotFoundException;
-import com.ffhs.referencease.services.interfaces.IAuthenticationService;
 import com.ffhs.referencease.services.interfaces.IUserAccountService;
 import com.ffhs.referencease.utils.FrontendMessages;
 import com.ffhs.referencease.utils.PBKDF2Hash;
@@ -35,8 +34,6 @@ public class AuthenticationBean implements Serializable {
 
   private final transient IUserAccountService userAccountService;
 
-  private final transient IAuthenticationService authenticationService;
-
   private UserAccountDTO userAccountDTO;
 
   private transient HttpSession session = null;
@@ -52,10 +49,8 @@ public class AuthenticationBean implements Serializable {
 
 
   @Inject
-  public AuthenticationBean(IUserAccountService userAccountService,
-      IAuthenticationService authenticationService) {
+  public AuthenticationBean(IUserAccountService userAccountService) {
     this.userAccountService = userAccountService;
-    this.authenticationService = authenticationService;
   }
 
   @PostConstruct

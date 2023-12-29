@@ -1,0 +1,17 @@
+services:
+  db:
+    image: postgres:15.5
+    container_name: local_postgres_referencease_db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: referencease
+#    volumes:
+#      - local_postgres_referencease:/var/lib/postgresql/data
+##      - ./db/init.sql:/docker-entrypoint-initdb.d/create_database.sql
+#
+#volumes:
+#  local_postgres_referencease:
