@@ -71,7 +71,7 @@ docker compose up
     - Nach dem Herunterladen ist die **`.jar`**-Datei in das Verzeichnis *
       *`GLASSFISH_HOME/glassfish/domains/domain1/lib/`** zu kopieren. **`GLASSFISH_HOME`**
       bezeichnet das Hauptverzeichnis der GlassFish-Installation, und **`domain1`** ist das
-      Standarddomänenverzeichnis. Bei Verwendung einer anderen Domäne ist der Pfad entsprechend
+      Standard-Domänenverzeichnis. Bei Verwendung einer anderen Domäne ist der Pfad entsprechend
       anzupassen.
 3. Starten Sie den Glassfish Server:
     - Öffnen Sie das Terminal und navigieren Sie zum Verzeichnis **`GLASSFISH_HOME/bin/`**.
