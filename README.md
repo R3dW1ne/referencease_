@@ -62,7 +62,8 @@ docker compose up
     - Laden Sie
       den [Eclipse GlassFish 7.0.7, Jakarta EE Web Profile, 10](https://www.eclipse.org/downloads/download.php?file=/ee4j/glassfish/web-7.0.7.zip)
       von der offiziellen [Glassfish-Website](https://glassfish.org/download_gf7.html) herunter.
-    - Entpacken Sie das Archiv in ein Verzeichnis Ihrer Wahl.
+    - Entpacken Sie das Archiv in ein Verzeichnis Ihrer Wahl. (z.B. **`C:/Users/username/Downloads/`
+      ** um die Einstellungen im .run-File dieses Projekts zu verwenden)
 2. **PostgreSQL JDBC-Treiber**:
     - Der PostgreSQL JDBC-Treiber wird benötigt. Dieser kann von der
       offiziellen [PostgreSQL-Website](https://jdbc.postgresql.org/download/) heruntergeladen
