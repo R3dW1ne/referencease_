@@ -62,7 +62,8 @@ docker compose up
     - Laden Sie
       den [Eclipse GlassFish 7.0.7, Jakarta EE Web Profile, 10](https://www.eclipse.org/downloads/download.php?file=/ee4j/glassfish/web-7.0.7.zip)
       von der offiziellen [Glassfish-Website](https://glassfish.org/download_gf7.html) herunter.
-    - Entpacken Sie das Archiv in ein Verzeichnis Ihrer Wahl.
+    - Entpacken Sie das Archiv in ein Verzeichnis Ihrer Wahl. (z.B. **`C:/Users/username/Downloads/`
+      ** um die Einstellungen im .run-File dieses Projekts zu verwenden)
 2. **PostgreSQL JDBC-Treiber**:
     - Der PostgreSQL JDBC-Treiber wird benötigt. Dieser kann von der
       offiziellen [PostgreSQL-Website](https://jdbc.postgresql.org/download/) heruntergeladen
@@ -70,7 +71,7 @@ docker compose up
     - Nach dem Herunterladen ist die **`.jar`**-Datei in das Verzeichnis *
       *`GLASSFISH_HOME/glassfish/domains/domain1/lib/`** zu kopieren. **`GLASSFISH_HOME`**
       bezeichnet das Hauptverzeichnis der GlassFish-Installation, und **`domain1`** ist das
-      Standarddomänenverzeichnis. Bei Verwendung einer anderen Domäne ist der Pfad entsprechend
+      Standard-Domänenverzeichnis. Bei Verwendung einer anderen Domäne ist der Pfad entsprechend
       anzupassen.
 3. Starten Sie den Glassfish Server:
     - Öffnen Sie das Terminal und navigieren Sie zum Verzeichnis **`GLASSFISH_HOME/bin/`**.
