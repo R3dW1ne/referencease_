@@ -1,5 +1,7 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="GlassFish 7.0.7" type="GlassfishConfiguration" factoryName="Local" APPLICATION_SERVER_NAME="GlassFish 7.0.7" ALTERNATIVE_JRE_ENABLED="false">
+  <configuration default="false" name="GlassFish 7.0.7" type="GlassfishConfiguration"
+    factoryName="Local" APPLICATION_SERVER_NAME="GlassFish 7.0.7" ALTERNATIVE_JRE_ENABLED="true"
+    ALTERNATIVE_JRE_PATH="17">
     <option name="OPEN_IN_BROWSER_URL"
       value="http://localhost:8080/referencease/resources/components/sites/login.xhtml"/>
     <option name="UPDATING_POLICY" value="restart-server" />
@@ -17,16 +19,16 @@
       <option name="CREDENTIAL_ALIAS" />
     </server-settings>
     <output_file
-      path="$PROJECT_DIR$/Glassfish/glassfish-7.0.7/glassfish7/glassfish/domains/domain1/config/logs/log4j.log"
-      is_save="true"/>
+      path="$USER_HOME$/Downloads/web-7.0.7/glassfish7/glassfish/domains/domain1/logs/server.log"/>
     <log_file alias="GlassFish Log"
-      path="$PROJECT_DIR$/Glassfish/glassfish-7.0.7/glassfish7/glassfish/domains/domain1/logs/server.log"/>
+      path="$USER_HOME$/Downloads/web-7.0.7/glassfish7/glassfish/domains/domain1/logs/server.log"
+      show_all="true"/>
     <log_file checked="false" alias="Java Logs"
       path="$PROJECT_DIR$/Glassfish/glassfish-7.0.7/glassfish7/glassfish/domains/domain1/logs/java.log"/>
     <log_file checked="false" alias="Glasfish Logs 2.0"
       path="$PROJECT_DIR$/Glassfish/glassfish-7.0.7/glassfish7/glassfish/domains/domain1/logs/server.log"/>
     <log_file alias="log4j.log"
-      path="$PROJECT_DIR$/Glassfish/glassfish-7.0.7/glassfish7/glassfish/domains/domain1/config/logs/log4j.log"/>
+      path="$USER_HOME$/Downloads/web-7.0.7/glassfish7/glassfish/domains/domain1/config/logs/log4j.log"/>
     <RunnerSettings RunnerId="Debug">
       <option name="DEBUG_PORT" value="9009" />
     </RunnerSettings>
