@@ -8,13 +8,10 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
-//    maven {
-//        url "https://repo.maven.apache.org/maven2/"
-//    }
 }
 
 ext {
-    junitVersion = '5.9.2'
+    junitVersion = '5.10.0'
 }
 
 sourceCompatibility = '17'
@@ -39,7 +36,6 @@ dependencies {
     implementation 'org.primefaces:primefaces:13.0.2:jakarta'
     implementation 'org.webjars.npm:primeflex:3.3.1'
 
-//    implementation 'org.mindrot:jbcrypt:0.4'
     implementation 'commons-codec:commons-codec:1.16.0'
 
 

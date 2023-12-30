@@ -13,6 +13,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,6 +43,7 @@ public class ReferenceLetterBean implements Serializable {
   private ReferenceReason selectedReferenceReason;
   private List<ReferenceReason> referenceReasons;
   private Boolean editMode;
+  private LocalDate selectedDeliveryDate;
 
   @Inject
   public ReferenceLetterBean(IReferenceLetterService referenceLetterService,
@@ -66,6 +68,12 @@ public class ReferenceLetterBean implements Serializable {
     if (selectedReferenceReason != null) {
       needsEndDate = !selectedReferenceReason.getReasonName().equals("Zwischenzeugnis");
       referenceLetter.setReferenceReason(selectedReferenceReason);
+    }
+  }
+
+  public void updateSelectedDeliveryDate() {
+    if (selectedDeliveryDate != null) {
+      referenceLetter.setDeliveryDate(selectedDeliveryDate);
     }
   }
 
@@ -106,6 +114,7 @@ public class ReferenceLetterBean implements Serializable {
     editMode = false;
     selectedReferenceReason = null;
     referenceLetter = new ReferenceLetter();
+    selectedDeliveryDate = null;
   }
 
   public String newReferenceLetter() {
@@ -116,6 +125,8 @@ public class ReferenceLetterBean implements Serializable {
   public String loadReferenceLetter(ReferenceLetter referenceLetter) {
     this.referenceLetter = referenceLetter;
     this.selectedReferenceReason = referenceLetter.getReferenceReason();
+    this.selectedDeliveryDate = referenceLetter.getDeliveryDate();
+    needsEndDate = !selectedReferenceReason.getReasonName().equals("Zwischenzeugnis");
     return "/resources/components/sites/secured/stepsToReferenceLetter.xhtml?faces-redirect=true";
   }
 
