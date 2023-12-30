@@ -12,6 +12,8 @@ repositories {
 
 ext {
     junitVersion = '5.10.0'
+    lombokVersion = '1.18.30'
+    log4jVersion = '2.22.0'
 }
 
 sourceCompatibility = '17'
@@ -22,29 +24,35 @@ tasks.withType(JavaCompile) {
 }
 
 dependencies {
-    compileOnly('jakarta.platform:jakarta.jakartaee-web-api:10.0.0')
+    // Jakarta EE API - Basis für Jakarta EE Webanwendungen
+    compileOnly "jakarta.platform:jakarta.jakartaee-web-api:10.0.0"
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
-    testImplementation("org.mockito:mockito-core:4.8.1")
+    // Testabhängigkeiten - JUnit und Mockito für Unit-Tests
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+    testImplementation "org.mockito:mockito-core:4.8.1"
 
+    // Datenbanktreiber - PostgreSQL JDBC-Treiber
+    implementation "org.postgresql:postgresql:42.6.0"
 
-    implementation 'org.postgresql:postgresql:42.6.0'
-    implementation 'org.projectlombok:lombok:1.18.30'
-    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+    // Hilfsbibliotheken - Lombok für Boilerplate-Code Reduzierung
+    implementation "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
 
-    implementation 'org.primefaces:primefaces:13.0.2:jakarta'
-    implementation 'org.webjars.npm:primeflex:3.3.1'
+    // JSF-Bibliotheken - PrimeFaces und PrimeFlex für Frontend-Komponenten
+    implementation "org.primefaces:primefaces:13.0.2:jakarta"
+    implementation "org.webjars.npm:primeflex:3.3.1"
 
-    implementation 'commons-codec:commons-codec:1.16.0'
+    // Codierungs- und Dekodierungsbibliothek - Commons Codec
+    implementation "commons-codec:commons-codec:1.16.0"
 
+    // Objektmapping-Bibliothek - ModelMapper für Objektzuordnungen
+    implementation "org.modelmapper:modelmapper:3.2.0"
 
-    implementation 'org.modelmapper:modelmapper:3.2.0'
-
-    implementation 'org.apache.logging.log4j:log4j-core:2.22.0'
-    implementation 'org.apache.logging.log4j:log4j-api:2.22.0'
-    runtimeOnly 'org.apache.logging.log4j:log4j-jakarta-web:2.22.0'
-
+    // Logging-Framework - Log4j für Logging
+    implementation "org.apache.logging.log4j:log4j-core:$log4jVersion"
+    implementation "org.apache.logging.log4j:log4j-api:$log4jVersion"
+    runtimeOnly "org.apache.logging.log4j:log4j-jakarta-web:$log4jVersion"
 
 }
 

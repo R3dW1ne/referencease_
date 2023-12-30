@@ -48,12 +48,16 @@
                         <p:outputLabel for="endDate" class="block text-900 font-medium mb-2"
                                        value="Enddatum:"/>
                         <p:calendar id="endDate"
-                                    value="#{referenceLetterBean.referenceLetter.endDate}"
+                                    value="#{referenceLetterBean.selectedEndDate}"
                                     required="#{referenceLetterBean.needsEndDate}"
                                     requiredMessage="Enddatum ist erforderlich bei dieser Referenzart."
                                     navigator="true"
                                     pattern="dd/MM/yyyy" yearRange="c-65:c-0"
-                                    styleClass="w-full mb-3"/>
+                                    styleClass="w-full mb-3">
+                            <p:ajax event="dateSelect"
+                                    listener="#{referenceLetterBean.updateSelectedEndDate}"
+                                    update="endDateWrapper"/>
+                        </p:calendar>
                     </p:outputPanel>
                     <p:message for="endDate"/>
                 </h:panelGroup>

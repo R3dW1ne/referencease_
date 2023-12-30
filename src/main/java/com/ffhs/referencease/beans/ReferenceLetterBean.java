@@ -44,6 +44,7 @@ public class ReferenceLetterBean implements Serializable {
   private List<ReferenceReason> referenceReasons;
   private Boolean editMode;
   private LocalDate selectedDeliveryDate;
+  private LocalDate selectedEndDate;
 
   @Inject
   public ReferenceLetterBean(IReferenceLetterService referenceLetterService,
@@ -68,6 +69,12 @@ public class ReferenceLetterBean implements Serializable {
     if (selectedReferenceReason != null) {
       needsEndDate = !selectedReferenceReason.getReasonName().equals("Zwischenzeugnis");
       referenceLetter.setReferenceReason(selectedReferenceReason);
+    }
+  }
+
+  public void updateSelectedEndDate() {
+    if (selectedEndDate != null) {
+      referenceLetter.setEndDate(selectedEndDate);
     }
   }
 
@@ -115,6 +122,7 @@ public class ReferenceLetterBean implements Serializable {
     selectedReferenceReason = null;
     referenceLetter = new ReferenceLetter();
     selectedDeliveryDate = null;
+    selectedEndDate = null;
   }
 
   public String newReferenceLetter() {
@@ -126,6 +134,7 @@ public class ReferenceLetterBean implements Serializable {
     this.referenceLetter = referenceLetter;
     this.selectedReferenceReason = referenceLetter.getReferenceReason();
     this.selectedDeliveryDate = referenceLetter.getDeliveryDate();
+    this.selectedEndDate = referenceLetter.getEndDate();
     needsEndDate = !selectedReferenceReason.getReasonName().equals("Zwischenzeugnis");
     return "/resources/components/sites/secured/stepsToReferenceLetter.xhtml?faces-redirect=true";
   }
