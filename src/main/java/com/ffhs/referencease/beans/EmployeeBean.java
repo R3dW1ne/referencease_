@@ -64,6 +64,16 @@ public class EmployeeBean implements Serializable {
   private List<Department> departments;
   private List<Gender> genders;
 
+  /**
+   * Konstruktor, der eine Instanz von `IEmployeeService`, `IPositionService`,
+   * `IDepartmentService`, `IGenderService` und `IReferenceLetterService` injiziert.
+   *
+   * @param employeeService Der Service für Mitarbeiter.
+   * @param positionService Der Service für Positionen.
+   * @param departmentService Der Service für Abteilungen.
+   * @param genderService Der Service für Geschlechter.
+   * @param referenceLetterService Der Service für Referenzschreiben.
+   */
   @Inject
   public EmployeeBean(IEmployeeService employeeService, IPositionService positionService,
       IDepartmentService departmentService, IGenderService genderService,
@@ -75,6 +85,9 @@ public class EmployeeBean implements Serializable {
     this.referenceLetterService = referenceLetterService;
   }
 
+  /**
+   * Initialisiert die Bean nach der Konstruktion.
+   */
   @PostConstruct
   public void init() {
     employee = new EmployeeDTO();
@@ -162,12 +175,20 @@ public class EmployeeBean implements Serializable {
     filteredEmployees = new ArrayList<>(employees);
   }
 
+  /**
+   * Setzt den ausgewählten Mitarbeiter auf den übergebenen Mitarbeiter.
+   */
   public void resetEmployee() {
     employee = new EmployeeDTO();
     selectedEmployee = new EmployeeDTO();
     editMode = false;
   }
 
+  /**
+   * Navigiert zur Mitarbeiterliste.
+   *
+   * @return Ein String, der den Navigationspfad zur Mitarbeiterliste bestimmt.
+   */
   public String navigateToEmployeeList() {
     refreshEmployeeList();
     selectedEmployee = null;
@@ -175,11 +196,23 @@ public class EmployeeBean implements Serializable {
     return "/resources/components/sites/secured/employeeList.xhtml?faces-redirect=true";
   }
 
+  /**
+   * Navigiert zur Mitarbeiterliste und setzt den ausgewählten Mitarbeiter auf den übergebenen
+   * Mitarbeiter.
+   *
+   * @return Ein String, der den Navigationspfad zur Mitarbeiterliste bestimmt.
+   */
   public String newEmployee() {
     resetEmployee();
     return "/resources/components/sites/secured/employeeMod.xhtml?faces-redirect=true";
   }
 
+  /**
+   * Navigiert zur Mitarbeiterliste und setzt den ausgewählten Mitarbeiter auf den übergebenen
+   * Mitarbeiter.
+   *
+   * @param employee Der Mitarbeiter, der ausgewählt werden soll.
+   */
   public void startEdit(EmployeeDTO employee) {
     this.selectedEmployee = employee;
     this.editMode = true;

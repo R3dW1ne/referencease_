@@ -68,14 +68,6 @@
                         <p:resetInput target=":dialogs:manage-employee-content"/>
                     </p:commandButton>
                 </p:toolbarGroup>
-                <!--                <p:toolbarGroup align="right">-->
-                <!--                    <p:fileUpload mode="simple" skinSimple="true" label="Import"-->
-                <!--                                  chooseIcon="pi pi-download"/>-->
-                <!--                    <p:commandButton value="Export" icon="pi pi-upload" styleClass="ui-button-help"-->
-                <!--                                     ajax="false">-->
-                <!--                        <p:dataExporter type="xml" target="employeeTable" fileName="products"/>-->
-                <!--                    </p:commandButton>-->
-                <!--                </p:toolbarGroup>-->
             </p:toolbar>
         </h:form>
 
@@ -84,12 +76,10 @@
                       widgetVar="manageProductDialog"
                       responsive="true">
                 <p:outputPanel id="manage-employee-content">
-<!--                    <div class="flex align-items-center justify-content-center">-->
                         <div class="surface-card p-5">
                             <ui:include
                                     src="/resources/components/sites/secured/createEmployeeImpl.xhtml"/>
                         </div>
-<!--                    </div>-->
                 </p:outputPanel>
 
                 <f:facet name="footer">

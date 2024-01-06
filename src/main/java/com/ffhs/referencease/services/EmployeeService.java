@@ -36,6 +36,7 @@ import org.modelmapper.ModelMapper;
  */
 @Stateless
 public class EmployeeService implements IEmployeeService {
+
   private final IEmployeeDAO employeeDao;
   private final IReferenceLetterService referenceLetterService;
   private final IDepartmentService departmentService;
@@ -46,8 +47,7 @@ public class EmployeeService implements IEmployeeService {
   @Inject
   public EmployeeService(IEmployeeDAO employeeDao, IReferenceLetterService referenceLetterService,
       IDepartmentService departmentService, IPositionService positionService,
-      IGenderService genderService,
-      ModelMapper modelMapper) {
+      IGenderService genderService, ModelMapper modelMapper) {
     this.employeeDao = employeeDao;
     this.referenceLetterService = referenceLetterService;
     this.departmentService = departmentService;
@@ -124,16 +124,35 @@ public class EmployeeService implements IEmployeeService {
     return trySaveOrUpdateEmployee(employeeDTO);
   }
 
+  /**
+   * Validiert, ob das übergebene EmployeeDTO-Objekt null ist.
+   *
+   * @param employeeDTO Das zu validierende EmployeeDTO-Objekt.
+   * @throws BusinessException Wenn das EmployeeDTO-Objekt null ist.
+   */
   private void validateEmployeeDTO(EmployeeDTO employeeDTO) throws BusinessException {
     if (employeeDTO == null) {
       throw new BusinessException("Mitarbeiter ist null.");
     }
   }
 
+  /**
+   * Überprüft, ob ein Mitarbeiter bereits in der Datenbank existiert.
+   *
+   * @param employeeDTO Das EmployeeDTO-Objekt des zu überprüfenden Mitarbeiters.
+   * @return true, wenn der Mitarbeiter in der Datenbank existiert, sonst false.
+   */
   private boolean employeeExistsInDB(EmployeeDTO employeeDTO) {
     return employeeDao.employeeIdExists(employeeDTO.getEmployeeId());
   }
 
+  /**
+   * Überprüft, ob die Mitarbeiternummer eines Mitarbeiters dupliziert ist.
+   *
+   * @param employeeDTO Das EmployeeDTO-Objekt mit der zu überprüfenden Mitarbeiternummer.
+   * @return true, wenn die Mitarbeiternummer bereits existiert und sie einem anderen Mitarbeiter
+   * zugeordnet ist, sonst false.
+   */
   private boolean employeeNumberIsDuplicate(EmployeeDTO employeeDTO) {
     String employeeNumber = employeeDTO.getEmployeeNumber();
     boolean employeeNumberExists = employeeDao.employeeNumberExists(employeeNumber);
@@ -143,6 +162,15 @@ public class EmployeeService implements IEmployeeService {
         .equals(employeeDTO.getEmployeeId());
   }
 
+  /**
+   * Versucht, einen Mitarbeiter zu speichern oder zu aktualisieren.
+   *
+   * @param employeeDTO Das EmployeeDTO-Objekt des Mitarbeiters, der gespeichert oder aktualisiert
+   *                    werden soll.
+   * @return Ein OperationResult-Objekt, das das Ergebnis der Operation enthält.
+   * @throws BusinessException Bei einem Fehler im Geschäftsprozess.
+   * @throws DatabaseException Bei einem Datenbankfehler.
+   */
   private OperationResult<EmployeeDTO> trySaveOrUpdateEmployee(EmployeeDTO employeeDTO)
       throws BusinessException, DatabaseException {
     try {
@@ -221,6 +249,16 @@ public class EmployeeService implements IEmployeeService {
     }
   }
 
+  /**
+   * Erstellt eine spezifizierte Anzahl von zufälligen Mitarbeiterdatensätzen, falls noch keine
+   * Mitarbeiter in der Datenbank vorhanden sind. Jeder Mitarbeiter wird mit zufälligen Attributen
+   * wie Mitarbeiternummer, Namen, Geburtsdatum, Telefonnummer, Anfangsdatum der Beschäftigung,
+   * Abteilung, Position und Geschlecht erstellt. Diese Methode wird nur ausgeführt, wenn noch keine
+   * Mitarbeiter in der Datenbank existieren.
+   *
+   * @param count  Die Anzahl der zu erstellenden zufälligen Mitarbeiter.
+   * @param random Das Random-Objekt zur Erzeugung zufälliger Werte.
+   */
   @Override
   public void createRandomEmployeesIfNotExists(int count, Random random) {
     // Überprüfen, ob bereits Mitarbeiter in der Datenbank existieren

@@ -2,8 +2,20 @@ package com.ffhs.referencease.utils;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
+/**
+ * Hilfsklasse zur Handhabung von Passworthashes. Diese Klasse bietet statische Methoden, um
+ * Passwörter zu hashen und die Übereinstimmung von Passworthashes zu überprüfen. Sie nutzt Apache
+ * Commons Codec für die Hash-Erstellung. Der Konstruktor ist privat, da diese Klasse nicht
+ * instanziiert werden soll.
+ */
 public class PWHash {
 
+  /**
+   * Privater Konstruktor, der eine Ausnahme auslöst, um die Instanziierung der Klasse zu
+   * verhindern.
+   *
+   * @throws IllegalStateException wenn versucht wird, die Klasse zu instanzieren.
+   */
   private PWHash() {
     throw new IllegalStateException("PWHash class");
   }

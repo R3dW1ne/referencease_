@@ -40,7 +40,6 @@ public class DepartmentService implements IDepartmentService {
 
   @Override
   public Department getRandomDepartment(Random random) {
-    // Annahme: Alle vorhandenen Abteilungen abrufen
     List<Department> departments = getAllDepartments();
 
     if (!departments.isEmpty()) {

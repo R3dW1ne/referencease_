@@ -15,6 +15,12 @@ import lombok.Data;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Managed Bean Klasse für die Benutzerverwaltung, speziell für die Registrierung neuer Benutzer.
+ * Diese Klasse bietet Funktionen zur Registrierung von Benutzerkonten durch Interaktion mit dem
+ * `IUserAccountService`. Sie führt Validierungen durch und verarbeitet die Registrierung von
+ * Benutzern im System.
+ */
 @Named
 @Data
 @RequestScoped
@@ -28,16 +34,32 @@ public class UserAccountBean implements Serializable {
 
   private UserAccountDTO userAccountDTO;
 
+  /**
+   * Konstruktor, der eine Instanz von `IUserAccountService` injiziert.
+   *
+   * @param userAccountService Der Service für Benutzerkonten.
+   */
   @Inject
   public UserAccountBean(IUserAccountService userAccountService) {
     this.userAccountService = userAccountService;
   }
 
+  /**
+   * Initialisiert die Bean nach der Konstruktion.
+   */
   @PostConstruct
   public void init() {
     userAccountDTO = new UserAccountDTO();
   }
 
+  /**
+   * Registriert einen neuen Benutzer im System.
+   * Überprüft die Einzigartigkeit der E-Mail-Adresse und validiert das Passwort,
+   * bevor der Benutzer gespeichert wird. Setzt Erfolgs- oder Fehlermeldungen und
+   * leitet entsprechend weiter.
+   *
+   * @return Ein String, der den Navigationspfad nach der Registrierung bestimmt.
+   */
   public String register() {
     String message = "";
     if (userAccountService.emailExists(userAccountDTO.getEmail())) {

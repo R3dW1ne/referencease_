@@ -15,22 +15,41 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * DAO-Klasse für die Verwaltung von Mitarbeiterdaten. Diese Klasse stellt Methoden zur Verfügung,
+ * um CRUD-Operationen auf Mitarbeiterentitäten durchzuführen. Sie verwendet den EntityManager, um
+ * Interaktionen mit der Datenbank zu handhaben. Die Klasse implementiert das Interface
+ * IEmployeeDAO, um eine klare Schnittstelle für die Mitarbeiterverwaltung zu bieten.
+ */
 @Stateless
 public class EmployeeDAO implements IEmployeeDAO {
 
   @PersistenceContext(unitName = "default")
   private EntityManager em;
 
+  /**
+   * Findet einen Mitarbeiter anhand seiner ID.
+   *
+   * @param id Die UUID des Mitarbeiters.
+   * @return Ein Optional, das den gefundenen Mitarbeiter enthält oder leer ist, wenn kein
+   * Mitarbeiter gefunden wurde.
+   * @throws DatabaseException Bei einem Fehler in der Datenbankabfrage.
+   */
   @Override
   public Optional<Employee> find(UUID id) throws DatabaseException {
     try {
-
       return Optional.ofNullable(em.find(Employee.class, id));
     } catch (PersistenceException e) {
       throw new DatabaseException("Error finding Employee with id " + id, e);
     }
   }
 
+  /**
+   * Findet einen Mitarbeiter anhand seiner Mitarbeiter-ID.
+   *
+   * @param id Die UUID des Mitarbeiters.
+   * @return Das gefundene Mitarbeiterobjekt oder null, wenn kein Mitarbeiter gefunden wird.
+   */
   @Override
   public Employee findByEmployeeId(UUID id) {
     try {
@@ -41,6 +60,12 @@ public class EmployeeDAO implements IEmployeeDAO {
     }
   }
 
+  /**
+   * Ruft eine Liste aller Mitarbeiter ab.
+   *
+   * @return Eine Liste von Mitarbeiterobjekten.
+   * @throws DatabaseException Bei einem Fehler in der Datenbankabfrage.
+   */
   @Override
   public List<Employee> findAll() throws DatabaseException {
     try {
@@ -50,7 +75,12 @@ public class EmployeeDAO implements IEmployeeDAO {
     }
   }
 
-
+  /**
+   * Löscht einen Mitarbeiter aus der Datenbank.
+   *
+   * @param employee Das zu löschende Mitarbeiterobjekt.
+   * @throws DatabaseException Bei einem Fehler beim Löschen des Mitarbeiters.
+   */
   @Override
   @Transactional
   public void delete(Employee employee) throws DatabaseException {
@@ -65,6 +95,13 @@ public class EmployeeDAO implements IEmployeeDAO {
     }
   }
 
+  /**
+   * Speichert oder aktualisiert einen Mitarbeiter in der Datenbank.
+   *
+   * @param employee Das zu speichernde oder zu aktualisierende Mitarbeiterobjekt.
+   * @return Der gespeicherte oder aktualisierte Mitarbeiter.
+   * @throws DatabaseException Bei einem Fehler beim Speichern oder Aktualisieren des Mitarbeiters.
+   */
   @Override
   @Transactional
   public Employee saveOrUpdateEmployee(Employee employee) throws DatabaseException {
@@ -80,6 +117,12 @@ public class EmployeeDAO implements IEmployeeDAO {
     }
   }
 
+  /**
+   * Speichert einen neuen Mitarbeiter in der Datenbank.
+   *
+   * @param employee Das zu speichernde Mitarbeiterobjekt.
+   * @throws DatabaseException Bei einem Fehler beim Speichern des neuen Mitarbeiters.
+   */
   @Override
   @Transactional
   public void save(Employee employee) throws DatabaseException {
@@ -90,6 +133,13 @@ public class EmployeeDAO implements IEmployeeDAO {
     }
   }
 
+  /**
+   * Aktualisiert einen bestehenden Mitarbeiter in der Datenbank.
+   *
+   * @param employee Das zu aktualisierende Mitarbeiterobjekt.
+   * @return Der aktualisierte Mitarbeiter.
+   * @throws DatabaseException Bei einem Fehler beim Aktualisieren des Mitarbeiters.
+   */
   @Override
   @Transactional
   public Employee update(Employee employee) throws DatabaseException {
@@ -100,6 +150,12 @@ public class EmployeeDAO implements IEmployeeDAO {
     }
   }
 
+  /**
+   * Löscht einen Mitarbeiter anhand seiner ID.
+   *
+   * @param id Die UUID des zu löschenden Mitarbeiters.
+   * @throws DatabaseException Bei einem Fehler beim Löschen des Mitarbeiters.
+   */
   @Override
   @Transactional
   public void deleteById(UUID id) throws DatabaseException {
@@ -113,6 +169,13 @@ public class EmployeeDAO implements IEmployeeDAO {
     }
   }
 
+  /**
+   * Überprüft, ob eine Mitarbeiternummer bereits existiert.
+   *
+   * @param employeeNumber Die zu überprüfende Mitarbeiternummer.
+   * @return true, wenn die Mitarbeiternummer existiert, sonst false.
+   * @throws DatabaseException Bei einem Fehler bei der Überprüfung.
+   */
   @Override
   public boolean employeeNumberExists(String employeeNumber) throws DatabaseException {
     if (employeeNumber == null) {
@@ -129,6 +192,13 @@ public class EmployeeDAO implements IEmployeeDAO {
     }
   }
 
+  /**
+   * Überprüft, ob eine Mitarbeiter-ID bereits existiert.
+   *
+   * @param employeeId Die zu überprüfende Mitarbeiter-ID.
+   * @return true, wenn die Mitarbeiter-ID existiert, sonst false.
+   * @throws DatabaseException Bei einem Fehler bei der Überprüfung.
+   */
   @Override
   public boolean employeeIdExists(UUID employeeId) throws DatabaseException {
     if (employeeId == null) {
@@ -145,6 +215,14 @@ public class EmployeeDAO implements IEmployeeDAO {
     }
   }
 
+  /**
+   * Findet einen Mitarbeiter anhand seiner Mitarbeiternummer.
+   *
+   * @param employeeNumber Die Mitarbeiternummer des gesuchten Mitarbeiters.
+   * @return Ein Optional, das den gefundenen Mitarbeiter enthält, oder ein leeres Optional, falls
+   * kein Mitarbeiter gefunden wurde.
+   * @throws DatabaseException Bei einem Fehler bei der Suche.
+   */
   @Override
   public Optional<Employee> findByEmployeeNumber(String employeeNumber) throws DatabaseException {
     try {
@@ -158,7 +236,12 @@ public class EmployeeDAO implements IEmployeeDAO {
     }
   }
 
-
+  /**
+   * Zählt die Anzahl der Mitarbeiter in der Datenbank.
+   *
+   * @return Die Anzahl der Mitarbeiter.
+   * @throws DatabaseException Bei einem Fehler bei der Zählung.
+   */
   @Override
   public Long countEmployees() throws DatabaseException {
     try {
